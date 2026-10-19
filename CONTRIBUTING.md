@@ -34,7 +34,7 @@ npm run typecheck
 npm run build
 ```
 
-Both run automatically on every pull request. For UI changes, add a before and after screenshot to the pull request.
+Both run automatically on every pull request, on Node 22 and 24. For UI changes, add a before and after screenshot to the pull request.
 
 ## Reporting a bug
 
