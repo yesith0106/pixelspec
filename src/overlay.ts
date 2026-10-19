@@ -85,11 +85,20 @@ export function drawOutline(r: Rect, cls: string): string {
 }
 
 /** Tag name above, dimensions below. */
-export function drawLabels(el: Element, r: Rect, kind: 'sel' | 'hov'): string {
+/**
+ * One quiet label per element.
+ * 'name': hovered element, shows "tag.class  W × H" above it.
+ * 'size': selected element, shows only "W × H" below it (its name is in the popover header).
+ */
+export function drawLabels(el: Element, r: Rect, mode: 'name' | 'size'): string {
   if (r.bottom < 0 || r.top > vh() || r.right < 0 || r.left > vw()) return '';
-  const tagY = r.top - 12 < 4 ? r.top + 12 : r.top - 12;
-  const dimY = r.bottom + 13 > vh() - 4 ? r.bottom - 13 : r.bottom + 13;
-  return pillL(`tag-${kind}`, Math.max(r.left, 4), tagY, shortName(el)) + pill(`dim-${kind}`, r.left + r.width / 2, dimY, `${fmt(r.width)} × ${fmt(r.height)}`);
+  const dims = `${fmt(r.width)} × ${fmt(r.height)}`;
+  if (mode === 'size') {
+    const y = r.bottom + 13 > vh() - 4 ? r.bottom - 13 : r.bottom + 13;
+    return pill('dim-sel', r.left + r.width / 2, y, dims);
+  }
+  const y = r.top - 13 < 4 ? r.bottom + 13 : r.top - 13;
+  return `<div class="pill pill-l tag-hov" style="left:${r2(clamp(r.left, 4, vw() - 60))}px;top:${r2(clamp(y, 10, vh() - 10))}px">${esc(shortName(el))}<span class="pd">${dims}</span></div>`;
 }
 
 /* ------------------------------------------------------------------ */

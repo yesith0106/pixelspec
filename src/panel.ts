@@ -282,7 +282,7 @@ export function specsHTML(el: Element): string {
   const text = directText(el) || (el.children.length <= 2 ? visibleText(el) : '');
   let h = '';
 
-  h += specRow('Size', chip(fmt(r.width), `${fmt(r.width)}px`, { dim: 'W ' }) + chip(fmt(r.height), `${fmt(r.height)}px`, { dim: 'H ' }));
+  h += specRow('Size', chip(`${fmt(r.width)} × ${fmt(r.height)}`, `width: ${fmt(r.width)}px; height: ${fmt(r.height)}px;`));
 
   const pad = pxSides(cs, 'padding');
   const mar = pxSides(cs, 'margin');
@@ -323,7 +323,7 @@ export function specsHTML(el: Element): string {
     t += chip(`${cs.fontWeight}${weightName(cs.fontWeight) ? ` ${weightName(cs.fontWeight)}` : ''}`, cs.fontWeight);
     if (cs.letterSpacing !== 'normal' && num(cs.letterSpacing) !== 0) {
       const em = fmt(num(cs.letterSpacing) / (fs || 16), 3);
-      t += chip(`${fmt(num(cs.letterSpacing))}px · ${em}em`, cs.letterSpacing, { dim: 'Tracking ' });
+      t += chip(`${fmt(num(cs.letterSpacing))}px · ${em}em`, cs.letterSpacing, { dim: 'tracking ' });
     }
     if (cs.textTransform !== 'none') t += chip(cs.textTransform, cs.textTransform);
     h += specRow('Type', t);
@@ -335,7 +335,7 @@ export function specsHTML(el: Element): string {
   if (cs.backgroundImage !== 'none' && cs.backgroundImage.includes('gradient')) col += chip('gradient', cs.backgroundImage, { swatch: cs.backgroundImage });
   if (text) {
     const ci = contrastInfo(el, cs);
-    if (ci) col += `<span class="cr ${ci.aa ? 'ok' : 'no'}" title="${ci.aa ? 'Passes' : 'Fails'} WCAG AA${ci.large ? ' (large text)' : ''}">${fmt(ci.ratio, 1)}:1 ${ci.aa ? 'AA ✓' : 'AA ✕'}</span>`;
+    if (ci) col += `<span class="cr ${ci.aa ? 'ok' : 'no'}" title="${ci.aa ? 'Passes' : 'Fails'} WCAG AA${ci.large ? ' (large text)' : ''}">${fmt(ci.ratio, 1)}:1 ${ci.aa ? 'AA' : 'fails AA'}</span>`;
   }
   h += specRow('Color', col);
 

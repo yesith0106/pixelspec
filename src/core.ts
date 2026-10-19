@@ -397,14 +397,15 @@ export class PixelSpec {
           top += drawMeasure(hr, pr);
         }
       }
-      labels += drawLabels(hov, hr, 'hov');
+      // While measuring, the redlines are the label; otherwise name the hovered element.
+      if (!sel) labels += drawLabels(hov, hr, 'name');
     }
     if (sel && (!hov || hov === sel) && this.alt && sel.parentElement) {
       const pr = rectOf(sel.parentElement);
       o += drawOutline(pr, 'ol-par');
       top += drawMeasure(rectOf(sel), pr);
     }
-    if (sel) labels += drawLabels(sel, rectOf(sel), 'sel');
+    if (sel) labels += drawLabels(sel, rectOf(sel), 'size');
     // Measurements last so they sit above the name/size labels.
     return o + labels + top;
   }
@@ -485,7 +486,7 @@ export class PixelSpec {
       <div class="pbody">
         ${this.quote ? `<blockquote class="quote">${esc(trunc(this.quote, 200))}</blockquote>` : ''}
         ${specs}
-        <details class="more"${this.moreOpen ? ' open' : ''}><summary>${I.chevron}<span>All properties</span><em>Box model, layout, type, a11y</em></summary><div class="mb">${details}</div></details>
+        <details class="more"${this.moreOpen ? ' open' : ''}><summary>${I.chevron}<span>All properties</span></summary><div class="mb">${details}</div></details>
       </div>
       <div class="pn">
         <div class="composer">
