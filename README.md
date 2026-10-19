@@ -111,6 +111,8 @@ npm run dev       # rebuild on change
 
 The overlay lives in a shadow root, so page styles never leak into it and it never leaks into the page.
 
+Icons are from the free [Hugeicons](https://hugeicons.com) set (MIT). Only the icons in use are bundled.
+
 ## Known limits
 
 - Contrast ignores background images and element opacity, and says so in the popover.
