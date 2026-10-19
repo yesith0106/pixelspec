@@ -2,7 +2,7 @@ import { Inspecta, type InspectaOptions } from './core';
 
 export { Inspecta };
 export type { CopyKind, InspectaNote, InspectaOptions } from './core';
-export { cssFor, cssSelector, describeForAI } from './inspect';
+export { cssFor, cssSelector, describe, describeCompact, describeForAI, type AIDetail } from './inspect';
 
 let instance: Inspecta | null = null;
 

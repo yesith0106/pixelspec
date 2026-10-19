@@ -1,4 +1,4 @@
-import { cssFor, cssSelector, describeForAI } from './inspect';
+import { cssFor, cssSelector, describe, describeCompact, describeForAI, type AIDetail } from './inspect';
 import {
   boxes, drawBoxModel, drawChildGaps, drawCrosshair, drawEdgeGuides, drawLabels, drawMarker, drawMeasure, drawOutline, drawTextLines,
 } from './overlay';
@@ -17,6 +17,11 @@ export interface InspectaOptions {
   showToolbar?: boolean;
   /** Toolbar corner. Default `bottom-right`. */
   position?: 'bottom-right' | 'bottom-left';
+  /**
+   * How much detail "Copy for AI" and Notes include. `compact` (default) is two short lines per element;
+   * `full` is a Markdown bullet list. Holding Shift while copying uses the other one.
+   */
+  aiDetail?: AIDetail;
   /** Called whenever something is copied. */
   onCopy?: (text: string, kind: CopyKind) => void;
 }
@@ -69,11 +74,11 @@ export class Inspecta {
   private helpOpen = false;
   private drag: { dx: number; dy: number } | null = null;
   private toastTimer = 0;
-  private opts: InspectaOptions & { hotkey: string; showToolbar: boolean; position: 'bottom-right' | 'bottom-left' };
+  private opts: InspectaOptions & { hotkey: string; showToolbar: boolean; position: 'bottom-right' | 'bottom-left'; aiDetail: AIDetail };
 
   constructor(options: InspectaOptions = {}) {
     const defined = Object.fromEntries(Object.entries(options).filter(([, v]) => v !== undefined)) as InspectaOptions;
-    this.opts = { hotkey: 'alt+shift+i', showToolbar: true, position: 'bottom-right', ...defined };
+    this.opts = { hotkey: 'alt+shift+i', showToolbar: true, position: 'bottom-right', aiDetail: 'compact', ...defined };
 
     this.host = document.createElement('inspecta-overlay');
     this.host.setAttribute('data-inspecta', '');
@@ -161,8 +166,13 @@ export class Inspecta {
     return this.notes.slice();
   }
 
-  notesMarkdown(): string {
+  /** All notes as text for an AI agent. `detail` defaults to the `aiDetail` option. */
+  notesMarkdown(detail: AIDetail = this.opts.aiDetail): string {
     const live = this.notes.filter((n) => n.element.isConnected);
+    if (detail === 'compact') {
+      const items = live.map((n, i) => `${i + 1}. ${describeCompact(n.element, n.text).replace(/\n/g, '\n   ')}`);
+      return `UI feedback for ${location.pathname} (${innerWidth}×${innerHeight}):\n${items.join('\n')}`;
+    }
     const head = `# UI feedback\n\nPage: ${location.href}\nViewport: ${innerWidth} × ${innerHeight}\n`;
     return (
       head +
@@ -170,6 +180,12 @@ export class Inspecta {
         .map((n, i) => `\n## ${i + 1}. ${n.text.split('\n')[0].slice(0, 80)}\n\n${describeForAI(n.element, n.text)}\n`)
         .join('')
     );
+  }
+
+  /** The detail level to use; Shift flips it. */
+  private detail(shift: boolean): AIDetail {
+    const d = this.opts.aiDetail;
+    return shift ? (d === 'full' ? 'compact' : 'full') : d;
   }
 
   destroy(): void {
@@ -283,7 +299,7 @@ export class Inspecta {
         <li><kbd>Alt</kbd> hold to measure to parent</li>
         <li><kbd>↑</kbd> parent · <kbd>↓</kbd> child · <kbd>←</kbd><kbd>→</kbd> siblings</li>
         <li><kbd>S</kbd> spacing · <kbd>T</kbd> text · <kbd>G</kbd> guides</li>
-        <li><kbd>C</kbd> copy for AI · <kbd>N</kbd> add note</li>
+        <li><kbd>C</kbd> copy for AI (<kbd>Shift</kbd> for ${this.opts.aiDetail === 'full' ? 'compact' : 'full'}) · <kbd>N</kbd> add note</li>
         <li><kbd>Esc</kbd> unpin, then exit</li>
         <li>Click any value in the panel to copy it</li>
         <li><kbd>${this.opts.hotkey}</kbd> toggle inspector</li></ul>`;
@@ -407,7 +423,9 @@ export class Inspecta {
       this.toggleFlag(k === 's' ? 'spacing' : k === 't' ? 'text' : 'guides');
     } else if (k === 'c' && (sel ?? this.hovered)) {
       e.preventDefault();
-      void this.copy(describeForAI((sel ?? this.hovered)!), 'ai', 'Copied for AI');
+      const target = (sel ?? this.hovered)!;
+      const d = this.detail(e.shiftKey);
+      void this.copy(describe(target, d, this.notes.find((n) => n.element === target)?.text), 'ai', `Copied for AI (${d})`);
     } else if (k === 'n' && sel) {
       e.preventDefault();
       this.root.querySelector('textarea')?.focus();
@@ -488,7 +506,12 @@ export class Inspecta {
         case 'parent': if (target?.parentElement) this.select(target.parentElement); break;
         case 'child': if (target?.firstElementChild) this.select(target.firstElementChild); break;
         case 'unpin': this.select(null); break;
-        case 'copy-ai': if (target) void this.copy(describeForAI(target, this.notes.find((n) => n.element === target)?.text), 'ai', 'Copied for AI'); break;
+        case 'copy-ai': {
+          if (!target) break;
+          const d = this.detail((e as MouseEvent).shiftKey);
+          void this.copy(describe(target, d, this.notes.find((n) => n.element === target)?.text), 'ai', `Copied for AI (${d})`);
+          break;
+        }
         case 'copy-css': if (target) void this.copy(cssFor(target), 'css', 'CSS copied'); break;
         case 'copy-sel': if (target) void this.copy(cssSelector(target), 'selector', 'Selector copied'); break;
         case 'save-note': this.saveNote(); break;
@@ -498,7 +521,7 @@ export class Inspecta {
           this.renderToolbar();
           break;
         case 'copy-notes':
-          if (this.notes.length) void this.copy(this.notesMarkdown(), 'notes', `${this.notes.length} note${this.notes.length === 1 ? '' : 's'} copied`);
+          if (this.notes.length) void this.copy(this.notesMarkdown(this.detail((e as MouseEvent).shiftKey)), 'notes', `${this.notes.length} note${this.notes.length === 1 ? '' : 's'} copied`);
           else this.toast('Pin an element and add a note first');
           break;
         case 'clear-notes': this.notes = []; this.renderPanel(); this.renderToolbar(); break;

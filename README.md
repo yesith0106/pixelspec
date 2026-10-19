@@ -25,6 +25,20 @@ A Figma-style inspect overlay for any web page. Hover to see the box model, clic
 - All attributes
 - Copy CSS, copy selector, copy for AI, and per-element notes
 
+## Copy for AI
+
+By default, "Copy for AI" and Notes use a compact format to save tokens. It has two lines per element and only non-default values:
+
+```
+Make this button bigger
+body>header>button.cta "Start free trial"
+126×34 p:10 18 r:999 | system-ui 14/14 w600 ls:0.01em | c:#FFF bg:#3581F6 contrast:3.7(fails AA)
+```
+
+Key: `p` padding, `m` margin, `b` border, `r` radius, `14/14 w600` size/line-height weight, `ls` letter spacing, `c` text color, `bg` background. Contrast only appears when it fails AA. Containers skip text and typography.
+
+Hold <kbd>Shift</kbd> while copying, or set `aiDetail: 'full'` (`data-ai-detail="full"` on the script tag), for the full Markdown version. That one adds page position, layout details, shadows and the full contrast result. It is roughly 2.5 times longer.
+
 ## Shortcuts
 
 | Key | Action |
@@ -34,7 +48,7 @@ A Figma-style inspect overlay for any web page. Hover to see the box model, clic
 | <kbd>Alt</kbd> (hold) | Measure to parent |
 | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> | Parent, first child, siblings |
 | <kbd>S</kbd> / <kbd>T</kbd> / <kbd>G</kbd> | Spacing, text lines, guides |
-| <kbd>C</kbd> | Copy element description for AI |
+| <kbd>C</kbd> | Copy element for AI (compact). <kbd>Shift</kbd>+<kbd>C</kbd> for full |
 | <kbd>N</kbd> | Focus the note box |
 | <kbd>Esc</kbd> | Unpin, then exit |
 
@@ -83,6 +97,7 @@ init({
   startActive: false,
   showToolbar: true,
   position: 'bottom-right',     // or 'bottom-left'
+  aiDetail: 'compact',          // or 'full'; Shift while copying uses the other
   onCopy: (text, kind) => {},   // kind: 'value' | 'css' | 'ai' | 'selector' | 'notes'
 });
 ```

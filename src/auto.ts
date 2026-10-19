@@ -7,6 +7,7 @@ const script = document.currentScript as HTMLScriptElement | null;
 const start = () =>
   init({
     startActive: script?.dataset.active === 'true',
+    aiDetail: script?.dataset.aiDetail === 'full' ? 'full' : undefined,
     hotkey: script?.dataset.hotkey || undefined,
     position: script?.dataset.position === 'bottom-left' ? 'bottom-left' : undefined,
   });

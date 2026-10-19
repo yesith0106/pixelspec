@@ -23,10 +23,10 @@ export function shortName(el: Element, maxClasses = 2): string {
 const cssEscape = (s: string) => (typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(s) : s.replace(/[^\w-]/g, '\\$&'));
 
 /** A reasonably short, reasonably unique selector. */
-export function cssSelector(el: Element): string {
+export function cssSelector(el: Element, maxDepth = 5): string {
   const parts: string[] = [];
   let node: Element | null = el;
-  while (node && parts.length < 5) {
+  while (node && parts.length < maxDepth) {
     const tag = node.tagName.toLowerCase();
     if (node.id && !/^\d/.test(node.id)) {
       parts.unshift(`#${cssEscape(node.id)}`);
@@ -418,6 +418,67 @@ export function cssFor(el: Element): string {
   add('filter', cs.filter, ['none']);
   add('overflow', cs.overflow, ['visible']);
   return `${cssSelector(el)} {\n${lines.join('\n')}\n}`;
+}
+
+export type AIDetail = 'compact' | 'full';
+
+/**
+ * Token-lean description: two short lines, only non-default values.
+ *   button.cta "Start free trial" <Button> src/Header.tsx:12
+ *   126×34 p:10 18 r:999 | system-ui 14/14 w600 ls:.01em | c:#FFF bg:#3581F6 contrast:3.7(fails AA)
+ */
+export function describeCompact(el: Element, note?: string): string {
+  const cs = getComputedStyle(el);
+  const r = rectOf(el);
+  const comp = componentInfo(el);
+  // Containers: skip the descendant text dump (and the inherited typography that goes with it).
+  const text = trunc(directText(el) || (el.children.length <= 2 ? visibleText(el) : ''), 40);
+  const hex = (css: string) => hexOf(css).replace(/^#([0-9A-F])\1([0-9A-F])\2([0-9A-F])\3$/, '#$1$2$3');
+
+  let head = cssSelector(el, 3).replace(/ > /g, '>');
+  if (text) head += ` "${text}"`;
+  if (comp) head += ` <${comp.names[0]}>${comp.source ? ` ${comp.source.replace(/^.*?\/src\//, 'src/')}` : ''}`;
+
+  const box: string[] = [`${fmt(r.width, 0)}×${fmt(r.height, 0)}`];
+  const pad = pxSides(cs, 'padding');
+  const mar = pxSides(cs, 'margin');
+  if (pad !== '0') box.push(`p:${pad}`);
+  if (mar !== '0') box.push(`m:${mar}`);
+  const border = borderSummary(cs);
+  if (border) box.push(`b:${border.replace(/px /, ' ').replace(' solid', '')}`);
+  const rad = radiusSummary(cs);
+  if (rad !== '0') box.push(`r:${rad}`);
+  if (cs.boxShadow !== 'none') box.push('shadow');
+  if (cs.opacity !== '1') box.push(`o:${cs.opacity}`);
+
+  const groups = [box.join(' ')];
+  const d = cs.display;
+  if (d.includes('flex') || d.includes('grid')) {
+    const lay = [d.includes('grid') ? 'grid' : cs.flexDirection.startsWith('column') ? 'col' : 'row'];
+    const gap = cs.rowGap === cs.columnGap ? cs.rowGap : `${cs.rowGap} ${cs.columnGap}`;
+    if (gap !== 'normal' && gap !== '0px') lay.push(`gap:${gap.replace(/px/g, '')}`);
+    if (!/normal|flex-start|start/.test(cs.justifyContent)) lay.push(`jc:${cs.justifyContent}`);
+    if (!/normal|stretch/.test(cs.alignItems)) lay.push(`ai:${cs.alignItems}`);
+    if (d.includes('grid')) lay.push(`cols:${cs.gridTemplateColumns.split(' ').length}`);
+    groups.push(lay.join(' '));
+  }
+  if (text) {
+    const t = [`${renderedFont(cs.fontFamily)} ${fmtPx(cs.fontSize)}/${fmt(lineHeightInfo(cs).px, 1)} w${cs.fontWeight}`];
+    if (cs.letterSpacing !== 'normal' && num(cs.letterSpacing) !== 0) t.push(`ls:${fmt(num(cs.letterSpacing) / (num(cs.fontSize) || 16), 3)}em`);
+    if (cs.textTransform !== 'none') t.push(cs.textTransform);
+    groups.push(t.join(' '));
+  }
+  const col = text ? [`c:${hex(cs.color)}`] : [];
+  if (!isTransparent(cs.backgroundColor)) col.push(`bg:${hex(cs.backgroundColor)}`);
+  const ci = text ? contrastInfo(el, cs) : null;
+  if (ci && !ci.aa) col.push(`contrast:${fmt(ci.ratio, 1)}(fails AA)`);
+  if (col.length) groups.push(col.join(' '));
+
+  return `${note ? `${note}\n` : ''}${head}\n${groups.join(' | ')}`;
+}
+
+export function describe(el: Element, detail: AIDetail, note?: string): string {
+  return detail === 'full' ? describeForAI(el, note) : describeCompact(el, note);
 }
 
 /** Markdown description intended to be pasted into an AI coding agent. */
