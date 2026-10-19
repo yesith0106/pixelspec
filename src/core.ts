@@ -120,6 +120,8 @@ export class PixelSpec {
   private suppressClick = false;
   private toastTimer = 0;
   private popPos = '';
+  /** Where the popover is anchored, relative to the selected element's top-left (follows it on scroll). */
+  private anchor: { dx: number; dy: number } | null = null;
   private s: Settings;
   private opts: PixelSpecOptions & { hotkey: string; showToolbar: boolean; position: 'bottom-right' | 'bottom-left'; persist: boolean };
 
@@ -239,7 +241,7 @@ export class PixelSpec {
   }
 
   /** Open the inspector popover on an element (or `null` to close it). */
-  select(el: Element | null, opts: { quote?: string; noteId?: number } = {}): void {
+  select(el: Element | null, opts: { quote?: string; noteId?: number; at?: { x: number; y: number } } = {}): void {
     if (!el) {
       this.closePop();
       return;
@@ -251,6 +253,14 @@ export class PixelSpec {
     }
     const existing = opts.noteId ?? (opts.quote ? undefined : this.notes.find((n) => n.element === el && !n.quote)?.id);
     const note = existing !== undefined ? this.notes.find((n) => n.id === existing) : undefined;
+    // Anchor at the click point. Without one (keyboard / parent-child nav), keep the popover where it is.
+    const r = el.getBoundingClientRect();
+    let at = opts.at;
+    if (!at && this.selected && this.anchor && !this.pop.hidden) {
+      const prev = this.selected.getBoundingClientRect();
+      at = { x: prev.left + this.anchor.dx, y: prev.top + this.anchor.dy };
+    }
+    this.anchor = at ? { dx: at.x - r.left, dy: at.y - r.top } : null;
     this.selected = el;
     this.quote = opts.quote ?? note?.quote ?? null;
     this.editing = note?.id ?? null;
@@ -523,7 +533,16 @@ export class PixelSpec {
     const vh = innerHeight;
     let x: number;
     let y: number;
-    if (r.right + M + pw <= vw - M) {
+    const gap = 14;
+    if (this.anchor) {
+      const ax = r.left + this.anchor.dx;
+      const ay = r.top + this.anchor.dy;
+      // Prefer below-right of the cursor, flip to the other side when it would overflow.
+      x = ax + gap + pw <= vw - M ? ax + gap : ax - gap - pw;
+      if (x < M) x = clamp(ax - pw / 2, M, vw - pw - M);
+      y = ay + gap + ph <= vh - M ? ay + gap : ay - gap - ph;
+      if (y < M) y = clamp(ay - ph / 2, M, Math.max(M, vh - ph - M));
+    } else if (r.right + M + pw <= vw - M) {
       x = r.right + M;
       y = clamp(r.top, M, vh - ph - M);
     } else if (r.left - M - pw >= M) {
@@ -870,7 +889,7 @@ export class PixelSpec {
     if (moved && text && selection && selection.rangeCount) {
       const anc = selection.getRangeAt(0).commonAncestorContainer;
       const el = anc.nodeType === 1 ? (anc as Element) : anc.parentElement;
-      if (el) this.select(el, { quote: text });
+      if (el) this.select(el, { quote: text, at: { x: e.clientX, y: e.clientY } });
       return;
     }
     const t = this.targetOf(e);
@@ -879,7 +898,7 @@ export class PixelSpec {
       else this.closePop();
       return;
     }
-    if (t) this.select(t);
+    if (t) this.select(t, { at: { x: e.clientX, y: e.clientY } });
   };
 
   private onKeyDown = (e: KeyboardEvent) => {
@@ -1030,7 +1049,7 @@ export class PixelSpec {
     const mk = t.closest<HTMLElement>('.mk');
     if (mk) {
       const n = this.notes.find((x) => x.id === Number(mk.dataset.note));
-      if (n?.element) this.select(n.element, { noteId: n.id });
+      if (n?.element) this.select(n.element, { noteId: n.id, at: { x: (e as MouseEvent).clientX, y: (e as MouseEvent).clientY } });
       return;
     }
     const actEl = t.closest('[data-act]');
