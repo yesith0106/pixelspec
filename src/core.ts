@@ -391,7 +391,7 @@ export class PixelSpec {
     if (hov && hov !== sel) {
       const hr = rectOf(hov);
       if (sel) {
-        o += drawOutline(hr, 'ol-hov');
+        o += drawOutline(hr, this.hoverClass(hr));
         top += drawMeasure(rectOf(sel), hr);
         if (!s.measured) {
           s.measured = true;
@@ -400,7 +400,7 @@ export class PixelSpec {
         }
       } else {
         if (s.hoverBox) o += drawBoxModel(boxes(hov), true);
-        o += drawOutline(hr, 'ol-hov');
+        o += drawOutline(hr, this.hoverClass(hr));
         if (this.alt && hov.parentElement) {
           const pr = rectOf(hov.parentElement);
           o += drawOutline(pr, 'ol-par');
@@ -418,6 +418,12 @@ export class PixelSpec {
     if (sel) labels += drawLabels(sel, rectOf(sel), 'size');
     // Measurements last so they sit above the name/size labels.
     return o + labels + top;
+  }
+
+  /** Large containers get an outline only; a tinted fill over most of the screen is just noise. */
+  private hoverClass(r: Rect): string {
+    const area = Math.max(0, r.width) * Math.max(0, r.height);
+    return area > innerWidth * innerHeight * 0.3 ? 'ol-hov big' : 'ol-hov';
   }
 
   private drawMarks(): void {

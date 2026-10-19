@@ -33,6 +33,7 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .bx-c { background: transparent; }
 .ol-sel { border: 1.5px solid var(--accent); }
 .ol-hov { border: 1px solid var(--accent); background: rgba(13,153,255,.05); }
+.ol-hov.big { background: none; }
 .ol-par { border: 1px dashed var(--red); }
 .sv { transform: translate(-50%, -50%); font-size: 9.5px; font-weight: 700; }
 .sv-p { color: #2c6e1a; }

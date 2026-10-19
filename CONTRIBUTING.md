@@ -26,6 +26,7 @@ In a second terminal, run `npm run dev` to rebuild on every change, then refresh
 | `src/react.ts` | The `<PixelSpec />` React component |
 | `src/auto.ts` | The drop-in `<script>` build |
 | `demo/` | A test page for trying changes |
+| `demo/hero/` | The wireframe scene used for the README animation |
 
 ## Before opening a pull request
 

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard</title>
+  <!-- Wireframe dashboard used for the README hero clip. Rendered inside demo/hero/index.html. -->
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      display: flex; overflow: hidden; background: #f5f4f2; color: #7a7a7a;
+      font: 500 18px/1.2 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .side {
+      width: 88px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 14px;
+      padding: 24px 0 22px; background: #fff; border-right: 1px solid #ececec;
+    }
+    .logo { width: 40px; height: 40px; border-radius: 10px; background: #e8e8e8; }
+    .nav { display: flex; flex-direction: column; gap: 12px; margin-top: 26px; }
+    .nav span { width: 36px; height: 36px; border-radius: 10px; background: #efefef; display: block; }
+    .avatar { margin-top: auto; width: 34px; height: 34px; border-radius: 50%; background: #e6e6e6; }
+
+    main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; padding: 26px 30px; }
+    header { display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .mark { width: 34px; height: 34px; border-radius: 9px; background: #e6e6e6; }
+    h1 { margin: 0; font: inherit; color: #7c7c7c; letter-spacing: -0.01em; }
+    .cta { width: 110px; height: 48px; border-radius: 10px; background: #e7e7e7; }
+
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .card { background: #fff; border-radius: 14px; padding: 26px 24px; box-shadow: 0 1px 2px rgba(0, 0, 0, .03); }
+    .label { width: 90px; height: 10px; border-radius: 5px; background: #ececec; }
+    .value { width: 100px; height: 36px; border-radius: 8px; background: #e8e8e8; margin-top: 18px; }
+    .card:nth-child(3) .label { width: 76px; }
+    .card:nth-child(3) .value { width: 80px; }
+
+    .table { flex: 1; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, .03); }
+    .row { display: flex; align-items: center; gap: 40px; height: 66px; padding: 0 28px; border-bottom: 1px solid #f0f0f0; }
+    .row span { height: 12px; border-radius: 6px; background: #efefef; display: block; }
+    .row.head span { background: #ebebeb; }
+    .pill { width: 96px; height: 34px !important; border-radius: 17px !important; background: #f3f3f3 !important; }
+  </style>
+</head>
+<body>
+  <aside class="side">
+    <div class="logo"></div>
+    <nav class="nav"><span></span><span></span><span></span></nav>
+    <div class="avatar"></div>
+  </aside>
+  <main>
+    <header>
+      <div class="brand"><div class="mark"></div><h1>Acme dashboard</h1></div>
+      <div class="cta" role="button"></div>
+    </header>
+    <section class="stats">
+      <div class="card"><div class="label"></div><div class="value"></div></div>
+      <div class="card"><div class="label"></div><div class="value"></div></div>
+      <div class="card"><div class="label"></div><div class="value"></div></div>
+    </section>
+    <section class="table">
+      <div class="row head"><span style="width:120px"></span><span style="width:90px"></span><span style="width:80px"></span></div>
+      <div class="row"><span style="width:140px"></span><span style="width:100px"></span><span class="pill"></span></div>
+      <div class="row"><span style="width:110px"></span><span style="width:84px"></span><span class="pill" style="width:84px"></span></div>
+      <div class="row"><span style="width:124px"></span><span style="width:76px"></span><span class="pill" style="width:96px"></span></div>
+      <div class="row"><span style="width:98px"></span><span style="width:92px"></span><span class="pill" style="width:88px"></span></div>
+    </section>
+  </main>
+  <script src="../../dist/pixelspec.global.js"></script>
+</body>
+</html>
