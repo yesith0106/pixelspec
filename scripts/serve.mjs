@@ -20,4 +20,4 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end('Not found');
   }
-}).listen(port, () => console.log(`Inspecta demo: http://localhost:${port}/demo/`));
+}).listen(port, () => console.log(`PixelSpec demo: http://localhost:${port}/demo/`));

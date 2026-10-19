@@ -1,4 +1,4 @@
-// Drop-in build: <script src="inspecta.global.js" data-active="true" data-hotkey="alt+shift+i"></script>
+// Drop-in build: <script src="pixelspec.global.js" data-active="true" data-hotkey="alt+shift+i"></script>
 import { init } from './index';
 
 export * from './index';

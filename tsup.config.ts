@@ -10,10 +10,10 @@ export default defineConfig([
     external: ['react'],
   },
   {
-    // Drop-in <script> build that auto-initialises. Exposes window.Inspecta.
-    entry: { inspecta: 'src/auto.ts' },
+    // Drop-in <script> build that auto-initialises. Exposes window.PixelSpec.
+    entry: { pixelspec: 'src/auto.ts' },
     format: ['iife'],
-    globalName: 'Inspecta',
+    globalName: 'PixelSpec',
     minify: true,
     target: 'es2020',
   },

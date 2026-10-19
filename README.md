@@ -1,6 +1,8 @@
-# Inspecta
+# PixelSpec
 
-A Figma-style inspect overlay for any web page, with [agentation](https://agentation.com)-style feedback for AI coding agents. Hover to inspect, click for specs and feedback, then hover another element to measure the distance.
+**Figma-style inspect and spacing overlay for any website, with AI-ready feedback.**
+
+PixelSpec lets you measure spacing between elements right in the browser: padding, margin, gaps, distances, letter spacing, line height, colors and contrast, like Figma's inspect panel on top of the live page. Click any element to leave feedback, then copy it all as a compact prompt for your AI coding agent (an [agentation](https://agentation.com) alternative with built-in design inspection).
 
 ## How it works
 
@@ -54,7 +56,7 @@ Switch to Full in settings, hold <kbd>Shift</kbd> while copying, or set `aiDetai
 ### Script tag (any site, no build step)
 
 ```html
-<script src="node_modules/inspecta/dist/inspecta.global.js" data-active="false"></script>
+<script src="node_modules/pixelspec/dist/pixelspec.global.js" data-active="false"></script>
 ```
 
 Optional attributes: `data-active="true"`, `data-hotkey="alt+shift+i"`, `data-position="bottom-left"`.
@@ -63,20 +65,20 @@ Optional attributes: `data-active="true"`, `data-hotkey="alt+shift+i"`, `data-po
 
 ```ts
 if (import.meta.env.DEV) {
-  import('inspecta').then(({ init }) => init({ hotkey: 'alt+shift+i' }));
+  import('pixelspec').then(({ init }) => init({ hotkey: 'alt+shift+i' }));
 }
 ```
 
 ### React / Next.js
 
 ```tsx
-import { Inspecta } from 'inspecta/react';
+import { PixelSpec } from 'pixelspec/react';
 
 export default function App() {
   return (
     <>
       <Main />
-      {process.env.NODE_ENV === 'development' && <Inspecta />}
+      {process.env.NODE_ENV === 'development' && <PixelSpec />}
     </>
   );
 }

@@ -9,7 +9,7 @@ import { clamp, copyText, esc, rectOf, trunc, type Rect } from './util';
 
 export type CopyKind = 'value' | 'css' | 'ai' | 'selector' | 'notes';
 
-export interface InspectaOptions {
+export interface PixelSpecOptions {
   /** Keyboard shortcut that toggles the inspector. Default `alt+shift+i`. Modifiers: alt, shift, ctrl, meta, mod (ctrl or ⌘). */
   hotkey?: string;
   /** Start with the inspector switched on. Default `false`. */
@@ -26,7 +26,7 @@ export interface InspectaOptions {
   onCopy?: (text: string, kind: CopyKind) => void;
 }
 
-export interface InspectaNote {
+export interface PixelSpecNote {
   id: number;
   element: Element | null;
   selector: string;
@@ -83,7 +83,7 @@ function isEditable(el: Element | null): boolean {
 const ib = (act: string, icon: string, tip: string, kbd = '', cls = '') =>
   `<button class="ib${cls ? ` ${cls}` : ''}" data-act="${act}" aria-label="${esc(tip)}" data-tip="${esc(tip)}"${kbd ? ` data-kbd="${esc(kbd)}"` : ''}>${icon}</button>`;
 
-export class Inspecta {
+export class PixelSpec {
   private host: HTMLElement;
   private root: ShadowRoot;
   private layer: HTMLElement;
@@ -105,7 +105,7 @@ export class Inspecta {
   private alt = false;
   private mouse = { x: -1, y: -1 };
   private down: { x: number; y: number } | null = null;
-  private notes: InspectaNote[] = [];
+  private notes: PixelSpecNote[] = [];
   private noteSeq = 0;
   private raf = 0;
   private lastLayer = '';
@@ -121,10 +121,10 @@ export class Inspecta {
   private toastTimer = 0;
   private popPos = '';
   private s: Settings;
-  private opts: InspectaOptions & { hotkey: string; showToolbar: boolean; position: 'bottom-right' | 'bottom-left'; persist: boolean };
+  private opts: PixelSpecOptions & { hotkey: string; showToolbar: boolean; position: 'bottom-right' | 'bottom-left'; persist: boolean };
 
-  constructor(options: InspectaOptions = {}) {
-    const defined = Object.fromEntries(Object.entries(options).filter(([, v]) => v !== undefined)) as InspectaOptions;
+  constructor(options: PixelSpecOptions = {}) {
+    const defined = Object.fromEntries(Object.entries(options).filter(([, v]) => v !== undefined)) as PixelSpecOptions;
     this.opts = { hotkey: 'alt+shift+i', showToolbar: true, position: 'bottom-right', persist: true, ...defined };
     this.s = {
       detail: this.opts.aiDetail ?? 'compact',
@@ -141,15 +141,15 @@ export class Inspecta {
     };
     delete (this.s as Partial<Settings> & { color?: string }).color;
 
-    this.host = document.createElement('inspecta-overlay');
-    this.host.setAttribute('data-inspecta', '');
+    this.host = document.createElement('pixelspec-overlay');
+    this.host.setAttribute('data-pixelspec', '');
     this.host.style.cssText = 'position:fixed;inset:0;z-index:2147483647;pointer-events:none;display:block;';
     this.root = this.host.attachShadow({ mode: 'open' });
     this.root.innerHTML = `<style>${STYLES}</style><div class="ui">
       <div class="layer"></div><div class="marks"></div>
       <div class="pop" hidden role="dialog" aria-label="Element inspector"></div>
       <div class="hint" hidden></div>
-      <div class="dock"><div class="menu" hidden role="menu" aria-label="Settings"></div><div class="tb" role="toolbar" aria-label="Inspecta"></div></div>
+      <div class="dock"><div class="menu" hidden role="menu" aria-label="Settings"></div><div class="tb" role="toolbar" aria-label="PixelSpec"></div></div>
       <div class="toast" role="status" aria-live="polite"></div></div>`;
     const q = <T extends HTMLElement>(s: string) => this.root.querySelector(s) as T;
     this.layer = q('.layer');
@@ -164,11 +164,11 @@ export class Inspecta {
     document.documentElement.appendChild(this.host);
 
     this.pageStyle = document.createElement('style');
-    this.pageStyle.textContent = 'html[data-inspecta-active], html[data-inspecta-active] * { cursor: crosshair !important; }';
+    this.pageStyle.textContent = 'html[data-pixelspec-active], html[data-pixelspec-active] * { cursor: crosshair !important; }';
     this.pauseStyle = document.createElement('style');
     document.head.append(this.pageStyle, this.pauseStyle);
 
-    for (const n of this.load<Omit<InspectaNote, 'element'>[]>(this.notesKey(), [])) {
+    for (const n of this.load<Omit<PixelSpecNote, 'element'>[]>(this.notesKey(), [])) {
       this.notes.push({ ...n, element: null });
       this.noteSeq = Math.max(this.noteSeq, n.id);
     }
@@ -207,7 +207,7 @@ export class Inspecta {
   activate(): void {
     if (this.active) return;
     this.active = true;
-    document.documentElement.setAttribute('data-inspecta-active', '');
+    document.documentElement.setAttribute('data-pixelspec-active', '');
     this.marks.hidden = false;
     this.raf = requestAnimationFrame(this.frame);
     this.renderToolbar();
@@ -228,7 +228,7 @@ export class Inspecta {
     this.layer.innerHTML = '';
     this.lastLayer = '';
     this.marks.hidden = true;
-    document.documentElement.removeAttribute('data-inspecta-active');
+    document.documentElement.removeAttribute('data-pixelspec-active');
     this.renderToolbar();
     this.renderHint();
   }
@@ -260,13 +260,13 @@ export class Inspecta {
     this.renderToolbar();
   }
 
-  getNotes(): InspectaNote[] {
+  getNotes(): PixelSpecNote[] {
     return this.notes.slice();
   }
 
   /** All feedback as text for an AI agent. `detail` defaults to the current setting. */
   notesMarkdown(detail: AIDetail = this.s.detail): string {
-    const label = (n: InspectaNote) => (n.quote ? `${n.text} (re: "${trunc(n.quote, 120)}")` : n.text);
+    const label = (n: PixelSpecNote) => (n.quote ? `${n.text} (re: "${trunc(n.quote, 120)}")` : n.text);
     if (detail === 'compact') {
       const items = this.notes.map(
         (n, i) => `${i + 1}. ${n.element?.isConnected ? describeCompact(n.element, label(n)) : `${label(n)}\n${n.selector} (not on page)`}`.replace(/\n/g, '\n   '),
@@ -316,7 +316,8 @@ export class Inspecta {
   private load<T>(key: string, fallback: T): T {
     if (!this.opts.persist) return fallback;
     try {
-      const raw = localStorage.getItem(`inspecta:${key}`);
+      // Fall back to keys saved under the package's previous name (inspecta).
+      const raw = localStorage.getItem(`pixelspec:${key}`) ?? localStorage.getItem(`inspecta:${key}`);
       return raw ? (JSON.parse(raw) as T) : fallback;
     } catch {
       return fallback;
@@ -326,10 +327,10 @@ export class Inspecta {
   private save(): void {
     if (!this.opts.persist) return;
     try {
-      localStorage.setItem('inspecta:settings', JSON.stringify(this.s));
+      localStorage.setItem('pixelspec:settings', JSON.stringify(this.s));
       const notes = this.notes.map(({ id, selector, text, quote }) => ({ id, selector, text, quote }));
-      if (notes.length) localStorage.setItem(`inspecta:${this.notesKey()}`, JSON.stringify(notes));
-      else localStorage.removeItem(`inspecta:${this.notesKey()}`);
+      if (notes.length) localStorage.setItem(`pixelspec:${this.notesKey()}`, JSON.stringify(notes));
+      else localStorage.removeItem(`pixelspec:${this.notesKey()}`);
     } catch {
       /* storage full or blocked */
     }
@@ -462,14 +463,14 @@ export class Inspecta {
     const html = document.documentElement;
     const scroll = this.pop.querySelector('.pbody')?.scrollTop ?? 0;
     // Drop our crosshair cursor override while reading styles so it doesn't show up as the element's cursor.
-    html.removeAttribute('data-inspecta-active');
+    html.removeAttribute('data-pixelspec-active');
     let specs = '';
     let details = '';
     try {
       specs = specsHTML(el);
       details = detailsHTML(el, this.closed);
     } finally {
-      html.setAttribute('data-inspecta-active', '');
+      html.setAttribute('data-pixelspec-active', '');
     }
     const id = `<span class="tag">${esc(tag)}</span><code>${el.id ? `#${esc(el.id)}` : ''}${cls.length ? `.${esc(cls.join('.'))}` : ''}</code>`;
     this.pop.innerHTML = `
@@ -624,7 +625,7 @@ export class Inspecta {
     const n = this.notes.length;
     this.tb.classList.toggle('collapsed', !this.active);
     if (!this.active) {
-      this.tb.innerHTML = `<button class="fab" data-act="toggle" aria-label="Open Inspecta" data-tip="Inspect & annotate" data-kbd="${esc(hotkeyLabel(this.opts.hotkey))}">${I.logo}</button>`;
+      this.tb.innerHTML = `<button class="fab" data-act="toggle" aria-label="Open PixelSpec" data-tip="Inspect & annotate" data-kbd="${esc(hotkeyLabel(this.opts.hotkey))}">${I.logo}</button>`;
       this.menu.hidden = true;
       return;
     }
@@ -652,7 +653,7 @@ export class Inspecta {
     const sw = (key: keyof Settings, label: string, kbd = '') =>
       `<button class="mi" role="menuitemcheckbox" aria-checked="${!!s[key]}" data-act="set-${key}"><span>${label}${kbd ? `<kbd>${kbd}</kbd>` : ''}</span><span class="switch${s[key] ? ' on' : ''}"></span></button>`;
     this.menu.innerHTML = `
-      <div class="mh">Inspecta <span>v${VERSION}</span></div>
+      <div class="mh">PixelSpec <span>v${VERSION}</span></div>
       <div class="mi col"><span>Copy detail</span>
         <div class="seg" style="margin-top:6px"><button data-act="detail-compact" class="${s.detail === 'compact' ? 'on' : ''}">Compact</button><button data-act="detail-full" class="${s.detail === 'full' ? 'on' : ''}">Full</button></div>
         <div class="sub">${s.detail === 'compact' ? 'Two lines per element. Saves tokens.' : 'Markdown with layout, position and shadows.'} Hold <kbd>Shift</kbd> when copying for the other.</div>

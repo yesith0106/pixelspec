@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
-import { destroy, init, type InspectaOptions } from './index';
+import { destroy, init, type PixelSpecOptions } from './index';
 
-export interface InspectaProps extends InspectaOptions {
+export interface PixelSpecProps extends PixelSpecOptions {
   /** Set to false to unmount the overlay entirely (e.g. in production). Default true. */
   enabled?: boolean;
 }
 
 /**
- * Renders nothing; mounts the Inspecta overlay while it is in the tree.
+ * Renders nothing; mounts the PixelSpec overlay while it is in the tree.
  *
- *   {process.env.NODE_ENV === 'development' && <Inspecta />}
+ *   {process.env.NODE_ENV === 'development' && <PixelSpec />}
  */
-export function Inspecta({ enabled = true, ...options }: InspectaProps): null {
+export function PixelSpec({ enabled = true, ...options }: PixelSpecProps): null {
   useEffect(() => {
     if (!enabled) return;
     init(options);
@@ -22,4 +22,4 @@ export function Inspecta({ enabled = true, ...options }: InspectaProps): null {
   return null;
 }
 
-export default Inspecta;
+export default PixelSpec;
