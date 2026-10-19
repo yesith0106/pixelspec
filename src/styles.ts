@@ -3,7 +3,7 @@ export const STYLES = /* css */ `
 * { box-sizing: border-box; }
 .ui {
   --bg: #18181b; --bg2: #232327; --line: rgba(255,255,255,.09); --fg: #f4f4f5; --fg2: #a1a1aa; --fg3: #71717a;
-  --accent: #0d99ff; --accent-soft: rgba(13,153,255,.16); --accent-fg: #6cc2ff; --mk: #0d99ff;
+  --red: #FF3B30; --accent: #0d99ff; --accent-soft: rgba(13,153,255,.16); --accent-fg: #6cc2ff; --mk: #0d99ff;
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   font: 500 13px/1.4 var(--sans); color: var(--fg); -webkit-font-smoothing: antialiased;
@@ -33,7 +33,7 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .bx-c { background: transparent; }
 .ol-sel { border: 1.5px solid var(--accent); }
 .ol-hov { border: 1px solid var(--accent); background: rgba(13,153,255,.05); }
-.ol-par { border: 1px dashed #f24822; }
+.ol-par { border: 1px dashed var(--red); }
 .sv { transform: translate(-50%, -50%); font-size: 9.5px; font-weight: 700; }
 .sv-p { color: #2c6e1a; }
 .sv-m { color: #9a5212; }
@@ -42,14 +42,14 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .dim-sel { background: var(--accent); }
 .tag-hov { background: #18181b; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 2px 6px rgba(0,0,0,.25); }
 .pd { margin-left: 8px; color: #a1a1aa; font-weight: 500; }
-.dl, .dcap, .dp { background: #f24822; }
-.dd-h { background: repeating-linear-gradient(90deg, #f24822 0 3px, transparent 3px 6px); }
-.dd-v { background: repeating-linear-gradient(180deg, #f24822 0 3px, transparent 3px 6px); }
+.dl, .dcap, .dp { background: var(--red); }
+.dd-h { background: repeating-linear-gradient(90deg, var(--red) 0 3px, transparent 3px 6px); }
+.dd-v { background: repeating-linear-gradient(180deg, var(--red) 0 3px, transparent 3px 6px); }
 .gap { background: repeating-linear-gradient(-45deg, rgba(232, 62, 140, .42) 0 1.5px, rgba(232, 62, 140, .1) 1.5px 6px); box-shadow: inset 0 0 0 1px rgba(232, 62, 140, .7); }
 .gp { background: #e83e8c; font-size: 9.5px; padding: 2px 4px; }
 .tl { box-shadow: inset 0 0 0 1px rgba(124, 58, 237, .8); background: rgba(124, 58, 237, .06); }
 .gd-v, .gd-h { background: rgba(13, 153, 255, .5); }
-.ch { background: rgba(242, 72, 34, .5); }
+.ch { background: rgba(255, 59, 48, .5); }
 .coord { background: #09090b; }
 
 /* ---------- markers ---------- */
@@ -74,7 +74,7 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .ib:hover { background: rgba(255,255,255,.08); color: #fff; }
 .ib.on { color: var(--accent-fg); background: var(--accent-soft); }
 .ib.ok { color: #4ade80; }
-.ib.close:hover { color: #fca5a5; }
+.ib.close:hover { color: var(--red); }
 .sep { width: 1px; height: 20px; background: var(--line); margin: 0 4px; }
 .bdg { position: absolute; top: 1px; right: 0; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--mk); color: #fff;
   font: 700 10px/16px var(--sans); text-align: center; box-shadow: 0 0 0 2px var(--bg); }
@@ -120,9 +120,9 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .btn.tint:hover { background: rgba(13,153,255,.22); box-shadow: inset 0 0 0 1px rgba(13,153,255,.45); color: #fff; }
 .btn.ghost { background: transparent; box-shadow: none; color: var(--fg2); }
 .btn.ghost:hover { background: rgba(255,255,255,.07); color: var(--fg); }
-.btn.danger { color: #f8a5a5; }
+.btn.danger { color: var(--red); }
 .btn.danger svg { color: currentColor; }
-.btn.danger:hover { background: rgba(239,68,68,.12); color: #fecaca; }
+.btn.danger:hover { background: rgba(255, 59, 48, .14); color: var(--red); }
 .btn.accent { color: var(--accent); }
 .btn.accent:hover { background: rgba(13,153,255,.1); color: var(--accent); }
 
@@ -168,7 +168,7 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .cr { display: inline-flex; align-items: center; height: 26px; padding: 0 4px; font: 600 11.5px/1 var(--sans); }
 .cr::before { content: ""; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; background: currentColor; }
 .cr.ok { color: #86efac; }
-.cr.no { color: #fca5a5; }
+.cr.no { color: var(--red); }
 
 .specs { margin-bottom: 6px; }
 .pid .ident { display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; cursor: copy; border-radius: 7px; }
@@ -209,7 +209,7 @@ textarea:focus, textarea:focus-visible { outline: none; }
 .composer:focus-within .chint { opacity: 1; transform: none; }
 .chint kbd { min-width: 0; padding: 0 4px; font-size: 10px; line-height: 16px; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.06); color: var(--fg2); }
 .cbar .del { width: 28px; height: 28px; border-radius: 8px; color: var(--fg3); }
-.cbar .del:hover { color: #fca5a5; background: rgba(239,68,68,.12); }
+.cbar .del:hover { color: var(--red); background: rgba(255, 59, 48, .14); }
 .send { flex: none; width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; color: #fff;
   background: linear-gradient(180deg, #2aa6ff, #0d8fef);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.25), 0 2px 6px rgba(13,143,239,.35);
@@ -242,7 +242,7 @@ textarea:focus, textarea:focus-visible { outline: none; }
 .sw > i { display: block; width: 100%; height: 100%; }
 .wc { display: inline-block; font: 600 10px/1.5 var(--sans); padding: 0 5px; border-radius: 4px; margin-left: 4px; }
 .wc.ok { background: #14532d; color: #86efac; }
-.wc.no { background: #5f1d1d; color: #fca5a5; }
+.wc.no { background: rgba(255, 59, 48, .16); color: var(--red); }
 .spec { font-size: 26px; line-height: 1.2; color: #fff; padding: 2px 0 8px; display: flex; align-items: baseline; gap: 10px; overflow: hidden; white-space: nowrap; }
 .spec span { font-size: 12px; color: var(--fg2); overflow: hidden; text-overflow: ellipsis; }
 .bm { position: relative; display: grid; grid-template-columns: 28px 1fr 28px; grid-template-rows: 18px auto 18px; grid-template-areas: ". t ." "l in r" ". b .";
