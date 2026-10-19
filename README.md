@@ -1,29 +1,39 @@
 # Inspecta
 
-A Figma-style inspect overlay for any web page. Hover to see the box model, click to pin, hover another element to see the redline distance between them. A side panel shows everything the browser knows about the element: spacing, typography, colors, contrast, layout, accessibility and framework component. Like [agentation](https://agentation.dev), you can pin elements, leave notes and copy them as Markdown for an AI coding agent.
+A Figma-style inspect overlay for any web page, with [agentation](https://agentation.com)-style feedback for AI coding agents. Hover to inspect, click for specs and feedback, then hover another element to measure the distance.
 
-## What it shows
+## How it works
 
-**On the page**
-- Box model: margin (orange), border (yellow), padding (green), content (blue), with values on the strips
-- Distances between a pinned element and the hovered one (red redlines, Figma-style, handles nested, overlapping and diagonal elements)
-- Hold <kbd>Alt</kbd> to measure an element against its parent
-- Gaps between children, hatched in pink (flex gap, grid gap, margins, anything)
-- Text line boxes for each rendered line
-- Guides: crosshair with viewport and page coordinates, plus edge guides from the pinned element
-- Tag name and size labels, numbered note markers
+1. **Open it.** Click the round button in the corner, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>. A short tip bar explains the basics the first time.
+2. **Hover** anything to see its name and size.
+3. **Click** an element. A popover opens next to it with the key specs as chips: size, padding, margin, gap, layout, font, color, contrast, radius and shadow. Click any chip to copy its value. The chip labels use the same colors as the overlay, so green is padding, orange is margin and pink is gap.
+4. **Hover another element** while one is selected to see red redline distances, like Figma. Hold <kbd>Alt</kbd> to measure to the parent.
+5. **Type feedback** in the popover and press <kbd>Enter</kbd>. A numbered marker appears on the element. Hover a marker to read its note, or click it to edit or delete it.
+6. **Select text** on the page to leave feedback that quotes it.
+7. **Copy** with the copy button or <kbd>C</kbd>, and paste it into your agent.
 
-**In the panel** (click any value to copy it)
-- Element: selector, React / Vue / Svelte component chain and source file, role, text
-- Size & position: viewport and page position, min/max sizes, distance to parent edges and siblings
-- Box model diagram, padding, margin, border, box-sizing
-- Layout: display, position, inset, z-index, overflow, all flex and grid container and item properties, measured gaps
-- Typography: rendered font (detected from the stack), size in px and rem, weight name, line height in px and ratio, letter spacing in px, em and %, word spacing, transform, decoration, features, smoothing, line clamp, rendered line count, live specimen
-- Colors: text, background, gradients, borders, outline, SVG fill and stroke as hex, plus WCAG contrast against the real composited background with AA/AAA badges
-- Appearance: radius, shadow, opacity, transform, filter, backdrop, blend, transitions, animations
-- Accessibility: role, accessible name, focusability, aria attributes, alt text, small target warning
-- All attributes
-- Copy CSS, copy selector, copy for AI, and per-element notes
+"All properties" in the popover opens the full list: box model diagram, every flex and grid property, full typography, colors, appearance, accessibility and attributes.
+
+## Toolbar
+
+The toolbar can be dragged anywhere, and it remembers where you put it.
+
+| Button | Key | What it does |
+| --- | --- | --- |
+| Spacing overlay | <kbd>S</kbd> | Box model and pink gap hatching on the selected element |
+| Guides | <kbd>G</kbd> | Crosshair with coordinates and edge guides |
+| Pause animations | <kbd>P</kbd> | Freezes CSS animations, transitions and videos |
+| Hide markers | <kbd>H</kbd> | Shown once you have feedback |
+| Copy feedback | <kbd>C</kbd> | Copies all feedback. The badge shows the count |
+| Clear all | <kbd>X</kbd> | Clears all feedback, with Undo |
+| Settings | | Copy detail, overlays, clear after copy, marker color |
+| Close | <kbd>Esc</kbd> | Esc closes the popover first, then the toolbar |
+
+In the popover, <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> walk to the parent, child and siblings while the feedback box is empty. <kbd>Shift</kbd>+<kbd>Enter</kbd> adds a new line.
+
+Some details protect your work. Feedback you are typing is never thrown away by a stray click: the popover shakes instead. Deleting and clearing can be undone from the toast. Feedback survives page reloads and hot reloads.
+
+While the toolbar is open, clicks on the page are blocked so links and buttons don't fire. Text selection still works.
 
 ## Copy for AI
 
@@ -37,22 +47,7 @@ body>header>button.cta "Start free trial"
 
 Key: `p` padding, `m` margin, `b` border, `r` radius, `14/14 w600` size/line-height weight, `ls` letter spacing, `c` text color, `bg` background. Contrast only appears when it fails AA. Containers skip text and typography.
 
-Hold <kbd>Shift</kbd> while copying, or set `aiDetail: 'full'` (`data-ai-detail="full"` on the script tag), for the full Markdown version. That one adds page position, layout details, shadows and the full contrast result. It is roughly 2.5 times longer.
-
-## Shortcuts
-
-| Key | Action |
-| --- | --- |
-| <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> | Toggle the inspector (configurable) |
-| Click | Pin element (click again to unpin) |
-| <kbd>Alt</kbd> (hold) | Measure to parent |
-| <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> | Parent, first child, siblings |
-| <kbd>S</kbd> / <kbd>T</kbd> / <kbd>G</kbd> | Spacing, text lines, guides |
-| <kbd>C</kbd> | Copy element for AI (compact). <kbd>Shift</kbd>+<kbd>C</kbd> for full |
-| <kbd>N</kbd> | Focus the note box |
-| <kbd>Esc</kbd> | Unpin, then exit |
-
-While the inspector is on, clicks on the page are swallowed so links and buttons don't fire.
+Switch to Full in settings, hold <kbd>Shift</kbd> while copying, or set `aiDetail: 'full'` (`data-ai-detail="full"` on the script tag), for the full Markdown version. That one adds page position, layout details, shadows and the full contrast result. It is roughly 2.5 times longer.
 
 ## Usage
 
@@ -93,11 +88,12 @@ In the Next.js App Router, put it in a `'use client'` component.
 
 ```ts
 init({
-  hotkey: 'alt+shift+i',        // modifiers: alt, shift, ctrl, meta
+  hotkey: 'alt+shift+i',        // modifiers: alt, shift, ctrl, meta, mod (Ctrl or ⌘)
   startActive: false,
   showToolbar: true,
   position: 'bottom-right',     // or 'bottom-left'
-  aiDetail: 'compact',          // or 'full'; Shift while copying uses the other
+  aiDetail: 'compact',          // starting value; users can change it in settings
+  persist: true,                // remember settings, toolbar position and feedback
   onCopy: (text, kind) => {},   // kind: 'value' | 'css' | 'ai' | 'selector' | 'notes'
 });
 ```
@@ -117,7 +113,8 @@ The overlay lives in a shadow root, so page styles never leak into it and it nev
 
 ## Known limits
 
-- Contrast ignores background images and element opacity, and says so in the panel.
+- Contrast ignores background images and element opacity, and says so in the popover.
+- Feedback is matched back to elements by selector after a reload, so it can land on the wrong element if the page structure changed.
 - Rendered font detection is a heuristic based on loaded font faces and canvas measurement.
 - Component source paths need a dev build. React 19 removed `_debugSource`, so React 19 shows names only.
 - Elements inside closed shadow roots and cross-origin iframes can't be inspected.

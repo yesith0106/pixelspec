@@ -6,12 +6,6 @@ import {
 } from './inspect';
 import { esc, fmt, fmtPx, num, rectOf, trunc } from './util';
 
-export interface PanelState {
-  pinned: boolean;
-  closed: Set<string>;
-  note: string | null;
-}
-
 type RowOpts = { swatch?: string; html?: boolean; copy?: string; muted?: boolean };
 
 function row(label: string, value: string, o: RowOpts = {}): string {
@@ -24,9 +18,6 @@ function section(id: string, title: string, body: string, closed: Set<string>, b
   if (!body) return '';
   return `<details data-sec="${id}"${closed.has(id) ? '' : ' open'}><summary>${esc(title)}${badge ? `<span class="badge">${badge}</span>` : ''}</summary><div class="sb">${body}</div></details>`;
 }
-
-const btn = (act: string, label: string, title = '', cls = '') =>
-  `<button class="${cls}" data-act="${act}"${title ? ` title="${esc(title)}"` : ''}>${label}</button>`;
 
 const v0 = (n: number) => (n ? fmt(n) : '–');
 
@@ -48,40 +39,15 @@ function colorRow(label: string, css: string): string {
   return row(label, describeColor(c), { swatch: css, copy: toHex(c) });
 }
 
-export function emptyPanelHTML(): string {
-  return `<div class="ph" data-drag><div class="ttl"><span class="tg">Inspecta</span></div></div>
-  <div class="empty">
-    <p>Hover any element to inspect it. <b>Click</b> to pin it, then hover others to measure the distance between them.</p>
-    <ul>
-      <li><kbd>Alt</kbd> hold to measure to the parent</li>
-      <li><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> walk the tree</li>
-      <li><kbd>S</kbd> spacing · <kbd>T</kbd> text lines · <kbd>G</kbd> guides</li>
-      <li><kbd>C</kbd> copy for AI · <kbd>Esc</kbd> unpin / exit</li>
-    </ul>
-  </div>`;
-}
-
-export function panelHTML(el: Element, st: PanelState): string {
+/** Full property list, grouped in collapsible sections. */
+export function detailsHTML(el: Element, closed: Set<string>): string {
   const cs = getComputedStyle(el);
   const r = rectOf(el);
   const tag = el.tagName.toLowerCase();
-  const classes = classList(el);
   const comp = componentInfo(el);
   const text = visibleText(el);
-  const closed = st.closed;
   const parent = el.parentElement;
   let h = '';
-
-  /* Header ---------------------------------------------------------- */
-  h += `<div class="ph" data-drag><div class="ttl"><span class="tg">${esc(tag)}</span>${el.id ? `<span class="id">#${esc(el.id)}</span>` : ''}${
-    classes.length ? `<span class="cl">.${esc(trunc(classes.slice(0, 3).join('.'), 48))}${classes.length > 3 ? ` +${classes.length - 3}` : ''}</span>` : ''
-  }</div><div class="acts">${btn('parent', '↑', 'Select parent (Arrow Up)')}${btn('child', '↓', 'Select first child (Arrow Down)')}${
-    st.pinned ? btn('unpin', '✕', 'Unpin (Esc)') : ''
-  }</div></div>`;
-  h += `<div class="sub"><span class="mode${st.pinned ? ' pin' : ''}">${st.pinned ? 'Pinned' : 'Hover'}</span><span class="dims">${fmt(r.width)} × ${fmt(r.height)}</span>${
-    comp ? `<span class="comp" title="${esc(comp.framework)} component">&lt;${esc(comp.names[0])}&gt;</span>` : ''
-  }</div>`;
-  h += `<div class="qa">${btn('copy-ai', 'Copy for AI', 'Markdown summary for coding agents (C)', 'pri')}${btn('copy-css', 'Copy CSS')}${btn('copy-sel', 'Selector')}</div>`;
 
   /* Element --------------------------------------------------------- */
   let b = row('Selector', cssSelector(el));
@@ -288,19 +254,101 @@ export function panelHTML(el: Element, st: PanelState): string {
   }
   h += section('attrs', 'Attributes', b, closed, String(el.attributes.length));
 
-  /* Note ------------------------------------------------------------ */
-  if (st.pinned) {
-    h += `<div class="note"><textarea placeholder="Leave a note for this element (copied with Notes)…" rows="2">${esc(st.note ?? '')}</textarea><div class="nr">${btn(
-      'save-note',
-      st.note ? 'Update note' : 'Add note',
-      'Ctrl/⌘ + Enter',
-      'pri',
-    )}${st.note ? btn('remove-note', 'Remove') : ''}</div></div>`;
-  }
   return h;
 }
 
 function toHexMaybe(css: string): string {
   const c = parseColor(css);
   return c ? describeColor(c) : css;
+}
+
+/* ------------------------------------------------------------------ */
+/* Spec card: the at-a-glance summary at the top of the popover        */
+/* ------------------------------------------------------------------ */
+
+const chip = (label: string, copy: string, opts: { swatch?: string; dim?: string; cls?: string } = {}) =>
+  `<button class="chip${opts.cls ? ` ${opts.cls}` : ''}" data-copy="${esc(copy)}" title="Click to copy">${
+    opts.swatch ? `<i class="sw"><i style="background:${esc(opts.swatch)}"></i></i>` : ''
+  }${opts.dim ? `<span class="cd">${esc(opts.dim)}</span>` : ''}${esc(label)}</button>`;
+
+const specRow = (label: string, chips: string) => (chips ? `<div class="sr"><span class="sk">${esc(label)}</span><div class="sc">${chips}</div></div>` : '');
+
+const px = (v: string) => v.split(' ').map((x) => (/^-?[\d.]+$/.test(x) && x !== '0' ? `${x}px` : x)).join(' ');
+
+export function specsHTML(el: Element): string {
+  const cs = getComputedStyle(el);
+  const r = rectOf(el);
+  const text = directText(el) || (el.children.length <= 2 ? visibleText(el) : '');
+  let h = '';
+
+  h += specRow('Size', chip(fmt(r.width), `${fmt(r.width)}px`, { dim: 'W ' }) + chip(fmt(r.height), `${fmt(r.height)}px`, { dim: 'H ' }));
+
+  const pad = pxSides(cs, 'padding');
+  const mar = pxSides(cs, 'margin');
+  let sp = '';
+  if (pad !== '0') sp += chip(pad, px(pad), { dim: 'Padding ', cls: 'c-pad' });
+  if (mar !== '0') sp += chip(mar, px(mar), { dim: 'Margin ', cls: 'c-mar' });
+  const d = cs.display;
+  const isFlex = d.includes('flex');
+  const isGrid = d.includes('grid');
+  if (isFlex || isGrid) {
+    const rg = cs.rowGap === 'normal' ? '0' : fmtPx(cs.rowGap);
+    const cg = cs.columnGap === 'normal' ? '0' : fmtPx(cs.columnGap);
+    const gap = rg === cg ? rg : `${rg} ${cg}`;
+    if (gap !== '0') sp += chip(gap, px(gap), { dim: 'Gap ', cls: 'c-gap' });
+  } else {
+    const gaps = [...new Set(gapRects(el).map((g) => fmt(g.size)))];
+    if (gaps.length) sp += chip(gaps.slice(0, 3).join(', '), gaps.join(', '), { dim: 'Between ', cls: 'c-gap' });
+  }
+  h += specRow('Spacing', sp);
+
+  if (isFlex || isGrid) {
+    const dir = isGrid ? `grid · ${cs.gridTemplateColumns.split(' ').length} cols` : `flex ${cs.flexDirection}${cs.flexWrap !== 'nowrap' ? ' wrap' : ''}`;
+    let lay = chip(dir, isGrid ? `display: grid; grid-template-columns: ${cs.gridTemplateColumns};` : `display: flex; flex-direction: ${cs.flexDirection};`);
+    if (cs.justifyContent !== 'normal') lay += chip(cs.justifyContent, `justify-content: ${cs.justifyContent};`, { dim: 'justify ' });
+    if (cs.alignItems !== 'normal') lay += chip(cs.alignItems, `align-items: ${cs.alignItems};`, { dim: 'align ' });
+    h += specRow('Layout', lay);
+  }
+
+  if (text) {
+    const fs = num(cs.fontSize);
+    const lh = lineHeightInfo(cs);
+    const font = renderedFont(cs.fontFamily);
+    let t = chip(font, cs.fontFamily);
+    t += chip(`${fmt(fs)} / ${fmt(lh.px, 1)}`, `font-size: ${fmt(fs)}px; line-height: ${cs.lineHeight};`);
+    t += chip(`${cs.fontWeight}${weightName(cs.fontWeight) ? ` ${weightName(cs.fontWeight)}` : ''}`, cs.fontWeight);
+    if (cs.letterSpacing !== 'normal' && num(cs.letterSpacing) !== 0) {
+      const em = fmt(num(cs.letterSpacing) / (fs || 16), 3);
+      t += chip(`${fmt(num(cs.letterSpacing))}px · ${em}em`, cs.letterSpacing, { dim: 'Tracking ' });
+    }
+    if (cs.textTransform !== 'none') t += chip(cs.textTransform, cs.textTransform);
+    h += specRow('Type', t);
+  }
+
+  let col = '';
+  if (text) col += colorChip(cs.color, 'Text ');
+  if (!isTransparent(cs.backgroundColor)) col += colorChip(cs.backgroundColor, 'Fill ');
+  if (cs.backgroundImage !== 'none' && cs.backgroundImage.includes('gradient')) col += chip('gradient', cs.backgroundImage, { swatch: cs.backgroundImage });
+  if (text) {
+    const ci = contrastInfo(el, cs);
+    if (ci) col += `<span class="cr ${ci.aa ? 'ok' : 'no'}" title="${ci.aa ? 'Passes' : 'Fails'} WCAG AA${ci.large ? ' (large text)' : ''}">${fmt(ci.ratio, 1)}:1 ${ci.aa ? 'AA ✓' : 'AA ✕'}</span>`;
+  }
+  h += specRow('Color', col);
+
+  let look = '';
+  const rad = radiusSummary(cs);
+  if (rad !== '0') look += chip(rad, `border-radius: ${px(rad)};`, { dim: 'Radius ' });
+  const border = borderSummary(cs);
+  if (border) look += chip(border.length > 28 ? 'mixed' : border, border, { dim: 'Border ' });
+  if (cs.boxShadow !== 'none') look += chip('shadow', `box-shadow: ${cs.boxShadow};`);
+  if (cs.opacity !== '1') look += chip(`${fmt(num(cs.opacity) * 100, 0)}%`, cs.opacity, { dim: 'Opacity ' });
+  h += specRow('Style', look);
+
+  return `<div class="specs">${h}</div>`;
+}
+
+function colorChip(css: string, dim: string): string {
+  const c = parseColor(css);
+  if (!c) return '';
+  return chip(describeColor(c), toHex(c), { swatch: css, dim });
 }
