@@ -166,8 +166,16 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .cr.ok { background: rgba(34,197,94,.12); color: #86efac; }
 .cr.no { background: rgba(239,68,68,.14); color: #fca5a5; }
 
-.pc { display: grid; grid-template-columns: 1.45fr 1fr 1fr; gap: 6px; margin: 14px 0 12px; }
-.pc .btn { width: 100%; }
+.specs { margin-bottom: 12px; }
+.pid .ident { display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; cursor: copy; border-radius: 7px; }
+.pid .ident:hover .tag { background: rgba(13,153,255,.26); }
+.pid .ident:hover code { color: var(--fg); }
+.pid .ident:active .tag { transform: scale(.96); }
+/* Tooltips inside the popover open downward so the popover edge never clips them. */
+.pop [data-tip]::after { bottom: auto; top: calc(100% + 8px); transform: translate(-50%, -4px); }
+.pop [data-tip]:hover::after { transform: translate(-50%, 0); }
+.pa .close[data-tip]::after { left: auto; right: 0; transform: translate(0, -4px); }
+.pa .close[data-tip]:hover::after { transform: translate(0, 0); }
 
 .more { border-top: 1px solid var(--line); margin: 0 -14px; }
 .more > summary { list-style: none; cursor: pointer; height: 42px; padding: 0 14px; color: var(--fg); font-size: 12.5px; font-weight: 600;
@@ -230,7 +238,7 @@ textarea:focus, textarea:focus-visible { box-shadow: inset 0 0 0 1px var(--accen
 .hint[hidden] { display: none; }
 .hint b { color: #fff; font-weight: 600; }
 @keyframes rise { from { opacity: 0; transform: translate(-50%, 8px); } }
-.toast { position: fixed; left: 50%; bottom: 72px; transform: translate(-50%, 8px); display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 14px; border-radius: 12px;
+.toast { position: fixed; left: 50%; top: 16px; transform: translate(-50%, -8px); display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 14px; border-radius: 12px;
   background: #27272a; color: var(--fg); font-weight: 600; font-size: 12.5px; box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 12px 32px rgba(0,0,0,.35); opacity: 0; pointer-events: none;
   transition: opacity .16s, transform .16s; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }

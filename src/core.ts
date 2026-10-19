@@ -474,8 +474,9 @@ export class Inspecta {
     const id = `<span class="tag">${esc(tag)}</span><code>${el.id ? `#${esc(el.id)}` : ''}${cls.length ? `.${esc(cls.join('.'))}` : ''}</code>`;
     this.pop.innerHTML = `
       <div class="ph">
-        <div class="pid">${id}${comp ? `<span class="comp" title="${esc(comp.framework)} component">${esc(comp.names[0])}</span>` : ''}</div>
+        <div class="pid"><button class="ident" data-act="copy-sel" title="Click to copy selector">${id}</button>${comp ? `<span class="comp" title="${esc(comp.framework)} component">${esc(comp.names[0])}</span>` : ''}</div>
         <div class="pa">
+          ${ib('copy-css', I.codeMd, 'Copy CSS')}
           <div class="nav">${ib('parent', I.up, 'Parent', '↑')}${ib('child', I.down, 'Child', '↓')}</div>
           ${ib('close', I.close, 'Close', 'Esc', 'close')}
         </div>
@@ -483,11 +484,6 @@ export class Inspecta {
       <div class="pbody">
         ${this.quote ? `<blockquote class="quote">${esc(trunc(this.quote, 200))}</blockquote>` : ''}
         ${specs}
-        <div class="pc">
-          <button class="btn sm tint" data-act="copy-ai" data-tip="Hold Shift for ${this.s.detail === 'full' ? 'compact' : 'full'}">${I.sparkle}<span>Copy for AI</span></button>
-          <button class="btn sm" data-act="copy-css">${I.code}<span>CSS</span></button>
-          <button class="btn sm" data-act="copy-sel">${I.hash}<span>Selector</span></button>
-        </div>
         <details class="more"${this.moreOpen ? ' open' : ''}><summary>${I.chevron}<span>All properties</span><em>Box model, layout, type, a11y</em></summary><div class="mb">${details}</div></details>
       </div>
       <div class="pn">
@@ -1054,13 +1050,6 @@ export class Inspecta {
         case 'close': this.closePop(); break;
         case 'save-note': this.saveNote(); break;
         case 'delete-note': this.deleteNote(); break;
-        case 'copy-ai': {
-          if (!sel) break;
-          const d = this.detail(shift);
-          const note = this.notes.find((n) => n.id === this.editing);
-          void this.copy(describe(sel, d, note?.text), 'ai', `Copied for AI (${d})`);
-          break;
-        }
         case 'copy-css': if (sel) void this.copy(cssFor(sel), 'css', 'CSS copied'); break;
         case 'copy-sel': if (sel) void this.copy(cssSelector(sel), 'selector', 'Selector copied'); break;
       }
