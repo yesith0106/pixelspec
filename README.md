@@ -26,7 +26,7 @@ The toolbar can be dragged anywhere, and it remembers where you put it.
 | Hide markers | <kbd>H</kbd> | Shown once you have feedback |
 | Copy feedback | <kbd>C</kbd> | Copies all feedback. The badge shows the count |
 | Clear all | <kbd>X</kbd> | Clears all feedback, with Undo |
-| Settings | | Copy detail, overlays, clear after copy, marker color |
+| Settings | | Copy detail, overlays, clear after copy |
 | Close | <kbd>Esc</kbd> | Esc closes the popover first, then the toolbar |
 
 In the popover, <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> walk to the parent, child and siblings while the feedback box is empty. <kbd>Shift</kbd>+<kbd>Enter</kbd> adds a new line.

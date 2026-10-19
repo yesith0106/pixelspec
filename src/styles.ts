@@ -3,7 +3,7 @@ export const STYLES = /* css */ `
 * { box-sizing: border-box; }
 .ui {
   --bg: #18181b; --bg2: #232327; --line: rgba(255,255,255,.09); --fg: #f4f4f5; --fg2: #a1a1aa; --fg3: #71717a;
-  --accent: #0d99ff; --accent-soft: rgba(13,153,255,.16); --accent-fg: #6cc2ff; --mk: #7c3aed;
+  --accent: #0d99ff; --accent-soft: rgba(13,153,255,.16); --accent-fg: #6cc2ff; --mk: #0d99ff;
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   font: 500 13px/1.4 var(--sans); color: var(--fg); -webkit-font-smoothing: antialiased;
@@ -98,9 +98,6 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .switch::before { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform .15s; }
 .switch.on { background: var(--accent); }
 .switch.on::before { transform: translateX(12px); }
-.colors { display: flex; gap: 6px; }
-.colors button { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
-.colors button.on { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px #fff; }
 .mf { display: flex; justify-content: space-between; align-items: center; padding: 8px 8px 4px; margin-top: 4px; border-top: 1px solid var(--line); color: var(--fg3); font-size: 11.5px; }
 .lk { color: var(--fg2); font-size: 12px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; border-radius: 7px; }
 .lk:hover { color: #fff; background: rgba(255,255,255,.07); }

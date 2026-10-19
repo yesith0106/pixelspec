@@ -43,13 +43,11 @@ interface Settings {
   guides: boolean;
   markers: boolean;
   clearOnCopy: boolean;
-  color: string;
   dock: { x: number; y: number } | null;
   tourDone: boolean;
   measured: boolean;
 }
 
-const COLORS = ['#7c3aed', '#0d99ff', '#16a34a', '#f97316', '#e11d48'];
 const VERSION = '0.2.0';
 const INTERACTIVE = 'a,button,input,textarea,select,option,label,summary,[contenteditable=""],[contenteditable="true"],[draggable="true"],[role="button"],[role="link"]';
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
@@ -136,12 +134,12 @@ export class Inspecta {
       guides: false,
       markers: true,
       clearOnCopy: false,
-      color: COLORS[0],
       dock: null,
       tourDone: false,
       measured: false,
       ...this.load<Partial<Settings>>('settings', {}),
     };
+    delete (this.s as Partial<Settings> & { color?: string }).color;
 
     this.host = document.createElement('inspecta-overlay');
     this.host.setAttribute('data-inspecta', '');
@@ -436,7 +434,6 @@ export class Inspecta {
         }
         m.style.left = `${clamp(r.right - 11, 4, vw - 26)}px`;
         m.style.top = `${clamp(r.top - 11, 4, innerHeight - 26)}px`;
-        m.style.background = this.s.color;
         m.classList.toggle('on', this.editing === n.id);
       });
     }
@@ -659,9 +656,6 @@ export class Inspecta {
       ${sw('hoverBox', 'Box model on hover')}
       ${sw('guides', 'Guides', 'G')}
       ${sw('clearOnCopy', 'Clear after copy')}
-      <div class="mi"><span>Marker color</span><div class="colors">${COLORS.map(
-        (c) => `<button data-act="color" data-color="${c}" class="${s.color === c ? 'on' : ''}" style="background:${c}" aria-label="Marker color ${c}"></button>`,
-      ).join('')}</div></div>
       <div class="mf"><span>Toggle <kbd>${esc(hotkeyLabel(this.opts.hotkey))}</kbd></span><button class="lk" data-act="tour">Show tips</button></div>`;
   }
 
@@ -1044,7 +1038,6 @@ export class Inspecta {
         case 'detail-compact': case 'detail-full': this.s.detail = act === 'detail-full' ? 'full' : 'compact'; this.save(); this.renderMenu(); break;
         case 'set-spacing': case 'set-textLines': case 'set-hoverBox': case 'set-guides': case 'set-clearOnCopy':
           this.setFlag(act.slice(4) as 'spacing'); break;
-        case 'color': this.s.color = (actEl as HTMLElement).dataset.color ?? COLORS[0]; this.save(); this.renderMenu(); break;
         case 'tour': this.s.tourDone = false; this.s.measured = false; this.menuOpen = false; this.save(); this.renderToolbar(); this.renderHint(); break;
         case 'tour-done': this.s.tourDone = true; this.save(); this.renderHint(); break;
         case 'toast': this.toastAction?.(); this.toastEl.classList.remove('show', 'act'); break;
