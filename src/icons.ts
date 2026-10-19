@@ -1,7 +1,7 @@
 // Icons from Hugeicons (https://hugeicons.com), free set, MIT licensed.
 import {
   ArrowDown02Icon, ArrowRight01Icon, ArrowUp02Icon, Cancel01Icon, CenterFocusIcon, Copy01Icon, CrosshairIcon, Delete02Icon,
-  HashtagIcon, PauseIcon, PlayIcon, RulerDimensionLineIcon, SlidersHorizontalIcon, SourceCodeIcon, SparklesIcon, Tick02Icon,
+  HashtagIcon, PauseIcon, RulerIcon, PlayIcon, RulerDimensionLineIcon, SlidersHorizontalIcon, SourceCodeIcon, SparklesIcon, Tick02Icon,
   ViewIcon, ViewOffSlashIcon,
 } from '@hugeicons/core-free-icons';
 
@@ -43,6 +43,8 @@ export const I = {
   close: h(Cancel01Icon, 16),
   chevron: h(ArrowRight01Icon, 14),
   code: h(SourceCodeIcon, 14),
-  sparkle: h(SparklesIcon, 14),
+  sparkle: h(SparklesIcon, 15),
   hash: h(HashtagIcon, 14),
+  trashSm: h(Delete02Icon, 14),
+  ruler: h(RulerIcon, 14),
 };

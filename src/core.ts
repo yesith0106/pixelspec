@@ -471,32 +471,35 @@ export class Inspecta {
     } finally {
       html.setAttribute('data-inspecta-active', '');
     }
-    const id = `<code><b>${esc(tag)}</b>${el.id ? `#${esc(el.id)}` : ''}${cls.length ? `.${esc(cls.join('.'))}` : ''}</code>`;
+    const id = `<span class="tag">${esc(tag)}</span><code>${el.id ? `#${esc(el.id)}` : ''}${cls.length ? `.${esc(cls.join('.'))}` : ''}</code>`;
     this.pop.innerHTML = `
       <div class="ph">
-        <div class="pid">${id}${comp ? `<span class="comp" title="${esc(comp.framework)} component">&lt;${esc(comp.names[0])}&gt;</span>` : ''}</div>
-        <div class="pa">${ib('parent', I.up, 'Select parent', '↑')}${ib('child', I.down, 'Select child', '↓')}${ib('close', I.close, 'Close', 'Esc', 'close')}</div>
+        <div class="pid">${id}${comp ? `<span class="comp" title="${esc(comp.framework)} component">${esc(comp.names[0])}</span>` : ''}</div>
+        <div class="pa">
+          <div class="nav">${ib('parent', I.up, 'Parent', '↑')}${ib('child', I.down, 'Child', '↓')}</div>
+          ${ib('close', I.close, 'Close', 'Esc', 'close')}
+        </div>
       </div>
       <div class="pbody">
-        ${this.quote ? `<div class="quote">“${esc(trunc(this.quote, 200))}”</div>` : ''}
+        ${this.quote ? `<blockquote class="quote">${esc(trunc(this.quote, 200))}</blockquote>` : ''}
         ${specs}
         <div class="pc">
-          <button class="lk" data-act="copy-ai">${I.sparkle}Copy for AI</button>
-          <button class="lk" data-act="copy-css">${I.code}CSS</button>
-          <button class="lk" data-act="copy-sel">${I.hash}Selector</button>
+          <button class="btn sm tint" data-act="copy-ai" data-tip="Hold Shift for ${this.s.detail === 'full' ? 'compact' : 'full'}">${I.sparkle}<span>Copy for AI</span></button>
+          <button class="btn sm" data-act="copy-css">${I.code}<span>CSS</span></button>
+          <button class="btn sm" data-act="copy-sel">${I.hash}<span>Selector</span></button>
         </div>
-        <details class="more"${this.moreOpen ? ' open' : ''}><summary>${I.chevron}All properties</summary><div class="mb">${details}</div></details>
+        <details class="more"${this.moreOpen ? ' open' : ''}><summary>${I.chevron}<span>All properties</span><em>Box model, layout, type, a11y</em></summary><div class="mb">${details}</div></details>
       </div>
       <div class="pn">
-        <textarea rows="2" aria-label="Feedback" placeholder="${this.quote ? 'What should change in this text?' : 'What should change? Leave feedback for your agent…'}">${esc(note?.text ?? '')}</textarea>
+        <textarea rows="2" aria-label="Feedback" placeholder="${this.quote ? 'What should change in this text?' : 'Leave feedback for your agent…'}">${esc(note?.text ?? '')}</textarea>
         <div class="pf">
-          <span class="kh"><kbd>↵</kbd> ${note ? 'save' : 'add'}</span>
-          ${note ? `<button class="btn danger" data-act="delete-note">Delete</button>` : ''}
-          <button class="btn" data-act="close">Cancel</button>
-          <button class="btn pri" data-act="save-note"${note?.text ? '' : ' disabled'}>${note ? 'Save' : 'Add'}</button>
+          ${note ? `<button class="btn sm ghost danger" data-act="delete-note">${I.trashSm}<span>Delete</span></button>` : ''}
+          <span class="grow"></span>
+          <button class="btn sm ghost" data-act="close">Cancel</button>
+          <button class="btn sm pri" data-act="save-note"${note?.text ? '' : ' disabled'}><span>${note ? 'Save' : 'Add feedback'}</span><kbd>↵</kbd></button>
         </div>
       </div>
-      ${this.s.measured ? '' : `<div class="ptip">Hover another element to measure the distance. Hold <kbd>Alt</kbd> for the parent.</div>`}`;
+      ${this.s.measured ? '' : `<div class="ptip">${I.ruler}<span>Hover another element to measure · <kbd>Alt</kbd> for parent</span></div>`}`;
     const wasHidden = this.pop.hidden;
     this.pop.hidden = false;
     const body = this.pop.querySelector('.pbody');
@@ -537,6 +540,11 @@ export class Inspecta {
       const dr = this.dock.getBoundingClientRect();
       x = dr.left > vw / 2 ? M : vw - pw - M;
       y = M;
+    }
+    // Never sit on top of the toolbar: slide away from it vertically.
+    const d = this.dock.getBoundingClientRect();
+    if (d.width && x < d.right + 8 && x + pw > d.left - 8 && y < d.bottom + 8 && y + ph > d.top - 8) {
+      y = d.top > vh / 2 ? Math.max(M, d.top - 8 - ph) : Math.min(vh - ph - M, d.bottom + 8);
     }
     const pos = `${Math.round(x)},${Math.round(y)}`;
     if (pos !== this.popPos) {
@@ -656,18 +664,18 @@ export class Inspecta {
       ${sw('hoverBox', 'Box model on hover')}
       ${sw('guides', 'Guides', 'G')}
       ${sw('clearOnCopy', 'Clear after copy')}
-      <div class="mf"><span>Toggle <kbd>${esc(hotkeyLabel(this.opts.hotkey))}</kbd></span><button class="lk" data-act="tour">Show tips</button></div>`;
+      <div class="mf"><span>Toggle <kbd>${esc(hotkeyLabel(this.opts.hotkey))}</kbd></span><button class="btn sm ghost" data-act="tour">Show tips</button></div>`;
   }
 
   private renderHint(): void {
     const show = this.active && !this.s.tourDone && !this.selected;
     this.hint.hidden = !show;
     if (!show) return;
-    this.hint.innerHTML = `<span><b>Hover</b> to inspect</span><span><b>Click</b> for specs and feedback</span><span><b>Select text</b> to quote it</span><span><kbd>Esc</kbd> to exit</span><button class="btn" data-act="tour-done">Got it</button>`;
+    this.hint.innerHTML = `<span><b>Hover</b> to inspect</span><span><b>Click</b> for specs and feedback</span><span><b>Select text</b> to quote it</span><span><kbd>Esc</kbd> to exit</span><button class="btn sm" data-act="tour-done">Got it</button>`;
   }
 
   private toast(msg: string, action?: { label: string; fn: () => void }): void {
-    this.toastEl.innerHTML = `<span>${esc(msg)}</span>${action ? `<button class="btn" data-act="toast">${esc(action.label)}</button>` : ''}`;
+    this.toastEl.innerHTML = `<span>${esc(msg)}</span>${action ? `<button class="btn sm ghost accent" data-act="toast">${esc(action.label)}</button>` : ''}`;
     this.toastAction = action?.fn ?? null;
     this.toastEl.classList.toggle('act', !!action);
     this.toastEl.classList.add('show');
