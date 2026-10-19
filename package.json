@@ -3,6 +3,15 @@
   "version": "0.2.0",
   "description": "Figma-style inspect and spacing overlay for any website: measure padding, margin, gaps, distances, typography, colors and contrast, then copy AI-ready feedback.",
   "license": "MIT",
+  "author": "Yesith (https://github.com/yesith0106)",
+  "homepage": "https://github.com/yesith0106/pixelspec#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yesith0106/pixelspec.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yesith0106/pixelspec/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,6 +29,8 @@
     },
     "./global": "./dist/pixelspec.global.js"
   },
+  "unpkg": "./dist/pixelspec.global.js",
+  "jsdelivr": "./dist/pixelspec.global.js",
   "files": [
     "dist"
   ],
@@ -28,7 +39,8 @@
     "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "demo": "node scripts/serve.mjs"
+    "demo": "node scripts/serve.mjs",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": ">=17"
