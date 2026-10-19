@@ -487,12 +487,13 @@ export class Inspecta {
         <details class="more"${this.moreOpen ? ' open' : ''}><summary>${I.chevron}<span>All properties</span><em>Box model, layout, type, a11y</em></summary><div class="mb">${details}</div></details>
       </div>
       <div class="pn">
-        <textarea rows="2" aria-label="Feedback" placeholder="${this.quote ? 'What should change in this text?' : 'Leave feedback for your agent…'}">${esc(note?.text ?? '')}</textarea>
-        <div class="pf">
-          ${note ? `<button class="btn sm ghost danger" data-act="delete-note">${I.trashSm}<span>Delete</span></button>` : ''}
-          <span class="grow"></span>
-          <button class="btn sm ghost" data-act="close">Cancel</button>
-          <button class="btn sm pri" data-act="save-note"${note?.text ? '' : ' disabled'}><span>${note ? 'Save' : 'Add feedback'}</span><kbd>↵</kbd></button>
+        <div class="composer">
+          <textarea rows="1" aria-label="Feedback" placeholder="${this.quote ? 'What should change in this text?' : 'Leave feedback for your agent…'}">${esc(note?.text ?? '')}</textarea>
+          <div class="cbar">
+            <span class="chint"><kbd>Enter</kbd> to ${note ? 'save' : 'add'}</span>
+            ${note ? ib('delete-note', I.trashSm, 'Delete feedback', '', 'del') : ''}
+            <button class="send" data-act="save-note" aria-label="${note ? 'Save feedback' : 'Add feedback'}"${note?.text ? '' : ' disabled'}>${I.send}</button>
+          </div>
         </div>
       </div>
       ${this.s.measured ? '' : `<div class="ptip">${I.ruler}<span>Hover another element to measure · <kbd>Alt</kbd> for parent</span></div>`}`;
@@ -505,6 +506,7 @@ export class Inspecta {
     if (focus) {
       const ta = this.pop.querySelector('textarea');
       if (ta) {
+        this.onUiInput();
         ta.focus({ preventScroll: true });
         ta.setSelectionRange(ta.value.length, ta.value.length);
       }
@@ -985,6 +987,10 @@ export class Inspecta {
     const ta = this.pop.querySelector('textarea');
     const btn = this.pop.querySelector<HTMLButtonElement>('[data-act="save-note"]');
     if (ta && btn) btn.disabled = !ta.value.trim();
+    if (ta) {
+      ta.style.height = 'auto';
+      ta.style.height = `${Math.min(ta.scrollHeight, 168)}px`;
+    }
   };
 
   private onToggle = (e: Event) => {

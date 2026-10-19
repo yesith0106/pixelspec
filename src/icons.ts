@@ -39,6 +39,7 @@ export const I = {
   settings: h(SlidersHorizontalIcon),
   x: h(Cancel01Icon),
   up: h(ArrowUp02Icon, 16),
+  send: h(ArrowUp02Icon, 16),
   down: h(ArrowDown02Icon, 16),
   close: h(Cancel01Icon, 16),
   chevron: h(ArrowRight01Icon, 14),
