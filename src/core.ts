@@ -830,6 +830,11 @@ export class PixelSpec {
     return t instanceof Element ? t : null;
   }
 
+  /** Empty page background (html/body) isn't highlighted on hover, like Figma. It stays reachable via the parent arrow. */
+  private hoverable(el: Element | null): Element | null {
+    return el && el !== document.documentElement && el !== document.body ? el : null;
+  }
+
   private onMove = (e: PointerEvent) => {
     this.mouse.x = e.clientX;
     this.mouse.y = e.clientY;
@@ -845,13 +850,13 @@ export class PixelSpec {
       return;
     }
     if (!this.active || this.isOurs(e)) return;
-    this.hovered = this.targetOf(e);
+    this.hovered = this.hoverable(this.targetOf(e));
   };
 
   private onScroll = () => {
     if (!this.active || this.mouse.x < 0) return;
     const el = document.elementFromPoint(this.mouse.x, this.mouse.y);
-    if (el && el !== this.host) this.hovered = el;
+    if (el !== this.host) this.hovered = this.hoverable(el);
   };
 
   /** Down events: stop the page from reacting, but keep native text selection working. */

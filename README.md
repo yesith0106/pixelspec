@@ -7,7 +7,7 @@
 
 PixelSpec lets you measure spacing between elements right in the browser: padding, margin, gaps, distances, letter spacing, line height, colors and contrast, like Figma's inspect panel on top of the live page. Click any element to leave feedback, then copy it all as a compact prompt for your AI coding agent. It is an open-source [agentation](https://agentation.com) alternative with built-in design inspection.
 
-![PixelSpec measuring the distance between two headings](docs/screenshot.png)
+![PixelSpec demo: hover to inspect, click for specs, measure distances, leave feedback and copy it for your AI agent](docs/demo.gif)
 
 - Works on any site and any framework. React, Vue and Svelte component names are detected automatically.
 - Zero runtime dependencies. The overlay lives in a shadow root, so it never touches your styles.
