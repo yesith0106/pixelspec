@@ -143,9 +143,10 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .pid code { min-width: 0; font: 500 12.5px var(--mono); color: var(--fg2); overflow: hidden; text-overflow: ellipsis; }
 .pid .comp { flex: none; height: 22px; padding: 0 7px; display: inline-flex; align-items: center; border-radius: 6px; background: rgba(167,139,250,.12);
   color: #c9b5ff; font: 600 11.5px var(--sans); }
-.pa { display: flex; align-items: center; gap: 4px; flex: none; }
-.pa .nav { display: flex; padding: 2px; border-radius: 8px; background: rgba(255,255,255,.05); }
-.pa .ib { width: 28px; height: 28px; border-radius: 6px; }
+.pa { display: flex; align-items: center; gap: 2px; flex: none; }
+.pa .nav { display: contents; }
+.pa .ib { width: 30px; height: 30px; border-radius: 8px; }
+.pa .ib svg { width: 16px; height: 16px; }
 
 .pbody { overflow: auto; padding: 12px 14px 0; scrollbar-width: thin; scrollbar-color: #3f3f46 transparent; }
 .quote { margin: 0 0 12px; padding: 8px 12px; border-left: 2px solid var(--mk); border-radius: 0 8px 8px 0; background: rgba(13,153,255,.06);
