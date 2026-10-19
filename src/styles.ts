@@ -159,9 +159,10 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .chip:hover { background: rgba(255,255,255,.09); box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
 .chip:active { background: rgba(13,153,255,.18); }
 .cd { color: var(--fg3); margin-right: 5px; font: 500 11.5px var(--sans); }
-.c-pad .cd { color: #8fd17a; }
-.c-mar .cd { color: #f6b26b; }
-.c-gap .cd { color: #f472b6; }
+.ci { display: inline-flex; margin-right: 6px; color: var(--fg3); }
+.c-pad .ci { color: #8fd17a; }
+.c-mar .ci { color: #f6b26b; }
+.c-gap .ci { color: #f472b6; }
 .cr { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; font: 600 11.5px/1 var(--sans); }
 .cr.ok { background: rgba(34,197,94,.12); color: #86efac; }
 .cr.no { background: rgba(239,68,68,.14); color: #fca5a5; }

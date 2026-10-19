@@ -4,6 +4,7 @@ import {
   accessibleName, borderSummary, classList, componentInfo, contrastInfo, cssSelector, directText, flowChildren,
   gapRects, isFocusable, letterSpacingInfo, lineHeightInfo, pxSides, radiusSummary, role, separation, textRects, visibleText,
 } from './inspect';
+import { I } from './icons';
 import { esc, fmt, fmtPx, num, rectOf, trunc } from './util';
 
 type RowOpts = { swatch?: string; html?: boolean; copy?: string; muted?: boolean };
@@ -266,10 +267,10 @@ function toHexMaybe(css: string): string {
 /* Spec card: the at-a-glance summary at the top of the popover        */
 /* ------------------------------------------------------------------ */
 
-const chip = (label: string, copy: string, opts: { swatch?: string; dim?: string; cls?: string } = {}) =>
-  `<button class="chip${opts.cls ? ` ${opts.cls}` : ''}" data-copy="${esc(copy)}" title="Click to copy">${
+const chip = (label: string, copy: string, opts: { swatch?: string; dim?: string; cls?: string; icon?: string; name?: string } = {}) =>
+  `<button class="chip${opts.cls ? ` ${opts.cls}` : ''}" data-copy="${esc(copy)}" title="${opts.name ? `${esc(opts.name)}. ` : ''}Click to copy">${
     opts.swatch ? `<i class="sw"><i style="background:${esc(opts.swatch)}"></i></i>` : ''
-  }${opts.dim ? `<span class="cd">${esc(opts.dim)}</span>` : ''}${esc(label)}</button>`;
+  }${opts.icon ? `<span class="ci" aria-label="${esc(opts.name ?? '')}">${opts.icon}</span>` : ''}${opts.dim ? `<span class="cd">${esc(opts.dim)}</span>` : ''}${esc(label)}</button>`;
 
 const specRow = (label: string, chips: string) => (chips ? `<div class="sr"><span class="sk">${esc(label)}</span><div class="sc">${chips}</div></div>` : '');
 
@@ -286,8 +287,8 @@ export function specsHTML(el: Element): string {
   const pad = pxSides(cs, 'padding');
   const mar = pxSides(cs, 'margin');
   let sp = '';
-  if (pad !== '0') sp += chip(pad, px(pad), { dim: 'Padding ', cls: 'c-pad' });
-  if (mar !== '0') sp += chip(mar, px(mar), { dim: 'Margin ', cls: 'c-mar' });
+  if (pad !== '0') sp += chip(pad, px(pad), { icon: I.padding, name: 'Padding', cls: 'c-pad' });
+  if (mar !== '0') sp += chip(mar, px(mar), { icon: I.margin, name: 'Margin', cls: 'c-mar' });
   const d = cs.display;
   const isFlex = d.includes('flex');
   const isGrid = d.includes('grid');
@@ -295,10 +296,13 @@ export function specsHTML(el: Element): string {
     const rg = cs.rowGap === 'normal' ? '0' : fmtPx(cs.rowGap);
     const cg = cs.columnGap === 'normal' ? '0' : fmtPx(cs.columnGap);
     const gap = rg === cg ? rg : `${rg} ${cg}`;
-    if (gap !== '0') sp += chip(gap, px(gap), { dim: 'Gap ', cls: 'c-gap' });
+    const vertical = isFlex && cs.flexDirection.startsWith('column');
+    if (gap !== '0') sp += chip(gap, px(gap), { icon: vertical ? I.gapV : I.gapH, name: 'Gap', cls: 'c-gap' });
   } else {
-    const gaps = [...new Set(gapRects(el).map((g) => fmt(g.size)))];
-    if (gaps.length) sp += chip(gaps.slice(0, 3).join(', '), gaps.join(', '), { dim: 'Between ', cls: 'c-gap' });
+    const rects = gapRects(el);
+    const gaps = [...new Set(rects.map((g) => fmt(g.size)))];
+    const vertical = rects.length > 0 && rects.every((g) => g.axis === 'y');
+    if (gaps.length) sp += chip(gaps.slice(0, 3).join(', '), gaps.join(', '), { icon: vertical ? I.gapV : I.gapH, name: 'Space between children', cls: 'c-gap' });
   }
   h += specRow('Spacing', sp);
 

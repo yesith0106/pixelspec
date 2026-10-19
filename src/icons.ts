@@ -1,5 +1,6 @@
 // Icons from Hugeicons (https://hugeicons.com), free set, MIT licensed.
 import {
+  AlignHorizontalSpaceAroundIcon, AlignHorizontalSpaceBetweenIcon, AlignVerticalSpaceBetweenIcon, FullScreenIcon,
   ArrowDown02Icon, ArrowRight01Icon, ArrowUp02Icon, Cancel01Icon, CenterFocusIcon, Copy01Icon, CrosshairIcon, Delete02Icon,
   PauseIcon, RulerIcon, PlayIcon, RulerDimensionLineIcon, SlidersHorizontalIcon, SourceCodeIcon, Tick02Icon,
   ViewIcon, ViewOffSlashIcon,
@@ -46,4 +47,8 @@ export const I = {
   codeMd: h(SourceCodeIcon, 16),
   trashSm: h(Delete02Icon, 14),
   ruler: h(RulerIcon, 14),
+  padding: h(AlignHorizontalSpaceAroundIcon, 14),
+  margin: h(FullScreenIcon, 14),
+  gapH: h(AlignHorizontalSpaceBetweenIcon, 14),
+  gapV: h(AlignVerticalSpaceBetweenIcon, 14),
 };
