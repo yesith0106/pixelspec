@@ -38,7 +38,7 @@ kbd { font: 500 12px/1 var(--sans); padding: 2px 5px; border-radius: 4px; border
 /* Main column */
 main { margin-left: var(--side); max-width: 816px; padding: 240px 0 0; }
 h1 { margin: 0; font: 600 64px/72px var(--sans); letter-spacing: -0.045em; }
-h2 { margin: 8px 0 0; font: 600 32px/40px var(--sans); letter-spacing: -0.035em; max-width: 640px; }
+h2 { margin: 8px 0 0; font: 600 32px/40px var(--sans); letter-spacing: -0.035em; }
 .label { color: var(--ink-55); }
 .body { color: var(--ink-80); }
 .body a, .link { color: var(--ink); background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; transition: color .15s; }
@@ -46,7 +46,7 @@ h2 { margin: 8px 0 0; font: 600 32px/40px var(--sans); letter-spacing: -0.035em;
 
 /* Hero */
 .lead, .intro, .release .summary, .release ul { font-size: var(--body); line-height: 1.6; }
-.lead { margin-top: 24px; max-width: 560px; color: var(--ink-80); }
+.lead { margin-top: 24px; color: var(--ink-80); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
 .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: #fff; transition: background .15s; }
 .btn:hover { background: var(--primary); }
@@ -61,7 +61,7 @@ h2 { margin: 8px 0 0; font: 600 32px/40px var(--sans); letter-spacing: -0.035em;
 
 /* Text sections */
 section { padding-top: 160px; scroll-margin-top: 80px; }
-.intro { margin-top: 16px; max-width: 560px; }
+.intro { margin-top: 16px; }
 
 .tabs { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 32px; }
 .tabs button { color: var(--ink-40); transition: color .15s; }
