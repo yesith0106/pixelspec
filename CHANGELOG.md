@@ -2,7 +2,9 @@
 
 All notable changes to PixelSpec are listed here. The site's changelog page (`site/changelog.html`) shows the same entries.
 
-## Unreleased
+## 0.2.1 (2026-10-20)
+
+Bug fixes.
 
 ### Fixed
 

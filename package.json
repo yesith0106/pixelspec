@@ -1,6 +1,6 @@
 {
   "name": "pixelspec",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Design inspector and spacing overlay for any website: measure padding, margin, gaps, distances, typography, colors and contrast, then copy AI-ready feedback.",
   "license": "MIT",
   "author": "Yesith (https://github.com/yesith0106)",

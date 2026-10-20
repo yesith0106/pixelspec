@@ -48,7 +48,7 @@ interface Settings {
   measured: boolean;
 }
 
-const VERSION = '0.2.0';
+const VERSION = '0.2.1';
 const INTERACTIVE = 'a,button,input,textarea,select,option,label,summary,[contenteditable=""],[contenteditable="true"],[draggable="true"],[role="button"],[role="link"]';
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
