@@ -3,12 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PixelSpec: the inspect panel for designers who build with AI</title>
-  <meta name="description" content="Inspect spacing, typography, color and contrast on any live website, click to leave feedback, and copy it as a precise prompt for your AI coding agent. Open source and free." />
-  <meta property="og:title" content="PixelSpec: point at exactly what your AI should change" />
-  <meta property="og:description" content="Figma-style inspect and annotation on top of your live site, with feedback your AI agent can act on." />
+  <title>PixelSpec: Figma-style inspect and visual feedback for AI coding agents</title>
+  <meta name="description" content="Figma-style inspect for any live website. Measure spacing, typography, color and contrast, then send precise design feedback to Claude Code, Cursor or any AI coding agent. Free and open source." />
+  <meta name="keywords" content="figma inspect, css inspector, spacing inspector, measure padding and margin, redlines, design QA, visual feedback, AI coding agent, Claude Code, Cursor, Agentation alternative" />
+  <meta property="og:site_name" content="PixelSpec" />
   <meta property="og:type" content="website" />
+  <meta property="og:title" content="PixelSpec: Figma-style inspect for sites you build with AI" />
+  <meta property="og:description" content="Measure spacing, type, color and contrast on any live website, then send design feedback your AI coding agent can act on." />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PixelSpec: Figma-style inspect for sites you build with AI" />
+  <meta name="twitter:description" content="Measure spacing, type, color and contrast on any live website, then send design feedback your AI coding agent can act on." />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PixelSpec",
+    "description": "Figma-style inspect and visual feedback tool for any live website. Measure padding, margin, gaps, redline distances, typography, color and WCAG contrast, then copy precise feedback for AI coding agents like Claude Code and Cursor.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any modern web browser",
+    "softwareVersion": "0.2.0",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "sameAs": ["https://github.com/yesith0106/pixelspec", "https://www.npmjs.com/package/pixelspec"]
+  }
+  </script>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,9 +46,9 @@
   </nav>
 
   <main>
-    <h1>PixelSpec is the inspect panel for designers who build with AI.</h1>
+    <h1>Figma-style inspect for the sites you build with AI.</h1>
 
-    <p class="lead">See the spacing, type, color and contrast on your live site, the way you would in Figma. Click an element to leave a note, then hand your AI agent feedback it can act on. A sharper take on Agentation.</p>
+    <p class="lead">PixelSpec is a free, open-source design inspector for any live website. Measure padding, margins, gaps and distances, check type, color and contrast, then click any element to send precise feedback to Claude Code, Cursor or your AI agent. A sharper alternative to Agentation.</p>
 
     <div class="actions">
       <button class="btn" data-try>Try it on this page</button>
@@ -39,18 +57,19 @@
     <p class="hint">Or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>I</kbd> anywhere on this page.</p>
 
     <div class="hero-video">
-      <video src="assets/demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Hovering to inspect an element, clicking for specs, measuring distances and leaving feedback"></video>
+      <video src="assets/demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="PixelSpec demo: hovering to inspect an element, clicking for its spacing and typography specs, measuring distances and leaving feedback for an AI agent"></video>
     </div>
 
     <section id="why" data-section="why">
       <p class="label">Why</p>
-      <h2>Designing with AI lost the inspect panel.</h2>
-      <p class="body intro">Designers now build straight in code with Claude Code, Cursor or v0. Without specs on screen, feedback turns vague ("make it a bit more spacious") and the agent guesses. PixelSpec shows the numbers you'd see in Figma and attaches them, with the exact element, to every note.</p>
+      <h2>Design feedback your AI agent can act on.</h2>
+      <p class="body intro">Designers now build straight in code with Claude Code, Cursor or v0, but the browser has no Figma-style inspect panel. Feedback turns vague ("make it a bit more spacious") and the agent guesses. PixelSpec shows the exact spacing, type and color values on the real page and attaches them, with the element's selector, to every note. Design QA without the back-and-forth.</p>
     </section>
 
     <section id="install" data-section="install">
       <p class="label">Install</p>
-      <h2>Add it to your dev build.</h2>
+      <h2>Install PixelSpec in your dev build.</h2>
+      <p class="body intro">Works with React, Next.js, Vite, Vue, Svelte and plain HTML. No dependencies, and it only loads in development.</p>
       <div class="tabs" role="tablist" aria-label="Setup">
         <button role="tab" aria-selected="true" aria-controls="t-react" id="b-react">React / Next.js</button>
         <button role="tab" aria-selected="false" aria-controls="t-vite" id="b-vite">Vite / Vue / Svelte</button>
