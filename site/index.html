@@ -75,8 +75,9 @@
     .install button { height: 30px; padding: 0 12px; border-radius: 999px; background: var(--tint); font: 13px/1 var(--sans); color: var(--ink-55); transition: color .15s; }
     .install button:hover { color: var(--primary); }
     .hint { margin-top: 16px; color: var(--ink-55); }
-    .hero-video { margin-top: 56px; padding: 40px 48px 0; overflow: hidden; background: linear-gradient(150deg, #e9eef7, #f3e9ef); }
-    .hero-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 10px 10px 0 0; box-shadow: 0 18px 50px -20px rgb(30 40 60 / .35); }
+    /* Same color as the video's own background, so the two blend */
+    .hero-video { margin-top: 56px; background: #fbfbf9; }
+    .hero-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
 
     /* Text sections */
     section { padding-top: 160px; scroll-margin-top: 80px; }
@@ -130,7 +131,7 @@
       h1 { font-size: 40px; line-height: 50px; }
       h2 { font-size: 26px; line-height: 36px; }
       .steps { grid-template-columns: 1fr; }
-      .hero-video { margin: 40px -20px 0; padding: 20px 16px 0; }
+      .hero-video { margin: 40px -20px 0; }
       section, .end { padding-top: 104px; }
       th:not(:first-child), td:not(:first-child) { width: 88px; }
       footer { flex-direction: column; align-items: flex-start; padding: 24px 20px; }
