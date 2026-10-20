@@ -7,6 +7,7 @@
   --tint: #f4f4f5;
   --primary: #2f6bff;
   --sans: Inter, "Helvetica Neue", Arial, sans-serif;
+  --body: 17px;      /* paragraph text, everywhere */
   --side: 232px;      /* where the main column starts */
 }
 * { box-sizing: border-box; }
@@ -44,7 +45,8 @@ h2 { margin: 8px 0 0; font: 600 32px/40px var(--sans); letter-spacing: -0.035em;
 .body a:hover, .link:hover { color: var(--primary); }
 
 /* Hero */
-.lead { margin-top: 24px; max-width: 560px; font-size: 17px; line-height: 1.6; color: var(--ink-80); }
+.lead, .intro, .release .summary, .release ul { font-size: var(--body); line-height: 1.6; }
+.lead { margin-top: 24px; max-width: 560px; color: var(--ink-80); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
 .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: #fff; transition: background .15s; }
 .btn:hover { background: var(--primary); }
