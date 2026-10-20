@@ -77,9 +77,6 @@
     /* Text sections */
     section { padding-top: 160px; scroll-margin-top: 80px; }
     .intro { margin-top: 16px; max-width: 560px; }
-    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
-    .steps .n { font: 500 13px/22.5px var(--sans); font-variant-numeric: tabular-nums; color: var(--primary); }
-    .steps h3 { font: inherit; color: var(--ink); margin: 2px 0 4px; }
 
     .tabs { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 32px; }
     .tabs button { color: var(--ink-40); transition: color .15s; }
@@ -121,8 +118,7 @@
       main { margin: 0 20px; padding-top: 120px; }
       h1 { font-size: 40px; line-height: 46px; }
       h2 { font-size: 26px; line-height: 32px; }
-      .steps { grid-template-columns: 1fr; }
-      .hero-video { margin-top: 40px; }
+        .hero-video { margin-top: 40px; }
       section { padding-top: 104px; }
       th:not(:first-child), td:not(:first-child) { width: 88px; }
       footer { flex-direction: column; align-items: flex-start; padding: 24px 20px; }
@@ -138,7 +134,6 @@
   <nav class="side-nav" aria-label="Sections">
     <a href="#top" data-spy="top" class="active">Overview</a>
     <a href="#why" data-spy="why">Why</a>
-    <a href="#how" data-spy="how">How it works</a>
     <a href="#install" data-spy="install">Install</a>
     <a href="#compare" data-spy="compare">Compare</a>
   </nav>
@@ -162,16 +157,6 @@
       <p class="label">Why</p>
       <h2>Designing with AI lost the inspect panel.</h2>
       <p class="body intro">Designers now build straight in code with Claude Code, Cursor or v0. Without specs on screen, feedback turns vague ("make it a bit more spacious") and the agent guesses. PixelSpec shows the numbers you'd see in Figma and attaches them, with the exact element, to every note.</p>
-    </section>
-
-    <section id="how" data-section="how">
-      <p class="label">How it works</p>
-      <h2>Inspect, annotate, paste. That's the whole loop.</h2>
-      <div class="steps body">
-        <div><span class="n">01</span><h3>Inspect</h3><p>Click any element for padding, margin, gap, type, color, contrast and radius. Hover another for redline distances.</p></div>
-        <div><span class="n">02</span><h3>Annotate</h3><p>Type what should change and press Enter. A numbered marker pins the note to the element.</p></div>
-        <div><span class="n">03</span><h3>Copy for AI</h3><p>Press <kbd>C</kbd> and paste into your agent. Each note carries its selector, component and specs.</p></div>
-      </div>
     </section>
 
     <section id="install" data-section="install">
