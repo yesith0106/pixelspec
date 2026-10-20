@@ -31,7 +31,8 @@ kbd { font: 500 12px/1 var(--sans); padding: 2px 5px; border-radius: 4px; border
 .side-nav a.active { color: var(--primary); }
 .side-nav a.active::before { content: ""; position: absolute; left: -12px; top: 5px; width: 4px; height: 4px; background: var(--primary); }
 .side-nav .gap { height: 12px; }
-.side-nav .ext::after { content: " ↗"; font-size: 12px; }
+.side-nav .icon-link { display: flex; align-items: center; gap: 6px; }
+.side-nav .icon-link svg { flex: none; }
 
 /* Main column */
 main { margin-left: var(--side); max-width: 816px; padding: 240px 0 0; }
