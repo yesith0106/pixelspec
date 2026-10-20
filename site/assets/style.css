@@ -47,7 +47,7 @@ h2 { margin: 8px 0 0; font: 600 32px/40px var(--sans); letter-spacing: -0.035em;
 /* Hero */
 .lead, .intro, .release .summary, .release ul { font-size: var(--body); line-height: 1.6; }
 /* Text blocks read best a little narrower than the column */
-.lead, .intro, h2 { max-width: 75%; }
+.lead, .intro, h2 { max-width: 80%; }
 .lead { margin-top: 24px; color: var(--ink-80); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
 .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: #fff; transition: background .15s; }
