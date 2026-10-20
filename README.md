@@ -3,6 +3,7 @@
 **Figma-style inspect and spacing overlay for any website, with AI-ready feedback.**
 
 [![CI](https://github.com/yesith0106/pixelspec/actions/workflows/ci.yml/badge.svg)](https://github.com/yesith0106/pixelspec/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/pixelspec.svg)](https://www.npmjs.com/package/pixelspec)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 PixelSpec lets you measure spacing between elements right in the browser: padding, margin, gaps, distances, letter spacing, line height, colors and contrast, like Figma's inspect panel on top of the live page. Click any element to leave feedback, then copy it all as a compact prompt for your AI coding agent. It is an open-source [agentation](https://agentation.com) alternative with built-in design inspection.
@@ -20,7 +21,7 @@ Pick the setup that matches your project. All three take under a minute.
 ### React or Next.js
 
 ```bash
-npm install -D github:yesith0106/pixelspec
+npm install -D pixelspec
 ```
 
 ```tsx
@@ -41,7 +42,7 @@ In the Next.js App Router, render it from a `'use client'` component, for exampl
 ### Vite, Vue, Svelte or any bundler
 
 ```bash
-npm install -D github:yesith0106/pixelspec
+npm install -D pixelspec
 ```
 
 ```ts
@@ -53,12 +54,13 @@ if (import.meta.env.DEV) {
 
 ### Plain HTML, no build step
 
-1. Download `pixelspec.global.js` from the [latest release](https://github.com/yesith0106/pixelspec/releases/latest).
-2. Put it next to your page and add one line before `</body>`:
+Add one line before `</body>`:
 
 ```html
-<script src="pixelspec.global.js"></script>
+<script src="https://unpkg.com/pixelspec"></script>
 ```
+
+To work offline, download `pixelspec.global.js` from the [latest release](https://github.com/yesith0106/pixelspec/releases/latest) and point the `src` at it.
 
 Optional attributes: `data-active="true"` to start open, `data-hotkey="alt+shift+i"`, `data-position="bottom-left"` and `data-ai-detail="full"`.
 
