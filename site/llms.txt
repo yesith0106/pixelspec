@@ -1,0 +1,92 @@
+# PixelSpec
+
+> PixelSpec is a free, open-source (MIT) design inspector for any live website. It measures padding, margin, gaps, distances between elements, typography, colors and WCAG contrast right in the browser, then lets you click elements to leave feedback and copy it as a compact prompt for AI coding agents such as Claude Code and Cursor. It is an alternative to Agentation with built-in design inspection.
+
+- Current version: 0.2.1. Package name on npm: `pixelspec`.
+- Works on any site and framework (React, Next.js, Vite, Vue, Svelte, plain HTML). React, Vue and Svelte component names are detected automatically.
+- Zero runtime dependencies. The overlay lives in a shadow root, so it never changes the page's styles.
+- Meant for development builds only.
+
+## Install
+
+React or Next.js (in the Next.js App Router, render it from a `'use client'` component):
+
+```bash
+npm install -D pixelspec
+```
+
+```tsx
+import { PixelSpec } from 'pixelspec/react';
+
+export default function App() {
+  return (
+    <>
+      <YourApp />
+      {process.env.NODE_ENV === 'development' && <PixelSpec />}
+    </>
+  );
+}
+```
+
+Vite, Vue, Svelte or any bundler:
+
+```ts
+if (import.meta.env.DEV) {
+  import('pixelspec').then(({ init }) => init());
+}
+```
+
+Plain HTML, no build step:
+
+```html
+<script src="https://unpkg.com/pixelspec"></script>
+```
+
+Script tag attributes: `data-active="true"`, `data-hotkey="alt+shift+i"`, `data-position="bottom-left"`, `data-ai-detail="full"`.
+
+## Use
+
+- Open it with the round button in the bottom-right corner, or press Alt+Shift+I.
+- Hover an element to see its name and size. Click it for a popover with size, padding, margin, gap, layout, font, color, contrast, radius and shadow. Click any value to copy it.
+- With an element selected, hover another to see redline distances. Hold Alt to measure to the parent.
+- Type feedback and press Enter to add a numbered marker. Select page text to leave feedback that quotes it.
+- Press C (or the copy button) to copy all feedback, then paste it into your AI agent.
+- Keys: S spacing overlay, G guides, P pause animations, H hide markers, C copy feedback, X clear all, Esc close. In the popover, arrow keys walk to the parent, child and siblings.
+
+Copied feedback is compact by default, two lines per element with only non-default values:
+
+```
+Make this button bigger
+body>header>button.cta "Start free trial"
+126×34 p:10 18 r:999 | system-ui 14/14 w600 ls:0.01em | c:#FFF bg:#3581F6 contrast:3.7(fails AA)
+```
+
+Key: `p` padding, `m` margin, `b` border, `r` radius, `14/14 w600` size/line-height and weight, `ls` letter spacing, `c` text color, `bg` background. Hold Shift while copying, or set `aiDetail: 'full'`, for the full Markdown version.
+
+## Options
+
+```ts
+init({
+  hotkey: 'alt+shift+i',        // modifiers: alt, shift, ctrl, meta, mod (Ctrl or ⌘)
+  startActive: false,
+  showToolbar: true,
+  position: 'bottom-right',     // or 'bottom-left'
+  aiDetail: 'compact',          // or 'full'
+  persist: true,                // remember settings, toolbar position and feedback
+  onCopy: (text, kind) => {},   // kind: 'value' | 'css' | 'ai' | 'selector' | 'notes'
+});
+```
+
+The React component takes the same options as props, plus `enabled`. The instance returned by `init()` has `activate()`, `deactivate()`, `toggle()`, `select(el)`, `getNotes()`, `notesMarkdown()` and `destroy()`.
+
+## Docs
+
+- [README](https://github.com/yesith0106/pixelspec/blob/main/README.md): full setup, usage, toolbar, copy format, options and known limits
+- [Changelog](https://www.pixelspec.dev/changelog): release notes for each version
+- [npm package](https://www.npmjs.com/package/pixelspec)
+- [Source code on GitHub](https://github.com/yesith0106/pixelspec)
+
+## Optional
+
+- [Contributing guide](https://github.com/yesith0106/pixelspec/blob/main/CONTRIBUTING.md): run it locally and how the code is laid out
+- [License (MIT)](https://github.com/yesith0106/pixelspec/blob/main/LICENSE)
