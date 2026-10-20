@@ -28,6 +28,7 @@ In a second terminal, run `npm run dev` to rebuild on every change, then refresh
 | `demo/` | A test page for trying changes |
 | `demo/hero/` | The wireframe scene used for the README animation |
 | `site/` | The landing page, a static site with no build step. Run `npm run demo` and open http://localhost:5178/site/ |
+| `CHANGELOG.md` | Release notes. When you release, add the entry here and to `site/changelog.html` |
 
 ## Before opening a pull request
 

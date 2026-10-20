@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Changelog · PixelSpec</title>
+  <meta name="description" content="New features, changes and fixes in each PixelSpec release." />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body id="top">
+  <a class="brand" href="./">PixelSpec</a>
+
+  <nav class="side-nav" aria-label="Sections">
+    <a href="./">Overview</a>
+    <a href="./#why">Why</a>
+    <a href="./#install">Install</a>
+    <a href="./#compare">Compare</a>
+    <span class="gap" aria-hidden="true"></span>
+    <a href="changelog.html" class="active" aria-current="page">Changelog</a>
+    <a class="ext" href="https://github.com/yesith0106/pixelspec">GitHub</a>
+  </nav>
+
+  <main>
+    <h1>Changelog</h1>
+    <p class="lead">New features, changes and fixes in each release.</p>
+
+    <div class="releases">
+      <article class="release" id="v0.2.0">
+        <div>
+          <p class="ver">0.2.0 <span class="latest">Latest</span></p>
+          <time datetime="2026-10-20">October 20, 2026</time>
+        </div>
+        <div>
+          <p class="summary">First public release, now on npm.</p>
+          <h3>Added</h3>
+          <ul>
+            <li>Install with <code>npm i -D pixelspec</code>, or load it with a script tag from unpkg or jsDelivr.</li>
+            <li>A toolbar you can collapse and drag, with tooltips and keyboard shortcuts.</li>
+            <li>A spec popover that opens where you click, stays pinned while you scroll, and lets you step to parent and child elements.</li>
+            <li>Numbered markers on annotated elements, quotes from selected text, and a button to pause animations.</li>
+            <li>A single-line feedback box: type what should change and press Enter.</li>
+            <li>Settings and notes are kept across reloads. Clearing or deleting notes can be undone.</li>
+          </ul>
+          <h3>Changed</h3>
+          <ul>
+            <li>Renamed from Inspecta to PixelSpec. Settings and notes saved under the old name still load.</li>
+            <li>Cleaner specs: plain values you hover to copy, size as one W × H value, and contrast as a colored dot.</li>
+            <li>Hovering empty page background no longer highlights the whole page, matching Figma.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release" id="v0.1.0">
+        <div>
+          <p class="ver">0.1.0</p>
+          <time datetime="2026-10-19">October 19, 2026</time>
+        </div>
+        <div>
+          <p class="summary">First prototype, under the name Inspecta.</p>
+          <h3>Added</h3>
+          <ul>
+            <li>Box model overlay for padding, margin and flex or grid gaps.</li>
+            <li>Redline distances between elements.</li>
+            <li>Typography, color and WCAG contrast specs.</li>
+            <li>Notes on elements, copied as a prompt for your AI agent. The compact format is the default; hold Shift for full specs.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <p class="status"><a href="changelog.html">v0.2</a>&nbsp;· Free and MIT licensed</p>
+    <nav aria-label="Footer">
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/yesith0106/pixelspec">GitHub</a>
+      <a href="https://www.npmjs.com/package/pixelspec">npm</a>
+    </nav>
+  </footer>
+
+  <script src="https://unpkg.com/pixelspec@0.2/dist/pixelspec.global.js"></script>
+</body>
+</html>
