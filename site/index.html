@@ -12,7 +12,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Libre+Baskerville&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --ink: rgb(50 64 79);
@@ -26,9 +26,7 @@
       --margin: #f59b23;  /* overlay: margin */
       --gap: #ec4f9b;     /* overlay: gap */
       --red: #ff3b30;     /* overlay: redlines */
-      --serif: "Libre Baskerville", Georgia, serif;
       --sans: Inter, "Helvetica Neue", Arial, sans-serif;
-      --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
       --side: 232px;      /* where the main column starts */
     }
     * { box-sizing: border-box; }
@@ -41,7 +39,7 @@
     a { color: inherit; text-decoration: none; }
     p { margin: 0; }
     button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-    kbd { font: 500 12px/1 var(--mono); padding: 2px 5px; border-radius: 4px; border: 1px solid var(--line); background: var(--tint); }
+    kbd { font: 500 12px/1 var(--sans); padding: 2px 5px; border-radius: 4px; border: 1px solid var(--line); background: var(--tint); }
 
     /* Sidebar */
     .brand { position: fixed; top: 28px; left: 24px; z-index: 5; display: flex; align-items: center; gap: 10px; color: var(--ink); }
@@ -55,8 +53,8 @@
 
     /* Main column */
     main { margin-left: var(--side); max-width: 816px; padding: 240px 0 0; }
-    h1 { margin: 0; font: 400 64px/80px var(--serif); letter-spacing: -0.03em; }
-    h2 { margin: 8px 0 0; font: 400 32px/44px var(--serif); letter-spacing: -0.02em; max-width: 640px; }
+    h1 { margin: 0; font: 600 64px/72px var(--sans); letter-spacing: -0.045em; }
+    h2 { margin: 8px 0 0; font: 600 32px/40px var(--sans); letter-spacing: -0.035em; max-width: 640px; }
     .label { color: var(--ink-55); }
     .body { color: var(--ink-80); }
     .body a, .link { color: var(--ink); background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; transition: color .15s; }
@@ -67,7 +65,7 @@
     .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
     .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: #fff; transition: background .15s; }
     .btn:hover { background: var(--primary); }
-    .install { display: inline-flex; align-items: center; gap: 14px; height: 42px; padding: 0 6px 0 18px; border-radius: 999px; border: 1px solid var(--line); font: 13px/1 var(--mono); }
+    .install { display: inline-flex; align-items: center; gap: 14px; height: 42px; padding: 0 6px 0 18px; border-radius: 999px; border: 1px solid var(--line); font: 14px/1 var(--sans); }
     .install .dollar { color: var(--ink-40); }
     .install button { height: 30px; padding: 0 12px; border-radius: 999px; background: var(--tint); font: 13px/1 var(--sans); color: var(--ink-55); transition: color .15s; }
     .install button:hover { color: var(--primary); }
@@ -80,7 +78,7 @@
     section { padding-top: 160px; scroll-margin-top: 80px; }
     .intro { margin-top: 16px; max-width: 560px; }
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
-    .steps .n { font: 13px/22.5px var(--mono); color: var(--primary); }
+    .steps .n { font: 500 13px/22.5px var(--sans); font-variant-numeric: tabular-nums; color: var(--primary); }
     .steps h3 { font: inherit; color: var(--ink); margin: 2px 0 4px; }
 
     .tabs { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 32px; }
@@ -88,7 +86,7 @@
     .tabs button:hover { color: var(--ink); }
     .tabs button[aria-selected="true"] { color: var(--primary); }
     .code { position: relative; margin-top: 14px; background: var(--tint); }
-    .code pre { margin: 0; padding: 22px 24px; overflow-x: auto; font: 13px/1.75 var(--mono); color: var(--ink); }
+    .code pre { margin: 0; padding: 22px 24px; overflow-x: auto; font: 14px/1.75 var(--sans); color: var(--ink); tab-size: 2; }
     .code .c { color: var(--ink-40); }
     .code .k { color: #b0306f; }
     .code .s { color: #1d7d57; }
@@ -121,8 +119,8 @@
       .brand { position: absolute; }
       .side-nav { display: none; }
       main { margin: 0 20px; padding-top: 120px; }
-      h1 { font-size: 40px; line-height: 50px; }
-      h2 { font-size: 26px; line-height: 36px; }
+      h1 { font-size: 40px; line-height: 46px; }
+      h2 { font-size: 26px; line-height: 32px; }
       .steps { grid-template-columns: 1fr; }
       .hero-video { margin-top: 40px; }
       section { padding-top: 104px; }
