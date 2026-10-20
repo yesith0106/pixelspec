@@ -27,6 +27,7 @@ In a second terminal, run `npm run dev` to rebuild on every change, then refresh
 | `src/auto.ts` | The drop-in `<script>` build |
 | `demo/` | A test page for trying changes |
 | `demo/hero/` | The wireframe scene used for the README animation |
+| `site/` | The landing page, a static site with no build step. Run `npm run demo` and open http://localhost:5178/site/ |
 
 ## Before opening a pull request
 

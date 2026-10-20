@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PixelSpec: Figma-style inspect for AI-native design</title>
+  <meta name="description" content="Inspect spacing, typography, color and contrast on any live website, click to leave feedback, and copy it as a precise prompt for your AI coding agent. Open source and free." />
+  <meta property="og:title" content="PixelSpec: point at exactly what your AI should change" />
+  <meta property="og:description" content="Figma-style inspect and annotation on top of your live site, with feedback your AI agent can act on." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg: #fbfbfa;
+      --surface: #ffffff;
+      --ink: #111214;
+      --muted: #5f636b;
+      --faint: #9a9ea6;
+      --line: #e8e8e5;
+      --soft: #f3f3f1;
+      --brand: #2f6bff;
+      --pad: #22b07d;     /* overlay: padding */
+      --margin: #f59b23;  /* overlay: margin */
+      --gap: #ec4f9b;     /* overlay: gap */
+      --red: #ff3b30;     /* overlay: redlines */
+      --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font: 400 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 96px 0; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px; font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--gap); }
+    h1, h2, h3 { margin: 0; letter-spacing: -0.03em; line-height: 1.08; font-weight: 650; }
+    h2 { font-size: clamp(32px, 4.4vw, 48px); max-width: 760px; }
+    .lead { font-size: 19px; color: var(--muted); max-width: 640px; margin: 20px 0 0; }
+
+    /* Nav */
+    .nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(1.6) blur(12px); border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .nav.scrolled { border-bottom-color: var(--line); }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; text-decoration: none; font-size: 17px; }
+    .logo svg { width: 24px; height: 24px; }
+    .nav nav { display: flex; align-items: center; gap: 28px; font-size: 14px; color: var(--muted); }
+    .nav nav a { text-decoration: none; }
+    .nav nav a:hover { color: var(--ink); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid transparent; font: 600 15px/1 inherit; font-family: inherit; text-decoration: none; cursor: pointer; transition: transform .15s, background .15s, border-color .15s; }
+    .btn:active { transform: scale(.98); }
+    .btn.primary { background: var(--ink); color: #fff; }
+    .btn.primary:hover { background: #2a2c31; }
+    .btn.ghost { background: var(--surface); border-color: var(--line); color: var(--ink); }
+    .btn.ghost:hover { border-color: #cfcfcb; }
+    .btn.sm { height: 36px; padding: 0 14px; font-size: 14px; }
+    kbd { font: 600 12px/1 var(--mono); padding: 3px 6px; border-radius: 6px; background: var(--soft); border: 1px solid var(--line); border-bottom-width: 2px; color: var(--ink); }
+
+    /* Hero */
+    .hero { padding: 88px 0 72px; text-align: center; }
+    .hero .eyebrow { justify-content: center; }
+    .hero h1 { font-size: clamp(42px, 7vw, 76px); max-width: 900px; margin: 0 auto; letter-spacing: -0.045em; }
+    .hero h1 .mark { position: relative; white-space: nowrap; }
+    .hero h1 .mark::after { content: ""; position: absolute; inset: -4px -8px; border: 1.5px dashed var(--gap); border-radius: 10px; pointer-events: none; }
+    .hero .lead { margin: 24px auto 0; }
+    .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 36px; }
+    .install { display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 8px 0 18px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font: 500 14px/1 var(--mono); }
+    .install .dollar { color: var(--faint); }
+    .copy { height: 30px; padding: 0 12px; border-radius: 999px; border: 0; background: var(--soft); font: 600 12px/1 inherit; font-family: inherit; color: var(--muted); cursor: pointer; }
+    .copy:hover { color: var(--ink); }
+    .hint { margin-top: 18px; font-size: 14px; color: var(--faint); }
+
+    .window { margin: 40px auto 0; max-width: 1120px; }
+    .window video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+
+    /* Why */
+    .why { background: var(--ink); color: #f2f2f0; }
+    .why .eyebrow { color: #a3a7ae; }
+    .why .lead { color: #b6b9bf; }
+    .why-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: start; margin-top: 56px; }
+    .why p { margin: 0 0 18px; color: #c4c7cc; font-size: 17px; }
+    .why p strong { color: #fff; font-weight: 600; }
+    .prompts { display: grid; gap: 14px; }
+    .prompt { border-radius: var(--radius); padding: 20px 22px; border: 1px solid #2a2c31; background: #17181b; }
+    .prompt .tag { font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; display: block; }
+    .prompt.before .tag { color: #8b8f97; }
+    .prompt.after { border-color: color-mix(in srgb, var(--pad) 45%, #2a2c31); }
+    .prompt.after .tag { color: var(--pad); }
+    .prompt .say { font-size: 17px; color: #fff; margin-bottom: 8px; }
+    .prompt pre { margin: 0; font: 13px/1.65 var(--mono); color: #c4c7cc; white-space: pre-wrap; word-break: break-word; }
+    .prompt pre b { color: #fff; font-weight: 500; }
+    .prompt .warn { color: #ff8a80; }
+
+    /* Steps */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 56px; }
+    .step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; }
+    .step .n { font: 600 13px/1 var(--mono); color: var(--faint); }
+    .step h3 { font-size: 22px; margin: 18px 0 10px; }
+    .step p { margin: 0; color: var(--muted); font-size: 15px; }
+    .viz { height: 150px; margin: -4px -4px 22px; border-radius: 12px; background: var(--soft); position: relative; overflow: hidden; }
+
+    /* Step visuals, drawn in the overlay's own colors */
+    .v-inspect .box { position: absolute; left: 50%; top: 50%; width: 170px; height: 80px; transform: translate(-50%, -50%); border-radius: 10px; background: color-mix(in srgb, var(--pad) 18%, transparent); outline: 1.5px solid var(--pad); }
+    .v-inspect .box::before { content: ""; position: absolute; inset: 14px 22px; border-radius: 5px; background: #fff; outline: 1px dashed #b9bcc2; }
+    .v-inspect .lbl { position: absolute; font: 600 10px/1 var(--mono); color: var(--pad); }
+    .v-inspect .lbl.t { left: 50%; top: calc(50% - 36px); transform: translateX(-50%); }
+    .v-inspect .lbl.l { left: calc(50% - 82px); top: 50%; transform: translateY(-50%); }
+    .v-inspect .tip { position: absolute; left: calc(50% - 85px); top: 16px; font: 600 10px/1 var(--mono); color: #fff; background: var(--ink); padding: 5px 7px; border-radius: 5px; }
+    .v-note .el { position: absolute; left: 26px; right: 26px; top: 34px; height: 44px; border-radius: 9px; background: #fff; outline: 1.5px solid var(--brand); }
+    .v-note .pin { position: absolute; left: 18px; top: 26px; width: 20px; height: 20px; border-radius: 50%; background: var(--brand); color: #fff; font: 700 11px/20px var(--mono); text-align: center; }
+    .v-note .bubble { position: absolute; left: 52px; right: 26px; top: 90px; padding: 10px 12px; border-radius: 10px; background: #fff; border: 1px solid var(--line); font-size: 13px; color: var(--ink); box-shadow: 0 6px 18px -8px rgba(0,0,0,.18); }
+    .v-copy pre { position: absolute; inset: 18px; margin: 0; padding: 14px; border-radius: 10px; background: var(--ink); color: #c4c7cc; font: 10.5px/1.6 var(--mono); white-space: pre; overflow: hidden; }
+    .v-copy pre b { color: #fff; font-weight: 500; }
+
+    /* Features */
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 56px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .feature { background: var(--surface); padding: 28px; }
+    .feature .sw { display: flex; gap: 6px; margin-bottom: 18px; }
+    .feature .sw span { width: 10px; height: 10px; border-radius: 3px; }
+    .feature h3 { font-size: 18px; letter-spacing: -0.015em; margin-bottom: 8px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    /* Comparison */
+    .compare { margin-top: 48px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .compare table { width: 100%; border-collapse: collapse; font-size: 15px; }
+    .compare th, .compare td { padding: 16px 24px; text-align: left; border-bottom: 1px solid var(--line); }
+    .compare tr:last-child td { border-bottom: 0; }
+    .compare th { font: 600 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--faint); background: var(--soft); }
+    .compare td:not(:first-child), .compare th:not(:first-child) { text-align: center; width: 180px; }
+    .compare .us { color: var(--ink); }
+    .yes { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--pad) 16%, transparent); color: var(--pad); font-weight: 700; font-size: 13px; }
+    .no { color: #c6c8cc; }
+    .partial { font-size: 13px; color: var(--muted); }
+    .footnote { margin-top: 14px; font-size: 13px; color: var(--faint); }
+
+    /* Install */
+    .tabs { display: inline-flex; gap: 4px; padding: 4px; margin-top: 40px; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); }
+    .tabs button { height: 34px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; font: 600 14px/1 inherit; font-family: inherit; color: var(--muted); cursor: pointer; }
+    .tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+    .code { position: relative; margin-top: 16px; border-radius: var(--radius); background: var(--ink); color: #d7d9dd; }
+    .code pre { margin: 0; padding: 24px 26px; overflow-x: auto; font: 14px/1.7 var(--mono); }
+    .code .c { color: #7d828b; }
+    .code .k { color: #ff9ecb; }
+    .code .s { color: #8fe0b8; }
+    .code .copy { position: absolute; top: 14px; right: 14px; background: #2a2c31; color: #c4c7cc; }
+    .code .copy:hover { color: #fff; }
+    [role="tabpanel"][hidden] { display: none; }
+
+    /* CTA + footer */
+    .cta { text-align: center; padding: 112px 0; }
+    .cta h2 { margin: 0 auto; }
+    .cta .lead { margin: 20px auto 0; }
+    footer { border-top: 1px solid var(--line); padding: 32px 0; font-size: 14px; color: var(--faint); }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer nav { display: flex; gap: 22px; }
+
+    @media (max-width: 860px) {
+      section { padding: 72px 0; }
+      .why-grid, .steps, .features { grid-template-columns: 1fr; }
+      .why-grid { gap: 40px; }
+      .nav nav a:not(.btn) { display: none; }
+      .compare th, .compare td { padding: 14px 14px; }
+      .compare td:not(:first-child), .compare th:not(:first-child) { width: 96px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="nav" id="top">
+    <div class="wrap">
+      <a class="logo" href="#top" aria-label="PixelSpec home">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="#111214"/><path d="M7 9.5V7h2.5M14.5 7H17v2.5M17 14.5V17h-2.5M9.5 17H7v-2.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.8" fill="#ec4f9b"/></svg>
+        PixelSpec
+      </a>
+      <nav aria-label="Primary">
+        <a href="#why">Why</a>
+        <a href="#how">How it works</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/yesith0106/pixelspec">GitHub</a>
+        <button class="btn primary sm" data-try>Try it on this page</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">For designers working with AI</p>
+        <h1>Point at the pixel. <span class="mark">Tell your AI</span> exactly what to fix.</h1>
+        <p class="lead">PixelSpec puts Figma-style inspect on top of your live site. See the spacing, type, color and contrast, click an element to leave feedback, and hand your coding agent instructions it can act on.</p>
+        <div class="actions">
+          <button class="btn primary" data-try>Try it on this page</button>
+          <div class="install"><span><span class="dollar">$</span> npm i -D pixelspec</span><button class="copy" data-copy="npm i -D pixelspec">Copy</button></div>
+        </div>
+        <p class="hint">Or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>I</kbd> anywhere on this page. It's running live.</p>
+
+        <div class="window">
+          <video src="assets/demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Hovering to inspect an element, clicking for specs, measuring distances and leaving feedback"></video>
+        </div>
+      </div>
+    </section>
+
+    <section class="why" id="why">
+      <div class="wrap">
+        <p class="eyebrow">Why PixelSpec exists</p>
+        <h2>Designing with AI lost the inspect panel.</h2>
+        <div class="why-grid">
+          <div>
+            <p>More and more designers skip the handoff and build straight in code with Claude Code, Cursor or v0. The design lives in the browser now. <strong>The tools we rely on didn't come with it.</strong></p>
+            <p>In Figma you can see that a gap is 14px when it should be 16, that the line height is off, or that a label fails contrast. On a live page you can't, so feedback turns vague: "make it a bit more spacious", "the title feels heavy". The agent guesses, you go back and forth, and the details drift.</p>
+            <p><strong>PixelSpec brings that precision back.</strong> You see the same numbers you would in your design tool, on the real thing, and every note you leave carries them, along with the exact element, so the agent knows what to change and where.</p>
+          </div>
+          <div class="prompts">
+            <div class="prompt before">
+              <span class="tag">Without PixelSpec</span>
+              <div class="say">"The button in the header looks a bit cramped and hard to read."</div>
+              <pre>Which button? How cramped? Compared to what?</pre>
+            </div>
+            <div class="prompt after">
+              <span class="tag">With PixelSpec</span>
+              <div class="say">Make this button bigger</div>
+<pre><b>body>header>button.cta</b> "Start free trial"
+126×34 p:10 18 r:999 | system-ui 14/14 w600
+c:#FFF bg:#3581F6 <span class="warn">contrast:3.7(fails AA)</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="wrap">
+        <p class="eyebrow">How it works</p>
+        <h2>Inspect, annotate, paste. That's the whole loop.</h2>
+        <p class="lead">No plugin, no screenshots, no account. It runs on your local dev server or any page you can add a script tag to.</p>
+        <div class="steps">
+          <article class="step">
+            <div class="viz v-inspect" aria-hidden="true"><span class="tip">button.cta 126×34</span><div class="box"></div><span class="lbl t">10</span><span class="lbl l">18</span></div>
+            <span class="n">01</span>
+            <h3>Inspect</h3>
+            <p>Hover anything to see its size. Click for padding, margin, gap, font, color, contrast, radius and shadow. Hover a second element for red redline distances.</p>
+          </article>
+          <article class="step">
+            <div class="viz v-note" aria-hidden="true"><div class="el"></div><span class="pin">1</span><div class="bubble">Make this 16px from the card edge</div></div>
+            <span class="n">02</span>
+            <h3>Annotate</h3>
+            <p>Type what you want changed and press Enter. A numbered marker sticks to the element. Select text to quote it. Notes survive reloads.</p>
+          </article>
+          <article class="step">
+            <div class="viz v-copy" aria-hidden="true"><pre><b>1. Make this 16px from the card edge</b>
+main>.grid>.card:nth-child(2)
+304×212 p:24 22 20 r:14 | gap:12
+
+<b>2. Too light, fails contrast</b>
+.row>span.chip.low "Low contrast…"</pre></div>
+            <span class="n">03</span>
+            <h3>Copy for AI</h3>
+            <p>Press <kbd>C</kbd> and paste into your agent. Each note comes with its selector, component name and only the specs that matter, in a compact format that saves tokens.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top: 0">
+      <div class="wrap">
+        <p class="eyebrow">What you can see</p>
+        <h2>The inspect panel you're used to, on the live page.</h2>
+        <div class="features">
+          <div class="feature"><div class="sw"><span style="background:var(--pad)"></span><span style="background:var(--margin)"></span><span style="background:var(--gap)"></span></div><h3>Spacing overlay</h3><p>Padding in green, margin in orange, flex and grid gaps hatched in pink.</p></div>
+          <div class="feature"><div class="sw"><span style="background:var(--red)"></span></div><h3>Redlines</h3><p>Distances between any two elements, like Figma. Hold Alt to measure to the parent.</p></div>
+          <div class="feature"><div class="sw"><span style="background:var(--ink)"></span></div><h3>Typography</h3><p>The rendered font, size, weight, line height and letter spacing in px, em and percent.</p></div>
+          <div class="feature"><div class="sw"><span style="background:var(--brand)"></span><span style="background:#ffd23f"></span></div><h3>Color and contrast</h3><p>Text and background colors with the WCAG ratio against the actual background.</p></div>
+          <div class="feature"><div class="sw"><span style="background:#61dafb"></span><span style="background:#42b883"></span><span style="background:#ff3e00"></span></div><h3>Component names</h3><p>React, Vue and Svelte components are detected so the agent finds the right file.</p></div>
+          <div class="feature"><div class="sw"><span style="background:var(--faint)"></span></div><h3>Stays out of the way</h3><p>Zero dependencies. It lives in a shadow root, so it never touches your styles.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top: 0">
+      <div class="wrap">
+        <p class="eyebrow">PixelSpec vs Agentation</p>
+        <h2>Agentation tells your agent where. PixelSpec also tells it what's there.</h2>
+        <p class="lead">Agentation made click-to-annotate feedback for AI agents popular. PixelSpec keeps that idea and adds the design layer, so your notes come with the measurements a designer would check.</p>
+        <div class="compare">
+          <table>
+            <thead><tr><th>Feature</th><th>Agentation</th><th class="us">PixelSpec</th></tr></thead>
+            <tbody>
+              <tr><td>Click an element and leave feedback</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+              <tr><td>Selectors and component names for the agent</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+              <tr><td>Padding, margin and gap overlay</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
+              <tr><td>Redline distances between elements</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
+              <tr><td>Typography, color and WCAG contrast specs</td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
+              <tr><td>Works with Vue, Svelte and plain HTML</td><td><span class="partial">React only</span></td><td><span class="yes">✓</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="footnote">Based on Agentation's public documentation as of October 2026.</p>
+      </div>
+    </section>
+
+    <section id="install" style="padding-top: 0">
+      <div class="wrap">
+        <p class="eyebrow">Install</p>
+        <h2>Running in under a minute.</h2>
+        <p class="lead">Add it to your dev build only, then click the round button in the corner or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>I</kbd>.</p>
+        <div class="tabs" role="tablist" aria-label="Setup">
+          <button role="tab" aria-selected="true" aria-controls="t-react" id="b-react">React / Next.js</button>
+          <button role="tab" aria-selected="false" aria-controls="t-vite" id="b-vite">Vite / Vue / Svelte</button>
+          <button role="tab" aria-selected="false" aria-controls="t-html" id="b-html">Plain HTML</button>
+        </div>
+        <div class="code" role="tabpanel" id="t-react" aria-labelledby="b-react">
+          <button class="copy" data-copy-from="t-react">Copy</button>
+<pre><span class="c">// npm i -D pixelspec</span>
+<span class="k">import</span> { PixelSpec } <span class="k">from</span> <span class="s">'pixelspec/react'</span>;
+
+<span class="k">export default function</span> App() {
+  <span class="k">return</span> (
+    &lt;&gt;
+      &lt;YourApp /&gt;
+      {process.env.NODE_ENV === <span class="s">'development'</span> &amp;&amp; &lt;PixelSpec /&gt;}
+    &lt;/&gt;
+  );
+}</pre>
+        </div>
+        <div class="code" role="tabpanel" id="t-vite" aria-labelledby="b-vite" hidden>
+          <button class="copy" data-copy-from="t-vite">Copy</button>
+<pre><span class="c">// npm i -D pixelspec, then in main.ts</span>
+<span class="k">if</span> (<span class="k">import</span>.meta.env.DEV) {
+  <span class="k">import</span>(<span class="s">'pixelspec'</span>).then(({ init }) =&gt; init());
+}</pre>
+        </div>
+        <div class="code" role="tabpanel" id="t-html" aria-labelledby="b-html" hidden>
+          <button class="copy" data-copy-from="t-html">Copy</button>
+<pre><span class="c">&lt;!-- Before &lt;/body&gt; --&gt;</span>
+&lt;script src=<span class="s">"https://unpkg.com/pixelspec"</span>&gt;&lt;/script&gt;</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="wrap">
+        <h2>Stop describing the pixel. Point at it.</h2>
+        <p class="lead">Free and open source under the MIT license.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/yesith0106/pixelspec">Star on GitHub</a>
+          <a class="btn ghost" href="https://www.npmjs.com/package/pixelspec">View on npm</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>PixelSpec · MIT · Made by <a href="https://github.com/yesith0106">Yesith</a></span>
+      <nav aria-label="Footer">
+        <a href="https://github.com/yesith0106/pixelspec">GitHub</a>
+        <a href="https://www.npmjs.com/package/pixelspec">npm</a>
+        <a href="https://github.com/yesith0106/pixelspec/issues">Report an issue</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- The page runs PixelSpec itself, so visitors can try it right here. -->
+  <script src="https://unpkg.com/pixelspec@0.2/dist/pixelspec.global.js"></script>
+  <script>
+    // Open the live PixelSpec toolbar from the page's buttons.
+    document.querySelectorAll('[data-try]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const ps = window.PixelSpec && window.PixelSpec.getInstance();
+        if (ps) ps.activate();
+      })
+    );
+
+    // Copy buttons.
+    document.querySelectorAll('.copy').forEach((b) =>
+      b.addEventListener('click', async () => {
+        const text = b.dataset.copy ?? document.getElementById(b.dataset.copyFrom).querySelector('pre').innerText;
+        try { await navigator.clipboard.writeText(text); b.textContent = 'Copied'; } catch { b.textContent = 'Press ⌘C'; }
+        setTimeout(() => (b.textContent = 'Copy'), 1500);
+      })
+    );
+
+    // Install tabs.
+    const tabs = document.querySelectorAll('[role="tab"]');
+    tabs.forEach((t) =>
+      t.addEventListener('click', () => {
+        tabs.forEach((o) => {
+          const on = o === t;
+          o.setAttribute('aria-selected', on);
+          document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
+        });
+      })
+    );
+
+    // Hairline under the nav once the page scrolls.
+    const nav = document.querySelector('.nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+  </script>
+</body>
+</html>
