@@ -1,7 +1,7 @@
 {
   "name": "pixelspec",
   "version": "0.2.0",
-  "description": "Figma-style inspect and spacing overlay for any website: measure padding, margin, gaps, distances, typography, colors and contrast, then copy AI-ready feedback.",
+  "description": "Design inspector and spacing overlay for any website: measure padding, margin, gaps, distances, typography, colors and contrast, then copy AI-ready feedback.",
   "license": "MIT",
   "author": "Yesith (https://github.com/yesith0106)",
   "homepage": "https://github.com/yesith0106/pixelspec#readme",
@@ -57,7 +57,7 @@
     "typescript": "^5.6.0"
   },
   "keywords": [
-    "figma inspect",
+    "design inspector",
     "css inspector",
     "spacing",
     "measure",

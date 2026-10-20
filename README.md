@@ -1,12 +1,12 @@
 # PixelSpec
 
-**Figma-style inspect and spacing overlay for any website, with AI-ready feedback.**
+**Design inspector and spacing overlay for any website, with AI-ready feedback.**
 
 [![CI](https://github.com/yesith0106/pixelspec/actions/workflows/ci.yml/badge.svg)](https://github.com/yesith0106/pixelspec/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/pixelspec.svg)](https://www.npmjs.com/package/pixelspec)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-PixelSpec lets you measure spacing between elements right in the browser: padding, margin, gaps, distances, letter spacing, line height, colors and contrast, like Figma's inspect panel on top of the live page. Click any element to leave feedback, then copy it all as a compact prompt for your AI coding agent. It is an open-source [agentation](https://agentation.com) alternative with built-in design inspection.
+PixelSpec lets you measure spacing between elements right in the browser: padding, margin, gaps, distances, letter spacing, line height, colors and contrast, like a design tool's inspect panel on top of the live page. Click any element to leave feedback, then copy it all as a compact prompt for your AI coding agent. It is an open-source [agentation](https://agentation.com) alternative with built-in design inspection.
 
 ![PixelSpec demo: hover to inspect, click for specs, measure distances, leave feedback and copy it for your AI agent](docs/demo.gif)
 
@@ -70,7 +70,7 @@ Optional attributes: `data-active="true"` to start open, `data-hotkey="alt+shift
 
 1. **Hover** anything to see its name and size.
 2. **Click** an element. A popover opens where you clicked, with the key specs: size, padding, margin, gap, layout, font, color, contrast, radius and shadow. Click any value to copy it. The spacing icons use the overlay colors: green is padding, orange is margin, pink is gap.
-3. **Hover another element** to see red redline distances, like Figma. Hold <kbd>Alt</kbd> to measure to the parent.
+3. **Hover another element** to see red redline distances between them. Hold <kbd>Alt</kbd> to measure to the parent.
 4. **Type feedback** and press <kbd>Enter</kbd>. A numbered marker appears on the element. Hover a marker to read the note, click it to edit or delete.
 5. **Select text** on the page to leave feedback that quotes it.
 6. **Copy** with the toolbar's copy button or <kbd>C</kbd>, and paste it into your agent.

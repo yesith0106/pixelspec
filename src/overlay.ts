@@ -121,7 +121,7 @@ const hDash = (x1: number, x2: number, y: number) => div('dd-h', Math.min(x1, x2
 const vDash = (y1: number, y2: number, x: number) => div('dd-v', x - 0.5, Math.min(y1, y2), 1, Math.abs(y2 - y1));
 
 /**
- * Figma-style distance measurement from `a` (anchor) to `b` (target).
+ * Design-tool-style distance measurement from `a` (anchor) to `b` (target).
  * Handles separated, intersecting and nested rects.
  */
 export function drawMeasure(a: Rect, b: Rect): string {

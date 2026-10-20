@@ -836,7 +836,7 @@ export class PixelSpec {
     return t instanceof Element ? t : null;
   }
 
-  /** Empty page background (html/body) isn't highlighted on hover, like Figma. It stays reachable via the parent arrow. */
+  /** Empty page background (html/body) isn't highlighted on hover, like in design tools. It stays reachable via the parent arrow. */
   private hoverable(el: Element | null): Element | null {
     return el && el !== document.documentElement && el !== document.body ? el : null;
   }

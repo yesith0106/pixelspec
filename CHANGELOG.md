@@ -19,7 +19,7 @@ First public release, now on npm.
 
 - Renamed from Inspecta to PixelSpec. Settings and notes saved under the old name still load.
 - Cleaner specs: plain values you hover to copy, size as one W × H value, and contrast as a colored dot.
-- Hovering empty page background no longer highlights the whole page, matching Figma.
+- Hovering empty page background no longer highlights the whole page.
 
 ## 0.1.0 (2026-10-19)
 
