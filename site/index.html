@@ -64,74 +64,18 @@
     .body a, .link { color: var(--ink); background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; transition: color .15s; }
     .body a:hover, .link:hover { color: var(--primary); }
 
-    .meta { display: grid; grid-template-columns: 192px 192px 384px; gap: 16px; padding: 40px 0 56px; }
-    .meta .label { margin-bottom: 4px; }
-    .npm { font: 13px/22.5px var(--mono); color: var(--ink); text-align: left; }
-    .npm:hover { color: var(--primary); }
-
-    /* Card grid */
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
-    .col { display: grid; gap: 31px; }
-    .card { display: block; }
-    .thumb { position: relative; overflow: hidden; background: var(--tint); }
-    .thumb > * { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
-    .card:hover .thumb > * { transform: scale(1.02); }
-    .cap { display: flex; gap: 6px; margin-top: 8px; line-height: 22.5px; }
-    .cap span:not(:first-child) { color: var(--ink-55); }
-    .h225 { height: 225px; } .h276 { height: 276px; } .h315 { height: 315px; }
-    .t-video { background: linear-gradient(150deg, #e9eef7, #f3e9ef); padding: 18px 22px 0; }
-    .t-video video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 8px 8px 0 0; box-shadow: 0 10px 30px -12px rgb(30 40 60 / .3); }
-
-    /* Thumbnail illustrations, drawn in the overlay's own colors */
-    .stage { position: absolute; inset: 0; display: grid; place-items: center; }
-    .tag { position: absolute; font: 500 10px/1 var(--mono); padding: 4px 6px; border-radius: 4px; color: #fff; }
-    .tag.pad { background: var(--pad); } .tag.mar { background: var(--margin); } .tag.gap { background: var(--gap); }
-
-    .t-spacing { background: #eef6f1; }
-    .t-spacing .m { padding: 18px; background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--margin) 22%, transparent) 0 6px, transparent 6px 10px); outline: 1px dashed var(--margin); }
-    .t-spacing .p { padding: 22px 26px; background: color-mix(in srgb, var(--pad) 24%, #fff); outline: 1.5px solid var(--pad); display: flex; gap: 12px; }
-    .t-spacing .p i { width: 54px; height: 64px; background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgb(0 0 0 / .08); }
-    .t-spacing .p i + i { box-shadow: -12px 0 0 0 color-mix(in srgb, var(--gap) 30%, transparent), 0 1px 2px rgb(0 0 0 / .08); }
-
-    .t-why { background: #1f2329; color: #c4c7cc; padding: 22px; display: grid; gap: 12px; align-content: center; }
-    .t-why .q { padding: 14px 16px; border: 1px solid #343941; border-radius: 10px; }
-    .t-why .q.ok { border-color: color-mix(in srgb, var(--pad) 55%, #343941); }
-    .t-why small { display: block; font: 500 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; color: #8b8f97; }
-    .t-why .ok small { color: var(--pad); }
-    .t-why .say { color: #fff; font-size: 14px; }
-    .t-why pre { margin: 6px 0 0; font: 11px/1.6 var(--mono); white-space: pre-wrap; }
-    .t-why pre b { color: #fff; font-weight: 500; }
-    .t-why .warn { color: #ff8a80; }
-
-    .t-redline { background: linear-gradient(135deg, #fde9df, #f6d4e3); }
-    .t-redline .a, .t-redline .b { position: absolute; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgb(0 0 0 / .08); }
-    .t-redline .a { left: 18%; top: 22%; width: 34%; height: 30%; outline: 1.5px solid #2f6bff; }
-    .t-redline .b { left: 62%; top: 52%; width: 22%; height: 28%; outline: 1px dashed #2f6bff; }
-    .t-redline .h { position: absolute; left: 52%; top: 66%; width: 10%; height: 1px; background: var(--red); }
-    .t-redline .vl { position: absolute; left: 73%; top: 37%; width: 1px; height: 15%; background: var(--red); }
-    .t-redline .n { position: absolute; font: 500 10px/1 var(--mono); padding: 3px 5px; border-radius: 3px; background: var(--red); color: #fff; }
-
-    .t-note { background: #eaf0fb; }
-    .t-note .el { position: absolute; left: 14%; right: 14%; top: 24%; height: 22%; background: #fff; border-radius: 10px; outline: 1.5px solid #2f6bff; }
-    .t-note .pin { position: absolute; left: calc(14% - 10px); top: calc(24% - 10px); width: 20px; height: 20px; border-radius: 50%; background: #2f6bff; color: #fff; font: 600 11px/20px var(--mono); text-align: center; }
-    .t-note .bubble { position: absolute; left: 22%; right: 14%; top: 54%; padding: 10px 12px; border-radius: 10px; background: #fff; font-size: 13px; color: var(--ink); box-shadow: 0 8px 22px -10px rgb(0 0 0 / .25); }
-    .t-note .bubble span { color: var(--ink-40); float: right; }
-
-    .t-copy { background: #2b2f36; }
-    .t-copy pre { position: absolute; inset: 22px; margin: 0; font: 11px/1.7 var(--mono); color: #aab0b9; white-space: pre; overflow: hidden; }
-    .t-copy pre b { color: #fff; font-weight: 500; }
-
-    .t-type { background: linear-gradient(160deg, #f7efe4, #efe2f1); }
-    .t-type .spec { position: absolute; left: 10%; right: 10%; top: 50%; transform: translateY(-50%); display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; font: 11px/1.4 var(--mono); color: var(--ink-80); }
-    .card:hover .t-type .spec { transform: translateY(-50%) scale(1.02); }
-    .t-type .big { grid-column: 1 / -1; font: 400 38px/1 var(--serif); color: var(--ink); margin-bottom: 10px; letter-spacing: -0.02em; }
-    .t-type .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 6px; }
-    .t-type .pass { color: #138a5e; }
-
-    .t-fw { background: #f1f1ef; }
-    .t-fw .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 280px; }
-    .t-fw .chips span { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px; border-radius: 999px; background: #fff; font-size: 13px; box-shadow: 0 1px 2px rgb(0 0 0 / .06); }
-    .t-fw .chips i { width: 8px; height: 8px; border-radius: 50%; }
+    /* Hero */
+    .lead { margin-top: 24px; max-width: 560px; font-size: 17px; line-height: 1.6; color: var(--ink-80); }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+    .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 999px; background: var(--ink); color: #fff; transition: background .15s; }
+    .btn:hover { background: var(--primary); }
+    .install { display: inline-flex; align-items: center; gap: 14px; height: 42px; padding: 0 6px 0 18px; border-radius: 999px; border: 1px solid var(--line); font: 13px/1 var(--mono); }
+    .install .dollar { color: var(--ink-40); }
+    .install button { height: 30px; padding: 0 12px; border-radius: 999px; background: var(--tint); font: 13px/1 var(--sans); color: var(--ink-55); transition: color .15s; }
+    .install button:hover { color: var(--primary); }
+    .hint { margin-top: 16px; color: var(--ink-55); }
+    .hero-video { margin-top: 56px; padding: 40px 48px 0; overflow: hidden; background: linear-gradient(150deg, #e9eef7, #f3e9ef); }
+    .hero-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 10px 10px 0 0; box-shadow: 0 18px 50px -20px rgb(30 40 60 / .35); }
 
     /* Text sections */
     section { padding-top: 160px; scroll-margin-top: 80px; }
@@ -177,7 +121,6 @@
     @media (max-width: 1100px) {
       :root { --side: 200px; }
       main { margin-right: 24px; }
-      .meta { grid-template-columns: 1fr 1fr 2fr; }
     }
     @media (max-width: 860px) {
       .brand, .try { position: absolute; }
@@ -185,17 +128,15 @@
       main { margin: 0 20px; padding-top: 120px; }
       h1 { font-size: 40px; line-height: 50px; }
       h2 { font-size: 26px; line-height: 36px; }
-      .meta { grid-template-columns: 1fr 1fr; row-gap: 20px; }
-      .meta > :last-child { grid-column: 1 / -1; }
-      .grid, .steps { grid-template-columns: 1fr; }
-      .grid, .col { row-gap: 24px; }
+      .steps { grid-template-columns: 1fr; }
+      .hero-video { margin: 40px -20px 0; padding: 20px 16px 0; }
       section, .end { padding-top: 104px; }
       th:not(:first-child), td:not(:first-child) { width: 88px; }
       footer { flex-direction: column; align-items: flex-start; padding: 24px 20px; }
       footer .status { padding-left: 0; }
       footer nav { gap: 20px; flex-wrap: wrap; }
     }
-    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .thumb > * { transition: none; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   </style>
 </head>
 <body id="top">
@@ -217,100 +158,16 @@
   <main>
     <h1>PixelSpec is the inspect panel for designers who build with AI.</h1>
 
-    <div class="meta">
-      <div>
-        <p class="label">Install</p>
-        <button class="npm" data-copy="npm i -D pixelspec" title="Copy to clipboard">npm i -D pixelspec</button>
-      </div>
-      <div>
-        <p class="label">Toggle</p>
-        <p class="body"><kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>I</kbd><br />on any page, even this one</p>
-      </div>
-      <div>
-        <p class="label">In short</p>
-        <p class="body">Figma-style specs on your live site, so you can point your AI at exactly what to change. A sharper take on <a href="#compare">Agentation</a>.</p>
-      </div>
+    <p class="lead">See the spacing, type, color and contrast on your live site, the way you would in Figma. Click an element to leave a note, then hand your AI agent feedback it can act on. A sharper take on <a class="link" href="#compare">Agentation</a>.</p>
+
+    <div class="actions">
+      <button class="btn" data-try>Try it on this page</button>
+      <div class="install"><span><span class="dollar">$</span> npm i -D pixelspec</span><button data-copy="npm i -D pixelspec">Copy</button></div>
     </div>
+    <p class="hint">Or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>I</kbd> anywhere on this page.</p>
 
-    <div class="grid">
-      <div class="col">
-        <a class="card" href="#how">
-          <div class="thumb h225 t-video"><video src="assets/demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Hovering to inspect an element, clicking for specs, measuring distances and leaving feedback"></video></div>
-          <p class="cap"><span>Live demo</span><span>/</span><span>Hover, click, measure</span></p>
-        </a>
-        <a class="card" href="#how">
-          <div class="thumb h276 t-spacing" aria-hidden="true">
-            <div class="stage"><div class="m"><div class="p"><i></i><i></i><i></i></div></div></div>
-            <span class="tag mar" style="left:14%;top:14%">margin 18</span>
-            <span class="tag pad" style="right:14%;top:27%">p 22 26</span>
-            <span class="tag gap" style="left:50%;bottom:16%;translate:-50% 0">gap 12</span>
-          </div>
-          <p class="cap"><span>Spacing overlay</span><span>/</span><span>Padding, margin, gap</span></p>
-        </a>
-        <a class="card" href="#how">
-          <div class="thumb h225 t-copy" aria-hidden="true"><pre><b>1. Make this 16px from the card edge</b>
-main>.grid>.card:nth-child(2)
-304×212 p:24 22 20 r:14 | gap:12
-
-<b>2. Too light, fails contrast</b>
-.row>span.chip.low "Low contrast…"
-c:#9AA0A6 bg:#FFF contrast:2.6</pre></div>
-          <p class="cap"><span>Copy for AI</span><span>/</span><span>Press C, paste</span></p>
-        </a>
-        <a class="card" href="#install">
-          <div class="thumb h225 t-fw" aria-hidden="true">
-            <div class="stage"><div class="chips">
-              <span><i style="background:#61dafb"></i>React</span>
-              <span><i style="background:#111"></i>Next.js</span>
-              <span><i style="background:#42b883"></i>Vue</span>
-              <span><i style="background:#ff3e00"></i>Svelte</span>
-              <span><i style="background:#a1a7b0"></i>Plain HTML</span>
-            </div></div>
-          </div>
-          <p class="cap"><span>Any stack</span><span>/</span><span>Zero dependencies</span></p>
-        </a>
-      </div>
-
-      <div class="col">
-        <a class="card" href="#why">
-          <div class="thumb h315 t-why" aria-hidden="true">
-            <div class="q"><small>Without PixelSpec</small><div class="say">"The header button looks a bit cramped."</div></div>
-            <div class="q ok"><small>With PixelSpec</small><div class="say">Make this button bigger</div>
-<pre><b>header>button.cta</b> "Start free trial"
-126×34 p:10 18 r:999 | 14/14 w600
-bg:#3581F6 <span class="warn">contrast:3.7 fails AA</span></pre></div>
-          </div>
-          <p class="cap"><span>Why it exists</span><span>/</span><span>Vague vs precise</span></p>
-        </a>
-        <a class="card" href="#how">
-          <div class="thumb h225 t-redline" aria-hidden="true">
-            <div class="a"></div><div class="b"></div>
-            <div class="h"></div><div class="vl"></div>
-            <span class="n" style="left:53%;top:calc(66% - 18px)">24</span>
-            <span class="n" style="left:calc(73% + 6px);top:41%">16</span>
-          </div>
-          <p class="cap"><span>Redlines</span><span>/</span><span>Distances, like Figma</span></p>
-        </a>
-        <a class="card" href="#how">
-          <div class="thumb h225 t-type" aria-hidden="true">
-            <div class="spec">
-              <span class="big">Aa Heading</span>
-              <span>font</span><span>Libre Baskerville 32/44</span>
-              <span>tracking</span><span>-0.02em</span>
-              <span>color</span><span><i class="sw" style="background:rgb(50 64 79)"></i>#32404F on #FFF</span>
-              <span>contrast</span><span class="pass">10.6 passes AAA</span>
-            </div>
-          </div>
-          <p class="cap"><span>Type and color</span><span>/</span><span>WCAG contrast</span></p>
-        </a>
-        <a class="card" href="#how">
-          <div class="thumb h225 t-note" aria-hidden="true">
-            <div class="el"></div><span class="pin">1</span>
-            <div class="bubble">Make this 16px from the card edge <span>↵</span></div>
-          </div>
-          <p class="cap"><span>Annotate</span><span>/</span><span>Click, type, Enter</span></p>
-        </a>
-      </div>
+    <div class="hero-video">
+      <video src="assets/demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Hovering to inspect an element, clicking for specs, measuring distances and leaving feedback"></video>
     </div>
 
     <section id="why" data-section="why">
