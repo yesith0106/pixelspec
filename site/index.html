@@ -52,9 +52,6 @@
     .side-nav a:hover { color: var(--ink); }
     .side-nav a.active { color: var(--primary); }
     .side-nav a.active::before { content: ""; position: absolute; left: -12px; top: 5px; width: 4px; height: 4px; background: var(--primary); }
-    .try { position: fixed; top: 24px; right: 24px; z-index: 5; display: flex; align-items: center; gap: 8px; height: 32px; color: var(--ink-40); transition: color .15s; }
-    .try:hover { color: var(--primary); }
-    .try svg { width: 20px; height: 20px; }
 
     /* Main column */
     main { margin-left: var(--side); max-width: 816px; padding: 240px 0 0; }
@@ -81,7 +78,6 @@
 
     /* Text sections */
     section { padding-top: 160px; scroll-margin-top: 80px; }
-    .prose { display: grid; gap: 14px; max-width: 560px; margin-top: 24px; }
     .intro { margin-top: 16px; max-width: 560px; }
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
     .steps .n { font: 13px/22.5px var(--mono); color: var(--primary); }
@@ -109,9 +105,6 @@
     .no { color: var(--ink-40); }
     .note { margin-top: 14px; color: var(--ink-40); font-size: 13px; }
 
-    .end { padding: 160px 0 0; }
-    .end h2 { max-width: 560px; }
-    .end .row { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 20px; }
 
     footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 120px; padding: 24px; color: var(--ink-40); }
     footer .status { display: flex; align-items: center; gap: 8px; padding-left: 12px; }
@@ -125,14 +118,14 @@
       main { margin-right: 24px; }
     }
     @media (max-width: 860px) {
-      .brand, .try { position: absolute; }
+      .brand { position: absolute; }
       .side-nav { display: none; }
       main { margin: 0 20px; padding-top: 120px; }
       h1 { font-size: 40px; line-height: 50px; }
       h2 { font-size: 26px; line-height: 36px; }
       .steps { grid-template-columns: 1fr; }
       .hero-video { margin-top: 40px; }
-      section, .end { padding-top: 104px; }
+      section { padding-top: 104px; }
       th:not(:first-child), td:not(:first-child) { width: 88px; }
       footer { flex-direction: column; align-items: flex-start; padding: 24px 20px; }
       footer .status { padding-left: 0; }
@@ -152,11 +145,6 @@
     <a href="#compare" data-spy="compare">Compare</a>
   </nav>
 
-  <button class="try" data-try aria-label="Try PixelSpec on this page">
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M4 7V4h3M13 4h3v3M16 13v3h-3M7 16H4v-3"/><circle cx="10" cy="10" r="1.4" fill="currentColor" stroke="none"/></svg>
-    <span>Try it here</span>
-  </button>
-
   <main>
     <h1>PixelSpec is the inspect panel for designers who build with AI.</h1>
 
@@ -175,27 +163,22 @@
     <section id="why" data-section="why">
       <p class="label">Why</p>
       <h2>Designing with AI lost the inspect panel.</h2>
-      <div class="prose body">
-        <p>More and more designers skip the handoff and build straight in code with Claude Code, Cursor or v0. The design lives in the browser now. The tools we rely on didn't come with it.</p>
-        <p>In Figma you can see that a gap is 14px when it should be 16, that the line height is off, or that a label fails contrast. On a live page you can't, so feedback turns vague: "make it a bit more spacious", "the title feels heavy". The agent guesses, you go back and forth, and the details drift.</p>
-        <p>PixelSpec brings that precision back. You see the same numbers you would in your design tool, on the real thing, and every note you leave carries them, along with the exact element, so the agent knows what to change and where.</p>
-      </div>
+      <p class="body intro">Designers now build straight in code with Claude Code, Cursor or v0. Without specs on screen, feedback turns vague ("make it a bit more spacious") and the agent guesses. PixelSpec shows the numbers you'd see in Figma and attaches them, with the exact element, to every note.</p>
     </section>
 
     <section id="how" data-section="how">
       <p class="label">How it works</p>
       <h2>Inspect, annotate, paste. That's the whole loop.</h2>
       <div class="steps body">
-        <div><span class="n">01</span><h3>Inspect</h3><p>Hover anything to see its size. Click for padding, margin, gap, font, color, contrast, radius and shadow. Hover a second element for redlines.</p></div>
-        <div><span class="n">02</span><h3>Annotate</h3><p>Type what you want changed and press Enter. A numbered marker sticks to the element. Select text to quote it. Notes survive reloads.</p></div>
-        <div><span class="n">03</span><h3>Copy for AI</h3><p>Press <kbd>C</kbd> and paste into your agent. Each note brings its selector, component name and only the specs that matter.</p></div>
+        <div><span class="n">01</span><h3>Inspect</h3><p>Click any element for padding, margin, gap, type, color, contrast and radius. Hover another for redline distances.</p></div>
+        <div><span class="n">02</span><h3>Annotate</h3><p>Type what should change and press Enter. A numbered marker pins the note to the element.</p></div>
+        <div><span class="n">03</span><h3>Copy for AI</h3><p>Press <kbd>C</kbd> and paste into your agent. Each note carries its selector, component and specs.</p></div>
       </div>
     </section>
 
     <section id="install" data-section="install">
       <p class="label">Install</p>
-      <h2>Running in under a minute.</h2>
-      <p class="body intro">Add it to your dev build only, then click the round button in the corner or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>I</kbd>.</p>
+      <h2>Add it to your dev build.</h2>
       <div class="tabs" role="tablist" aria-label="Setup">
         <button role="tab" aria-selected="true" aria-controls="t-react" id="b-react">React / Next.js</button>
         <button role="tab" aria-selected="false" aria-controls="t-vite" id="b-vite">Vite / Vue / Svelte</button>
@@ -232,12 +215,10 @@
     <section id="compare" data-section="compare">
       <p class="label">Compare</p>
       <h2>Agentation tells your agent where. PixelSpec also tells it what's there.</h2>
-      <p class="body intro">Agentation made click-to-annotate feedback for AI agents popular. PixelSpec keeps that idea and adds the design layer, so your notes come with the measurements a designer would check.</p>
       <table>
         <thead><tr><th></th><th>Agentation</th><th>PixelSpec</th></tr></thead>
         <tbody>
-          <tr><td>Click an element and leave feedback</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
-          <tr><td>Selectors and component names</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td>Click-to-annotate feedback for agents</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
           <tr><td>Padding, margin and gap overlay</td><td class="no">No</td><td class="yes">Yes</td></tr>
           <tr><td>Redline distances between elements</td><td class="no">No</td><td class="yes">Yes</td></tr>
           <tr><td>Typography, color and WCAG contrast</td><td class="no">No</td><td class="yes">Yes</td></tr>
@@ -247,14 +228,6 @@
       <p class="note">Based on Agentation's public documentation as of October 2026.</p>
     </section>
 
-    <div class="end">
-      <h2>Stop describing the pixel. Point at it.</h2>
-      <div class="row body">
-        <a class="link" href="https://github.com/yesith0106/pixelspec">Star on GitHub</a>
-        <a class="link" href="https://www.npmjs.com/package/pixelspec">View on npm</a>
-        <button class="link" data-try>Try it here</button>
-      </div>
-    </div>
   </main>
 
   <footer>
@@ -262,8 +235,6 @@
     <nav aria-label="Footer">
       <a href="https://github.com/yesith0106/pixelspec">GitHub</a>
       <a href="https://www.npmjs.com/package/pixelspec">npm</a>
-      <a href="https://github.com/yesith0106/pixelspec/issues">Issues</a>
-      <a href="https://github.com/yesith0106">Yesith</a>
     </nav>
   </footer>
 
