@@ -59,6 +59,8 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
   pointer-events: auto; box-shadow: 0 0 0 2px #fff, 0 3px 10px rgba(0,0,0,.25); animation: mk-in .28s cubic-bezier(.3,1.6,.5,1); transition: transform .12s; }
 .mk:hover, .mk.on { transform: scale(1.15); }
 .mk[data-tip]::after { white-space: normal; width: max-content; max-width: 240px; text-align: left; line-height: 1.35; }
+/* The element this note was on has been removed from the page. */
+.mk.gone { background: #71717a; box-shadow: 0 0 0 2px #fff, 0 3px 10px rgba(0,0,0,.25); outline: 1.5px dashed #71717a; outline-offset: 3px; opacity: .85; }
 @keyframes mk-in { from { transform: scale(0); } }
 
 /* ---------- dock & toolbar ---------- */
@@ -149,7 +151,7 @@ kbd { display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 5
 .pa .ib { width: 30px; height: 30px; border-radius: 8px; }
 .pa .ib svg { width: 16px; height: 16px; }
 
-.pbody { overflow: auto; padding: 12px 14px 0; scrollbar-width: thin; scrollbar-color: #3f3f46 transparent; }
+.pbody { overflow: auto; overscroll-behavior: contain; padding: 12px 14px 0; scrollbar-width: thin; scrollbar-color: #3f3f46 transparent; }
 .quote { margin: 0 0 12px; padding: 8px 12px; border-left: 2px solid var(--mk); border-radius: 0 8px 8px 0; background: rgba(13,153,255,.06);
   color: #d4d4d8; font: italic 400 12.5px/1.5 var(--sans); }
 .specs { display: grid; gap: 2px; }

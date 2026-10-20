@@ -2,6 +2,13 @@
 
 All notable changes to PixelSpec are listed here. The site's changelog page (`site/changelog.html`) shows the same entries.
 
+## Unreleased
+
+### Fixed
+
+- Feedback on an element that was later removed from the page keeps its marker, dashed and grey, where the element was. Click it to delete the feedback.
+- The inspector popover now scrolls on sites that use smooth-scroll libraries such as Lenis.
+
 ## 0.2.0 (2026-10-20)
 
 First public release, now on npm.

@@ -106,6 +106,8 @@ export class PixelSpec {
   private mouse = { x: -1, y: -1 };
   private down: { x: number; y: number } | null = null;
   private notes: PixelSpecNote[] = [];
+  /** Where each note's element last was, in page coordinates, so its marker can stay put if the element is removed. */
+  private lastPos = new Map<number, { x: number; y: number }>();
   private noteSeq = 0;
   private raf = 0;
   private lastLayer = '';
@@ -181,6 +183,10 @@ export class PixelSpec {
     this.root.addEventListener('toggle', this.onToggle, true);
     this.tb.addEventListener('pointerdown', this.onDockDown);
     this.host.addEventListener('keydown', (e) => e.stopPropagation());
+    // Smooth-scroll libraries (Lenis, Locomotive, ScrollSmoother) cancel wheel and touch events page-wide,
+    // which stops the popover from scrolling. Keep those events inside our UI so the browser scrolls it natively.
+    this.host.setAttribute('data-lenis-prevent', '');
+    for (const t of ['wheel', 'touchmove']) this.root.addEventListener(t, (e) => e.stopPropagation(), { passive: true });
 
     window.addEventListener('pointermove', this.onMove, true);
     window.addEventListener('pointerup', this.onDockUp, true);
@@ -430,8 +436,9 @@ export class PixelSpec {
     const seen = new Set<number>();
     if (this.s.markers) {
       const vw = document.documentElement.clientWidth;
+      let stacked = 0;
       this.notes.forEach((n, i) => {
-        if (!n.element?.isConnected) return;
+        const gone = !n.element?.isConnected;
         seen.add(n.id);
         let m = this.markEls.get(n.id);
         if (!m) {
@@ -441,17 +448,35 @@ export class PixelSpec {
           this.marks.appendChild(m);
           this.markEls.set(n.id, m);
         }
-        const r = rectOf(n.element);
-        m.style.display = r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > vw ? 'none' : '';
+        // A note whose element was removed keeps its marker where the element last was
+        // (or in a column at the top left after a reload), so it can still be deleted.
+        let x: number, y: number;
+        if (gone) {
+          const p = this.lastPos.get(n.id);
+          if (p) {
+            x = p.x - scrollX;
+            y = p.y - scrollY;
+          } else {
+            x = 27;
+            y = 27 + stacked++ * 30;
+          }
+        } else {
+          const r = rectOf(n.element!);
+          x = r.right;
+          y = r.top;
+          this.lastPos.set(n.id, { x: r.right + scrollX, y: r.top + scrollY });
+        }
+        m.style.display = y < -11 || y > innerHeight + 11 || x < -11 || x > vw + 11 ? 'none' : '';
+        m.classList.toggle('gone', gone);
         const label = String(i + 1);
         if (m.textContent !== label) m.textContent = label;
-        const tip = trunc(n.text, 120);
+        const tip = gone ? `Element removed: ${trunc(n.text, 100)}` : trunc(n.text, 120);
         if (m.dataset.tip !== tip) {
           m.dataset.tip = tip;
           m.setAttribute('aria-label', `Feedback ${label}: ${tip}`);
         }
-        m.style.left = `${clamp(r.right - 11, 4, vw - 26)}px`;
-        m.style.top = `${clamp(r.top - 11, 4, innerHeight - 26)}px`;
+        m.style.left = `${clamp(x - 11, 4, vw - 26)}px`;
+        m.style.top = `${clamp(y - 11, 4, innerHeight - 26)}px`;
         m.classList.toggle('on', this.editing === n.id);
       });
     }
@@ -624,13 +649,13 @@ export class PixelSpec {
     this.renderToolbar(true);
   }
 
-  private deleteNote(): void {
-    const n = this.notes.find((x) => x.id === this.editing);
+  private deleteNote(id = this.editing): void {
+    const n = this.notes.find((x) => x.id === id);
     if (!n) return;
     const idx = this.notes.indexOf(n);
     this.notes.splice(idx, 1);
     this.save();
-    this.closePop(true);
+    if (this.editing === id) this.closePop(true);
     this.renderToolbar();
     this.toast('Feedback deleted', {
       label: 'Undo',
@@ -1060,7 +1085,8 @@ export class PixelSpec {
     const mk = t.closest<HTMLElement>('.mk');
     if (mk) {
       const n = this.notes.find((x) => x.id === Number(mk.dataset.note));
-      if (n?.element) this.select(n.element, { noteId: n.id, at: { x: (e as MouseEvent).clientX, y: (e as MouseEvent).clientY } });
+      if (n?.element?.isConnected) this.select(n.element, { noteId: n.id, at: { x: (e as MouseEvent).clientX, y: (e as MouseEvent).clientY } });
+      else if (n) this.toast(`Feedback ${this.notes.indexOf(n) + 1}: its element is no longer on the page`, { label: 'Delete', fn: () => this.deleteNote(n.id) });
       return;
     }
     const actEl = t.closest('[data-act]');
