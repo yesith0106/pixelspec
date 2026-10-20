@@ -6,6 +6,8 @@
 [![npm](https://img.shields.io/npm/v/pixelspec.svg)](https://www.npmjs.com/package/pixelspec)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+**Website and live demo: [pixelspec.dev](https://www.pixelspec.dev)**
+
 PixelSpec lets you measure spacing between elements right in the browser: padding, margin, gaps, distances, letter spacing, line height, colors and contrast, like a design tool's inspect panel on top of the live page. Click any element to leave feedback, then copy it all as a compact prompt for your AI coding agent. It is an open-source [agentation](https://agentation.com) alternative with built-in design inspection.
 
 ![PixelSpec demo: hover to inspect, click for specs, measure distances, leave feedback and copy it for your AI agent](docs/demo.gif)
