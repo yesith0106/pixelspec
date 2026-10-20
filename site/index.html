@@ -44,8 +44,9 @@
     kbd { font: 500 12px/1 var(--mono); padding: 2px 5px; border-radius: 4px; border: 1px solid var(--line); background: var(--tint); }
 
     /* Sidebar */
-    .brand { position: fixed; top: 28px; left: 24px; z-index: 5; color: var(--ink-40); transition: color .15s; }
-    .brand:hover { color: var(--ink); }
+    .brand { position: fixed; top: 28px; left: 24px; z-index: 5; display: flex; align-items: center; gap: 10px; color: var(--ink); }
+    .brand::before { content: ""; width: 10px; height: 10px; background: var(--primary); transition: transform .2s; }
+    .brand:hover::before { transform: rotate(90deg) scale(1.15); }
     .side-nav { position: fixed; top: 240px; left: 24px; z-index: 5; display: grid; gap: 12px; }
     .side-nav a { position: relative; line-height: 15px; color: var(--ink-40); transition: color .15s; }
     .side-nav a:hover { color: var(--ink); }
