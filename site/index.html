@@ -76,7 +76,7 @@
     .install button:hover { color: var(--primary); }
     .hint { margin-top: 16px; color: var(--ink-55); }
     /* Same color as the video's own background, so the two blend */
-    .hero-video { margin-top: 56px; background: #fbfbf9; }
+    .hero-video { margin-top: 56px; background: #fbfbf9; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
     .hero-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
 
     /* Text sections */
@@ -131,7 +131,7 @@
       h1 { font-size: 40px; line-height: 50px; }
       h2 { font-size: 26px; line-height: 36px; }
       .steps { grid-template-columns: 1fr; }
-      .hero-video { margin: 40px -20px 0; }
+      .hero-video { margin-top: 40px; }
       section, .end { padding-top: 104px; }
       th:not(:first-child), td:not(:first-child) { width: 88px; }
       footer { flex-direction: column; align-items: flex-start; padding: 24px 20px; }
