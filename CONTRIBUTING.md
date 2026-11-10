@@ -22,7 +22,8 @@ In a second terminal, run `npm run dev` to rebuild on every change, then refresh
 | `src/panel.ts` | The spec card and the "All properties" list |
 | `src/inspect.ts` | Reading the element: selectors, components, accessibility, AI and CSS export |
 | `src/styles.ts` | All UI styles (the overlay lives in a shadow root) |
-| `src/icons.ts` | Hugeicons used in the UI, bundled at build time |
+| `src/icons.ts` | The UI icons. They are generated from `scripts/icons.mjs` into `src/brand.gen.ts` by `npm run brand` |
+| `site/` | The pixelspec.dev landing page |
 | `src/react.ts` | The `<PixelSpec />` React component |
 | `src/auto.ts` | The drop-in `<script>` build |
 | `demo/` | A test page for trying changes |

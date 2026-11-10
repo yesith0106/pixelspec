@@ -16,7 +16,7 @@ export interface PixelSpecOptions {
   startActive?: boolean;
   /** Show the floating toolbar. Default `true`. */
   showToolbar?: boolean;
-  /** Initial toolbar corner (the user can drag it anywhere). Default `bottom-right`. */
+  /** Toolbar corner. The toolbar stays pinned there. Default `bottom-right`. */
   position?: 'bottom-right' | 'bottom-left';
   /** Initial "Copy for AI" detail. Users can change it in settings; Shift while copying uses the other one. */
   aiDetail?: AIDetail;
@@ -43,12 +43,11 @@ interface Settings {
   guides: boolean;
   markers: boolean;
   clearOnCopy: boolean;
-  dock: { x: number; y: number } | null;
   tourDone: boolean;
   measured: boolean;
 }
 
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 const INTERACTIVE = 'a,button,input,textarea,select,option,label,summary,[contenteditable=""],[contenteditable="true"],[draggable="true"],[role="button"],[role="link"]';
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
@@ -74,6 +73,15 @@ function hotkeyLabel(spec: string): string {
     .split('+')
     .map((p, i, a) => (i === a.length - 1 ? p.toUpperCase() : map[p.trim()] ?? `${p}+`))
     .join('');
+}
+
+/** The hotkey as separate keycaps, e.g. <kbd>Alt</kbd><kbd>Shift</kbd><kbd>I</kbd>. */
+function hotkeyKeys(spec: string): string {
+  const map: Record<string, string> = isMac
+    ? { alt: '⌥', option: '⌥', shift: '⇧', ctrl: '⌃', control: '⌃', meta: '⌘', cmd: '⌘', mod: '⌘' }
+    : { alt: 'Alt', option: 'Alt', shift: 'Shift', ctrl: 'Ctrl', control: 'Ctrl', meta: 'Win', cmd: 'Win', mod: 'Ctrl' };
+  const parts = spec.toLowerCase().split('+').map((p) => p.trim());
+  return `<span class="keys">${parts.map((p, i) => `<kbd>${esc(i === parts.length - 1 ? p.toUpperCase() : map[p] ?? p)}</kbd>`).join('')}</span>`;
 }
 
 function isEditable(el: Element | null): boolean {
@@ -116,8 +124,6 @@ export class PixelSpec {
   private pausedVideos: HTMLMediaElement[] = [];
   private closed = new Set<string>(['attrs']);
   private moreOpen = false;
-  private dockDrag: { sx: number; sy: number; ox: number; oy: number; moved: boolean } | null = null;
-  private suppressClick = false;
   private toastTimer = 0;
   private popPos = '';
   /** Where the popover is anchored, relative to the selected element's top-left (follows it on scroll). */
@@ -136,12 +142,13 @@ export class PixelSpec {
       guides: false,
       markers: true,
       clearOnCopy: false,
-      dock: null,
       tourDone: false,
       measured: false,
       ...this.load<Partial<Settings>>('settings', {}),
     };
     delete (this.s as Partial<Settings> & { color?: string }).color;
+    // Older versions let you drag the toolbar and saved its position. It's pinned now.
+    delete (this.s as Partial<Settings> & { dock?: unknown }).dock;
 
     this.host = document.createElement('pixelspec-overlay');
     this.host.setAttribute('data-pixelspec', '');
@@ -179,11 +186,9 @@ export class PixelSpec {
     this.root.addEventListener('keydown', this.onUiKey as EventListener);
     this.root.addEventListener('input', this.onUiInput);
     this.root.addEventListener('toggle', this.onToggle, true);
-    this.tb.addEventListener('pointerdown', this.onDockDown);
     this.host.addEventListener('keydown', (e) => e.stopPropagation());
 
     window.addEventListener('pointermove', this.onMove, true);
-    window.addEventListener('pointerup', this.onDockUp, true);
     for (const t of ['pointerdown', 'mousedown']) window.addEventListener(t, this.onDown, true);
     for (const t of ['pointerup', 'mouseup', 'dblclick', 'auxclick']) window.addEventListener(t, this.onSwallow, true);
     window.addEventListener('click', this.onClick, true);
@@ -301,7 +306,6 @@ export class PixelSpec {
     this.deactivate();
     cancelAnimationFrame(this.raf);
     window.removeEventListener('pointermove', this.onMove, true);
-    window.removeEventListener('pointerup', this.onDockUp, true);
     for (const t of ['pointerdown', 'mousedown']) window.removeEventListener(t, this.onDown, true);
     for (const t of ['pointerup', 'mouseup', 'dblclick', 'auxclick']) window.removeEventListener(t, this.onSwallow, true);
     window.removeEventListener('click', this.onClick, true);
@@ -492,7 +496,7 @@ export class PixelSpec {
     const id = `<span class="tag">${esc(tag)}</span><code>${el.id ? `#${esc(el.id)}` : ''}${cls.length ? `.${esc(cls.join('.'))}` : ''}</code>`;
     this.pop.innerHTML = `
       <div class="ph">
-        <div class="pid"><button class="ident" data-act="copy-sel" title="Click to copy selector">${id}</button>${comp ? `<span class="comp" title="${esc(comp.framework)} component">${esc(comp.names[0])}</span>` : ''}</div>
+        <div class="pid"><button class="ident" data-act="copy-sel" title="Click to copy selector">${id}</button>${comp ? `<span class="comp" title="${esc(comp.framework)} component">${I.component}${esc(comp.names[0])}</span>` : ''}</div>
         <div class="pa">
           ${ib('copy-css', I.codeMd, 'Copy CSS')}
           <div class="nav">${ib('parent', I.up, 'Parent', '↑')}${ib('child', I.down, 'Child', '↓')}</div>
@@ -514,7 +518,7 @@ export class PixelSpec {
           </div>
         </div>
       </div>
-      ${this.s.measured ? '' : `<div class="ptip">${I.ruler}<span>Hover another element to measure · <kbd>Alt</kbd> for parent</span></div>`}`;
+      ${this.s.measured ? '' : `<div class="ptip">${I.ruler}<span><b>Tip:</b> hover another element to measure, <kbd>Alt</kbd> for parent</span></div>`}`;
     const wasHidden = this.pop.hidden;
     this.pop.hidden = false;
     const body = this.pop.querySelector('.pbody');
@@ -679,7 +683,7 @@ export class PixelSpec {
     const sw = (key: keyof Settings, label: string, kbd = '') =>
       `<button class="mi" role="menuitemcheckbox" aria-checked="${!!s[key]}" data-act="set-${key}"><span>${label}${kbd ? `<kbd>${kbd}</kbd>` : ''}</span><span class="switch${s[key] ? ' on' : ''}"></span></button>`;
     this.menu.innerHTML = `
-      <div class="mh">PixelSpec <span>v${VERSION}</span></div>
+      <div class="mh"><b>${I.markSm}PixelSpec</b><span>v${VERSION}</span></div>
       <div class="mi col"><span>Copy detail</span>
         <div class="seg" style="margin-top:6px"><button data-act="detail-compact" class="${s.detail === 'compact' ? 'on' : ''}">Compact</button><button data-act="detail-full" class="${s.detail === 'full' ? 'on' : ''}">Full</button></div>
         <div class="sub">${s.detail === 'compact' ? 'Two lines per element. Saves tokens.' : 'Markdown with layout, position and shadows.'} Hold <kbd>Shift</kbd> when copying for the other.</div>
@@ -689,18 +693,18 @@ export class PixelSpec {
       ${sw('hoverBox', 'Box model on hover')}
       ${sw('guides', 'Guides', 'G')}
       ${sw('clearOnCopy', 'Clear after copy')}
-      <div class="mf"><span>Toggle <kbd>${esc(hotkeyLabel(this.opts.hotkey))}</kbd></span><button class="btn sm ghost" data-act="tour">Show tips</button></div>`;
+      <div class="mf"><span>Toggle ${hotkeyKeys(this.opts.hotkey)}</span><button class="btn sm ghost" data-act="tour">Show tips</button></div>`;
   }
 
   private renderHint(): void {
     const show = this.active && !this.s.tourDone && !this.selected;
     this.hint.hidden = !show;
     if (!show) return;
-    this.hint.innerHTML = `<span><b>Hover</b> to inspect</span><span><b>Click</b> for specs and feedback</span><span><b>Select text</b> to quote it</span><span><kbd>Esc</kbd> to exit</span><button class="btn sm" data-act="tour-done">Got it</button>`;
+    this.hint.innerHTML = `${I.markSm}<span><b>Hover</b> to inspect</span><span><b>Click</b> for specs and feedback</span><span><b>Select text</b> to quote it</span><span><kbd>Esc</kbd> to exit</span><button class="btn sm" data-act="tour-done">Got it</button>`;
   }
 
   private toast(msg: string, action?: { label: string; fn: () => void }): void {
-    this.toastEl.innerHTML = `<span>${esc(msg)}</span>${action ? `<button class="btn sm ghost accent" data-act="toast">${esc(action.label)}</button>` : ''}`;
+    this.toastEl.innerHTML = `${I.markSm}<span>${esc(msg)}</span>${action ? `<button class="btn sm ghost accent" data-act="toast">${esc(action.label)}</button>` : ''}`;
     this.toastAction = action?.fn ?? null;
     this.toastEl.classList.toggle('act', !!action);
     this.toastEl.classList.add('show');
@@ -712,28 +716,17 @@ export class PixelSpec {
   }
   private toastAction: (() => void) | null = null;
 
+  /** The toolbar is pinned to its corner and can't be moved. */
   private placeDock = () => {
-    const d = this.s.dock;
+    const left = this.opts.position === 'bottom-left';
     const st = this.dock.style;
-    const vw = document.documentElement.clientWidth;
-    if (d) {
-      const r = this.dock.getBoundingClientRect();
-      const x = clamp(d.x, 8, Math.max(8, vw - (this.tb.offsetWidth || 46) - 8));
-      const y = clamp(d.y, 8, Math.max(8, innerHeight - (this.tb.offsetHeight || 46) - 8));
-      st.left = `${x}px`;
-      st.top = 'auto';
-      st.right = 'auto';
-      st.bottom = `${innerHeight - y - (this.tb.offsetHeight || 46)}px`;
-      this.dock.classList.toggle('top', y < innerHeight / 2);
-      this.dock.style.alignItems = x + (r.width || 46) / 2 < vw / 2 ? 'flex-start' : 'flex-end';
-    } else {
-      st.left = this.opts.position === 'bottom-left' ? '16px' : 'auto';
-      st.right = this.opts.position === 'bottom-left' ? 'auto' : '16px';
-      st.top = 'auto';
-      st.bottom = '16px';
-      this.dock.style.alignItems = this.opts.position === 'bottom-left' ? 'flex-start' : 'flex-end';
-      this.dock.classList.remove('top');
-    }
+    st.left = left ? '16px' : 'auto';
+    st.right = left ? 'auto' : '16px';
+    st.top = 'auto';
+    st.bottom = '16px';
+    st.alignItems = left ? 'flex-start' : 'flex-end';
+    this.dock.classList.toggle('left', left);
+    this.dock.classList.remove('top');
   };
 
   private async copy(text: string, kind: CopyKind, msg = 'Copied'): Promise<boolean> {
@@ -836,7 +829,7 @@ export class PixelSpec {
     return t instanceof Element ? t : null;
   }
 
-  /** Empty page background (html/body) isn't highlighted on hover, like Figma. It stays reachable via the parent arrow. */
+  /** Empty page background (html/body) isn't highlighted on hover. It stays reachable via the parent arrow. */
   private hoverable(el: Element | null): Element | null {
     return el && el !== document.documentElement && el !== document.body ? el : null;
   }
@@ -844,17 +837,6 @@ export class PixelSpec {
   private onMove = (e: PointerEvent) => {
     this.mouse.x = e.clientX;
     this.mouse.y = e.clientY;
-    const dd = this.dockDrag;
-    if (dd) {
-      const dx = e.clientX - dd.sx;
-      const dy = e.clientY - dd.sy;
-      if (!dd.moved && Math.hypot(dx, dy) < 4) return;
-      dd.moved = true;
-      this.tb.classList.add('dragging');
-      this.s.dock = { x: dd.ox + dx, y: dd.oy + dy };
-      this.placeDock();
-      return;
-    }
     if (!this.active || this.isOurs(e)) return;
     this.hovered = this.hoverable(this.targetOf(e));
   };
@@ -1037,25 +1019,7 @@ export class PixelSpec {
     else this.closed.add(id);
   };
 
-  private onDockDown = (e: PointerEvent) => {
-    if (e.button !== 0) return;
-    const r = this.tb.getBoundingClientRect();
-    this.dockDrag = { sx: e.clientX, sy: e.clientY, ox: r.left, oy: r.top, moved: false };
-  };
-
-  private onDockUp = () => {
-    const dd = this.dockDrag;
-    this.dockDrag = null;
-    if (dd?.moved) {
-      this.suppressClick = true;
-      this.tb.classList.remove('dragging');
-      this.save();
-      setTimeout(() => (this.suppressClick = false), 0);
-    }
-  };
-
   private onUiClick = (e: Event) => {
-    if (this.suppressClick) return;
     const t = e.target as Element;
     const mk = t.closest<HTMLElement>('.mk');
     if (mk) {

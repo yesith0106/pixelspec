@@ -1,2 +1,5 @@
 node_modules
 dist
+
+# Brand book: kept locally, not part of the repo
+site/brand/

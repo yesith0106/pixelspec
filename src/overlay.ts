@@ -60,10 +60,10 @@ function sideLabels(outer: Rect, inner: Rect, v: number[], cls: string): string 
   let o = '';
   const lab = (val: number, x: number, y: number, room: number, need: number) =>
     val && room >= need ? `<div class="sv ${cls}" style="left:${r2(x)}px;top:${r2(y)}px">${fmt(val)}</div>` : '';
-  o += lab(v[0], inner.left + inner.width / 2, outer.top + (inner.top - outer.top) / 2, inner.top - outer.top, 12);
-  o += lab(v[2], inner.left + inner.width / 2, inner.bottom + (outer.bottom - inner.bottom) / 2, outer.bottom - inner.bottom, 12);
-  o += lab(v[3], outer.left + (inner.left - outer.left) / 2, inner.top + inner.height / 2, inner.left - outer.left, 18);
-  o += lab(v[1], inner.right + (outer.right - inner.right) / 2, inner.top + inner.height / 2, outer.right - inner.right, 18);
+  o += lab(v[0], inner.left + inner.width / 2, outer.top + (inner.top - outer.top) / 2, inner.top - outer.top, 14);
+  o += lab(v[2], inner.left + inner.width / 2, inner.bottom + (outer.bottom - inner.bottom) / 2, outer.bottom - inner.bottom, 14);
+  o += lab(v[3], outer.left + (inner.left - outer.left) / 2, inner.top + inner.height / 2, inner.left - outer.left, 20);
+  o += lab(v[1], inner.right + (outer.right - inner.right) / 2, inner.top + inner.height / 2, outer.right - inner.right, 20);
   return o;
 }
 
@@ -81,10 +81,14 @@ export function drawBoxModel(bx: Boxes, labels: boolean): string {
 }
 
 export function drawOutline(r: Rect, cls: string): string {
-  return div(`ol ${cls}`, r.left, r.top, r.width, r.height);
+  let o = div(`ol ${cls}`, r.left, r.top, r.width, r.height);
+  // Square corner handles on the selection, left off small elements so they don't cover them.
+  if (cls === 'ol-sel' && r.width >= 24 && r.height >= 24) {
+    for (const [x, y] of [[r.left, r.top], [r.right, r.top], [r.left, r.bottom], [r.right, r.bottom]]) o += div('hd', x - 3.5, y - 3.5, 7, 7);
+  }
+  return o;
 }
 
-/** Tag name above, dimensions below. */
 /**
  * One quiet label per element.
  * 'name': hovered element, shows "tag.class  W × H" above it.
@@ -121,7 +125,7 @@ const hDash = (x1: number, x2: number, y: number) => div('dd-h', Math.min(x1, x2
 const vDash = (y1: number, y2: number, x: number) => div('dd-v', x - 0.5, Math.min(y1, y2), 1, Math.abs(y2 - y1));
 
 /**
- * Figma-style distance measurement from `a` (anchor) to `b` (target).
+ * Distance measurement from `a` (anchor) to `b` (target).
  * Handles separated, intersecting and nested rects.
  */
 export function drawMeasure(a: Rect, b: Rect): string {
@@ -212,10 +216,4 @@ export function drawCrosshair(x: number, y: number): string {
     div('ch', 0, y, vw(), 1) +
     pillL('coord', x + 10, y + 18, `${Math.round(x)}, ${Math.round(y)}  ·  page ${Math.round(x + scrollX)}, ${Math.round(y + scrollY)}`)
   );
-}
-
-export function drawMarker(r: Rect, n: number): string {
-  const x = clamp(r.left, 2, vw() - 22);
-  const y = clamp(r.top, 2, vh() - 22);
-  return `<div class="mk" style="left:${r2(x - 9)}px;top:${r2(y - 9)}px">${n}</div>`;
 }

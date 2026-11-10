@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Northwind pricing</title>
+  <!-- Scene for the landing page demo clip (site/assets/demo.webm). Recorded at 1280 x 720. -->
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      overflow: hidden; background: #F6F7F9; color: #111827;
+      font: 400 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    header { display: flex; align-items: center; justify-content: space-between; height: 72px; padding: 0 56px; background: #fff; border-bottom: 1px solid #E5E7EB; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
+    .logo i { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, #6366F1, #8B5CF6); }
+    nav { display: flex; gap: 32px; font-size: 14px; font-weight: 500; color: #4B5563; }
+    .cta { padding: 10px 18px; border: 0; border-radius: 8px; background: #111827; color: #fff; font: 600 14px/1 inherit; font-family: inherit; }
+    .hero { text-align: center; padding: 48px 0 32px; }
+    .eyebrow { margin: 0 0 12px; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #6366F1; }
+    h1 { margin: 0 0 12px; font-size: 44px; line-height: 1.1; letter-spacing: -0.03em; font-weight: 700; }
+    .lede { margin: 0 auto; max-width: 520px; font-size: 17px; color: #6B7280; }
+    .plans { display: grid; grid-template-columns: repeat(3, 300px); gap: 24px; justify-content: center; }
+    .card { position: relative; padding: 28px 26px; background: #fff; border: 1px solid #E5E7EB; border-radius: 16px; box-shadow: 0 1px 2px rgba(17,24,39,.04); }
+    .card.pop { border-color: #6366F1; box-shadow: 0 12px 32px -12px rgba(99,102,241,.35); }
+    .badge { position: absolute; top: -12px; left: 26px; padding: 4px 10px; border-radius: 999px; background: #6366F1; color: #fff; font-size: 12px; font-weight: 600; }
+    .card h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+    .card .desc { margin: 0 0 18px; font-size: 14px; color: #6B7280; }
+    .price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 18px; }
+    .price b { font-size: 38px; letter-spacing: -0.03em; }
+    .price span { color: #6B7280; font-size: 14px; }
+    .card ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; font-size: 14px; color: #374151; }
+    .card li::before { content: '✓'; margin-right: 8px; color: #10B981; font-weight: 700; }
+    .buy { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #D1D5DB; background: #fff; font: 600 14px/1 inherit; font-family: inherit; color: #111827; }
+    .pop .buy { background: #6366F1; border-color: #6366F1; color: #fff; }
+
+    /* Headless recordings don't capture the real cursor, so draw one. */
+    #cur { position: fixed; left: 0; top: 0; z-index: 2147483647; width: 18px; height: 26px; pointer-events: none; transform: translate(-100px, -100px); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><i></i>Northwind</div>
+    <nav><span>Product</span><span>Pricing</span><span>Customers</span><span>Docs</span></nav>
+    <button class="cta">Start free trial</button>
+  </header>
+  <section class="hero">
+    <p class="eyebrow">Pricing</p>
+    <h1>Plans that scale with you</h1>
+    <p class="lede">Start free, upgrade when your team grows. Every plan includes unlimited projects.</p>
+  </section>
+  <section class="plans">
+    <article class="card">
+      <h3>Starter</h3><p class="desc">For side projects</p>
+      <div class="price"><b>$0</b><span>/ month</span></div>
+      <ul><li>3 collaborators</li><li>Unlimited projects</li><li>Community support</li></ul>
+      <button class="buy">Get started</button>
+    </article>
+    <article class="card pop">
+      <span class="badge">Most popular</span>
+      <h3>Pro</h3><p class="desc">For growing teams</p>
+      <div class="price"><b>$12</b><span>/ user / month</span></div>
+      <ul><li>Unlimited collaborators</li><li>Version history</li><li>Priority support</li></ul>
+      <button class="buy">Start free trial</button>
+    </article>
+    <article class="card">
+      <h3>Enterprise</h3><p class="desc">For large organisations</p>
+      <div class="price"><b>Custom</b></div>
+      <ul><li>SSO and SCIM</li><li>Audit logs</li><li>Dedicated manager</li></ul>
+      <button class="buy">Contact sales</button>
+    </article>
+  </section>
+
+  <svg id="cur" viewBox="0 0 12 19" shape-rendering="crispEdges" aria-hidden="true"><path fill="#111" d="M0 0h1v18H0zM1 1h1v1H1zM2 2h1v1H2zM3 3h1v1H3zM4 4h1v1H4zM5 5h1v1H5zM6 6h1v1H6zM7 7h1v1H7zM8 8h1v1H8zM9 9h1v1H9zM10 10h1v1h-1zM6 10h4v1H6zM6 11h1v2H6zM3 12h1v1H3zM2 13h1v1H2zM1 14h1v1H1zM7 13h1v2H7zM8 15h1v2H8zM6 17h2v1H6zM4 12h1v2H4zM5 14h1v2H5z"/><path fill="#fff" d="M1 2h1v12H1zM2 3h1v10H2zM3 4h1v8H3zM4 5h1v7H4zM5 6h1v8H5zM6 7h1v3H6zM7 8h1v2H7zM8 9h1v1H8zM6 13h1v4H6zM7 15h1v2H7z"/></svg>
+  <script>
+    const cur = document.getElementById('cur');
+    addEventListener('pointermove', (e) => { cur.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`; }, { passive: true, capture: true });
+  </script>
+  <script src="../../dist/pixelspec.global.js"></script>
+</body>
+</html>

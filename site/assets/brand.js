@@ -1,0 +1,49 @@
+/* PixelSpec brand: the logo as clean vector SVG. Exposes window.PS and hydrates [data-logo].
+ * Mark: one solid shape on a 7×7 cell grid. A thick frame with a stepped notch at the top right,
+ * and a cut-out that reads as a "P" and a speech bubble: the page, and the note you leave on it.
+ * Outside corners are rounded (0.48 cell), inside corners filleted (0.34 cell).
+ * Wordmark: "PixelSpec" in Geist SemiBold, -0.025em, outlined (no font needed).
+ * Lockup: mark box 82 wordmark units, centred on the cap height, 26-unit gap. */
+(function () {
+  'use strict';
+  var ROWS = ["#####..","######.","##...##","##...##","##...##","##.####","#######"];
+  var MARK = 'M0.48 0L1 0L1 1L0 1L0 0.48C0 0.215 0.215 0 0.48 0ZM1 0L2 0L2 1L1 1L1 0ZM2 0L3 0L3 1L2 1L2 0ZM3 0L4 0L4 1L3 1L3 0ZM4 0L4.52 0C4.785 0 5 0.215 5 0.48L5 1L4 1L4 0ZM5 1L5 0.66C5 0.848 5.152 1 5.34 1ZM0 1L1 1L1 2L0 2L0 1ZM1 1L2 1L2 2L1 2L1 1ZM2 1L3 1L3 2L2 2L2 1ZM3 1L4 1L4 2L3 2L3 1ZM4 1L5 1L5 2L4 2L4 1ZM5 1L5.52 1C5.785 1 6 1.215 6 1.48L6 2L5 2L5 1ZM6 2L6 1.66C6 1.848 6.152 2 6.34 2ZM0 2L1 2L1 3L0 3L0 2ZM1 2L2 2L2 3L1 3L1 2ZM2 2L2.34 2C2.152 2 2 2.152 2 2.34ZM5 2L5 2.34C5 2.152 4.848 2 4.66 2ZM5 2L6 2L6 3L5 3L5 2ZM6 2L6.52 2C6.785 2 7 2.215 7 2.48L7 3L6 3L6 2ZM0 3L1 3L1 4L0 4L0 3ZM1 3L2 3L2 4L1 4L1 3ZM5 3L6 3L6 4L5 4L5 3ZM6 3L7 3L7 4L6 4L6 3ZM0 4L1 4L1 5L0 5L0 4ZM1 4L2 4L2 5L1 5L1 4ZM5 5L4.66 5C4.848 5 5 4.848 5 4.66ZM5 4L6 4L6 5L5 5L5 4ZM6 4L7 4L7 5L6 5L6 4ZM0 5L1 5L1 6L0 6L0 5ZM1 5L2 5L2 6L1 6L1 5ZM3 6L2.66 6C2.848 6 3 5.848 3 5.66ZM2 6L2 5.66C2 5.848 2.152 6 2.34 6ZM3.48 5L4 5L4 6L3 6L3 5.48C3 5.215 3.215 5 3.48 5ZM4 5L5 5L5 6L4 6L4 5ZM5 5L6 5L6 6L5 6L5 5ZM6 5L7 5L7 6L6 6L6 5ZM0 6L1 6L1 7L0.48 7C0.215 7 0 6.785 0 6.52L0 6ZM1 6L2 6L2 7L1 7L1 6ZM2 6L3 6L3 7L2 7L2 6ZM3 6L4 6L4 7L3 7L3 6ZM4 6L5 6L5 7L4 7L4 6ZM5 6L6 6L6 7L5 7L5 6ZM6 6L7 6L7 6.52C7 6.785 6.785 7 6.52 7L6 7L6 6Z';
+  var WORD = { d: 'M13 0 L0 0 L0 -71 L27.5 -71 Q39.9 -71 46.95 -65 Q54 -59 54 -48.4 L54 -48.4 Q54 -37.7 46.95 -31.65 Q39.9 -25.6 27.5 -25.6 L27.5 -25.6 L13 -25.6 L13 0 M13 -59.7 L13 -36.9 L26.9 -36.9 Q33.5 -36.9 37.05 -39.8 Q40.6 -42.7 40.6 -48.4 L40.6 -48.4 Q40.6 -54 37.05 -56.85 Q33.5 -59.7 26.9 -59.7 L26.9 -59.7 L13 -59.7 M73.7 0 L60.9 0 L60.9 -53.4 L73.7 -53.4 L73.7 0 M74 -60.5 L60.7 -60.5 L60.7 -71.9 L74 -71.9 L74 -60.5 M92.1 0 L77.9 0 L97.1 -27.2 L78.6 -53.4 L92.5 -53.4 L104.7 -35.2 L116.7 -53.4 L130.8 -53.4 L112.4 -27.1 L131.5 0 L117.6 0 L104.9 -19.2 L92.1 0 M157.8 1.2 L157.8 1.2 Q149.8 1.2 143.9 -2.25 Q138 -5.7 134.8 -12 Q131.6 -18.3 131.6 -26.7 L131.6 -26.7 Q131.6 -35.1 134.8 -41.4 Q138 -47.7 143.85 -51.15 Q149.7 -54.6 157.5 -54.6 L157.5 -54.6 Q165.1 -54.6 170.8 -51.2 Q176.5 -47.8 179.65 -41.4 Q182.8 -35 182.8 -26 L182.8 -26 L182.8 -23.1 L144.9 -23.1 Q145.2 -16.1 148.7 -12.55 Q152.2 -9 157.9 -9 L157.9 -9 Q166.6 -9 169 -16.4 L169 -16.4 L182.1 -15.6 Q179.9 -7.8 173.45 -3.3 Q167 1.2 157.8 1.2 M144.9 -31.7 L144.9 -31.7 L169.6 -31.7 Q169.1 -38.2 165.85 -41.35 Q162.6 -44.5 157.5 -44.5 L157.5 -44.5 Q152.3 -44.5 149 -41.2 Q145.7 -37.9 144.9 -31.7 M211.5 0 L203.6 0 Q197.7 0 194.25 -3 Q190.8 -6 190.8 -12.6 L190.8 -12.6 L190.8 -71 L203.6 -71 L203.6 -13.9 Q203.6 -9.9 207.6 -9.9 L207.6 -9.9 L211.5 -9.9 L211.5 0 M245.8 1.6 L245.8 1.6 Q237 1.6 230.6 -1.5 Q224.2 -4.6 220.55 -10.15 Q216.9 -15.7 216.3 -23.1 L216.3 -23.1 L229.5 -23.9 Q230.4 -17 234.5 -13.3 Q238.6 -9.6 246 -9.6 L246 -9.6 Q252.3 -9.6 255.75 -11.95 Q259.2 -14.3 259.2 -18.8 L259.2 -18.8 Q259.2 -21.5 257.9 -23.6 Q256.6 -25.7 252.9 -27.5 Q249.2 -29.3 241.9 -31 L241.9 -31 Q233.1 -33 227.8 -35.55 Q222.5 -38.1 220.1 -41.95 Q217.7 -45.8 217.7 -51.6 L217.7 -51.6 Q217.7 -57.8 220.8 -62.55 Q223.9 -67.3 229.6 -69.95 Q235.3 -72.6 243.3 -72.6 L243.3 -72.6 Q251.8 -72.6 257.75 -69.55 Q263.7 -66.5 267.05 -61.2 Q270.4 -55.9 271.2 -49 L271.2 -49 L258.1 -48.4 Q257.4 -54.2 253.6 -57.8 Q249.8 -61.4 243.1 -61.4 L243.1 -61.4 Q237.5 -61.4 234.25 -58.8 Q231 -56.2 231 -52.1 L231 -52.1 Q231 -49.2 232.35 -47.3 Q233.7 -45.4 237.2 -44 Q240.7 -42.6 247 -41.2 L247 -41.2 Q256.5 -39.1 262.1 -36.05 Q267.7 -33 270.1 -28.9 Q272.5 -24.8 272.5 -19.5 L272.5 -19.5 Q272.5 -13 269.15 -8.25 Q265.8 -3.5 259.85 -0.95 Q253.9 1.6 245.8 1.6 M295.1 15 L282.3 15 L282.3 -53.4 L294.6 -53.4 L294.8 -45.4 Q297.1 -49.9 301.3 -52.25 Q305.5 -54.6 310.8 -54.6 L310.8 -54.6 Q318.4 -54.6 323.45 -50.85 Q328.5 -47.1 331 -40.75 Q333.5 -34.4 333.5 -26.7 L333.5 -26.7 Q333.5 -19 330.95 -12.7 Q328.4 -6.4 323.35 -2.6 Q318.3 1.2 310.7 1.2 L310.7 1.2 Q305.6 1.2 301.45 -1.05 Q297.3 -3.3 295.1 -7.3 L295.1 -7.3 L295.1 15 M307.7 -9.2 L307.7 -9.2 Q313.5 -9.2 316.85 -13.85 Q320.2 -18.5 320.2 -26.7 L320.2 -26.7 Q320.2 -34.9 316.85 -39.55 Q313.5 -44.2 307.7 -44.2 L307.7 -44.2 Q301.9 -44.2 298.5 -39.8 Q295.1 -35.4 295.1 -26.7 L295.1 -26.7 Q295.1 -18 298.45 -13.6 Q301.8 -9.2 307.7 -9.2 M364 1.2 L364 1.2 Q356 1.2 350.1 -2.25 Q344.2 -5.7 341 -12 Q337.8 -18.3 337.8 -26.7 L337.8 -26.7 Q337.8 -35.1 341 -41.4 Q344.2 -47.7 350.05 -51.15 Q355.9 -54.6 363.7 -54.6 L363.7 -54.6 Q371.3 -54.6 377 -51.2 Q382.7 -47.8 385.85 -41.4 Q389 -35 389 -26 L389 -26 L389 -23.1 L351.1 -23.1 Q351.4 -16.1 354.9 -12.55 Q358.4 -9 364.1 -9 L364.1 -9 Q372.8 -9 375.2 -16.4 L375.2 -16.4 L388.3 -15.6 Q386.1 -7.8 379.65 -3.3 Q373.2 1.2 364 1.2 M351.1 -31.7 L351.1 -31.7 L375.8 -31.7 Q375.3 -38.2 372.05 -41.35 Q368.8 -44.5 363.7 -44.5 L363.7 -44.5 Q358.5 -44.5 355.2 -41.2 Q351.9 -37.9 351.1 -31.7 M419.7 1.2 L419.7 1.2 Q411.7 1.2 405.8 -2.25 Q399.9 -5.7 396.65 -12 Q393.4 -18.3 393.4 -26.7 L393.4 -26.7 Q393.4 -35.1 396.65 -41.4 Q399.9 -47.7 405.8 -51.15 Q411.7 -54.6 419.7 -54.6 L419.7 -54.6 Q429.9 -54.6 436.65 -49.3 Q443.4 -44 444.6 -34.5 L444.6 -34.5 L431.4 -33.8 Q430.6 -38.9 427.45 -41.55 Q424.3 -44.2 419.7 -44.2 L419.7 -44.2 Q413.5 -44.2 410.1 -39.6 Q406.7 -35 406.7 -26.7 L406.7 -26.7 Q406.7 -18.4 410.1 -13.8 Q413.5 -9.2 419.7 -9.2 L419.7 -9.2 Q424.4 -9.2 427.55 -11.9 Q430.7 -14.6 431.4 -20.3 L431.4 -20.3 L444.6 -19.7 Q443.5 -10.1 436.75 -4.45 Q430 1.2 419.7 1.2', w: 444.6, cap: 71 };
+
+  function attrs(o) {
+    return o.title ? 'role="img" aria-label="' + o.title + '"' : 'aria-hidden="true"';
+  }
+  // The mark takes --ps-mark (brand blue by default on pages), the wordmark currentColor. Pass hex for files.
+  function markFill(o) { return o.mark ? 'fill="' + o.mark + '"' : 'style="fill:var(--ps-mark, currentColor)"'; }
+  function mark(o) {
+    o = o || {};
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 7" class="' + (o.className || 'ps-logo ps-mark') + '" ' + attrs(o) + '><path ' + markFill(o) + ' d="' + MARK + '"/></svg>';
+  }
+  function wordmark(o) {
+    o = o || {};
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -73 ' + Math.ceil(WORD.w) + ' 89" class="' + (o.className || 'ps-logo ps-word') + '" ' + attrs(o) + '><path fill="' + (o.word || 'currentColor') + '" d="' + WORD.d + '"/></svg>';
+  }
+  var MS = 82, MY = -35.5 - MS / 2, LX = MS + 26;
+  var VB = '0 ' + Math.floor(MY) + ' ' + Math.ceil(LX + WORD.w) + ' ' + Math.ceil(16 - MY);
+  function lockup(o) {
+    o = o || {};
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + VB + '" class="' + (o.className || 'ps-logo ps-lockup') + '" ' + attrs(o) + '>' +
+      '<path ' + markFill(o) + ' transform="translate(0 ' + MY + ') scale(' + (MS / 7) + ')" d="' + MARK + '"/>' +
+      '<path transform="translate(' + LX + ' 0)" fill="' + (o.word || 'currentColor') + '" d="' + WORD.d + '"/></svg>';
+  }
+  var PS = { ROWS: ROWS, MARK: MARK, WORD: WORD, mark: mark, wordmark: wordmark, lockup: lockup };
+  PS.hydrate = function (root) {
+    (root || document).querySelectorAll('[data-logo]').forEach(function (el) {
+      var k = el.getAttribute('data-logo');
+      var fn = PS[k] || PS.lockup;
+      el.innerHTML = fn({ title: el.hasAttribute('data-decorative') ? '' : 'PixelSpec' });
+    });
+  };
+  if (typeof window !== 'undefined') {
+    window.PS = PS;
+    if (typeof document !== 'undefined' && document.querySelectorAll) {
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { PS.hydrate(); });
+      else PS.hydrate();
+    }
+  }
+})();

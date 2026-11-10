@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PixelSpec: Visual feedback and CSS inspector for AI coding agents</title>
+  <meta name="description" content="PixelSpec is a free, open-source CSS inspector and visual feedback tool for your live website. Measure spacing, typography and color contrast, pin notes to any element, and copy pixel-perfect feedback for your AI coding agent." />
+  <meta name="keywords" content="visual feedback tool, CSS inspector, design QA, pixel perfect, measure spacing, UI review, AI coding agent, vibe coding, design handoff, website annotation, color contrast checker, React dev tool" />
+  <meta name="theme-color" content="#08090A" />
+  <link rel="canonical" href="https://www.pixelspec.dev/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.pixelspec.dev/" />
+  <meta property="og:site_name" content="PixelSpec" />
+  <meta property="og:title" content="PixelSpec: Visual feedback and CSS inspector for AI coding agents" />
+  <meta property="og:description" content="Measure spacing, typography and color on your live site, pin notes to any element, and give your AI coding agent pixel-perfect feedback." />
+  <meta property="og:image" content="https://www.pixelspec.dev/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:image" content="https://www.pixelspec.dev/assets/og.png" />
+  <meta property="og:image:alt" content="PixelSpec: Every pixel, on spec." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PixelSpec: Visual feedback and CSS inspector for AI coding agents" />
+  <meta name="twitter:description" content="Measure spacing, typography and color on your live site and give your AI coding agent pixel-perfect feedback." />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PixelSpec",
+    "url": "https://www.pixelspec.dev/",
+    "image": "https://www.pixelspec.dev/assets/og.png",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web browser",
+    "description": "A free, open-source CSS inspector and visual feedback tool. Measure spacing, typography and color contrast on any live website, pin notes to elements, and copy precise feedback for AI coding agents.",
+    "softwareVersion": "0.3.0",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "downloadUrl": "https://www.npmjs.com/package/pixelspec",
+    "sameAs": ["https://github.com/yesith0106/pixelspec"]
+  }
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is PixelSpec?","acceptedAnswer":{"@type":"Answer","text":"PixelSpec is a free, open-source visual feedback tool and CSS inspector for websites. It runs as an overlay on your live site in development, so you can measure spacing, typography and color, pin notes to elements, and copy precise feedback for your AI coding agent."}},{"@type":"Question","name":"How do I measure spacing and padding on a website?","acceptedAnswer":{"@type":"Answer","text":"Turn on PixelSpec and hover any element. Padding shows in green, margin in orange and the gaps between children in pink, with the value in pixels. Hover a second element to see the exact distance between the two."}},{"@type":"Question","name":"Does it work with my AI coding agent?","acceptedAnswer":{"@type":"Answer","text":"Yes. Press C to copy every note as compact text or full Markdown, then paste it into Claude Code, Cursor, Codex, Copilot or any agent that reads text. Each note includes the selector, component, size and styles, so the agent finds the right element."}},{"@type":"Question","name":"Is PixelSpec for designers or developers?","acceptedAnswer":{"@type":"Answer","text":"Both. Designers use it for design QA on the real build: check spacing, type and color against the design, then leave notes on the exact element instead of sending screenshots. Developers and vibe coders use it to turn \"this looks off\" into precise instructions their AI coding agent can fix in one pass."}},{"@type":"Question","name":"How does PixelSpec help with vibe coding?","acceptedAnswer":{"@type":"Answer","text":"When you build with an AI agent, describing visual bugs in words is the slow part. With PixelSpec you click the element, type what should change and copy. The agent gets the selector, component name, size, spacing, font and colors with every note, so it edits the right element without guessing."}},{"@type":"Question","name":"Will PixelSpec affect my production site?","acceptedAnswer":{"@type":"Answer","text":"No. You load it only in development, it renders inside its own shadow root so it never changes your styles, and it has zero runtime dependencies."}},{"@type":"Question","name":"Which frameworks does it support?","acceptedAnswer":{"@type":"Answer","text":"Any website. Install it from npm for React, Next.js, Vite, Vue or Svelte, or add one script tag to plain HTML. React, Vue and Svelte component names are detected automatically."}},{"@type":"Question","name":"How does the color contrast check work?","acceptedAnswer":{"@type":"Answer","text":"PixelSpec reads the text color and the real composited background behind it, then shows the WCAG contrast ratio and whether it passes AA or AAA."}},{"@type":"Question","name":"Is PixelSpec free?","acceptedAnswer":{"@type":"Answer","text":"Yes. PixelSpec is open source under the MIT license, free for personal and commercial use."}}]}
+  </script>
+  <link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Pixel:ELSH@0..100&family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/ps.css" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <link rel="stylesheet" href="assets/mock.css" />
+</head>
+<body data-px-rulers>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="PixelSpec home"><span data-logo="lockup" data-decorative></span></a>
+    <nav class="links" aria-label="Primary">
+      <a href="#features">Features</a>
+      <a href="#agents">For agents</a>
+      <a href="#how">How it works</a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="actions">
+      <a class="btn btn-ghost sm gh" href="https://github.com/yesith0106/pixelspec"><svg class="i sm"><use href="assets/icons.svg#github"/></svg><span>GitHub</span></a>
+      <a class="btn btn-primary sm" href="#install">Get started</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <a class="pill-link" href="https://github.com/yesith0106/pixelspec/releases"><span class="dot"></span><b>v0.3</b><span class="sep"></span>Open source, MIT<svg class="i sm"><use href="assets/icons.svg#arrow"/></svg></a>
+      <h1 class="h-display" id="hero-title">Pixel-perfect UI feedback for <span class="t-pixel accent">AI agents.</span></h1>
+      <div class="measure" aria-hidden="true"><i></i><span class="spec-tag" id="h1w">—</span><i></i></div>
+      <p class="lede">PixelSpec is a free, open-source CSS inspector for your live website. Measure spacing, typography and color, pin visual feedback to any element, and copy a precise spec your AI coding agent can act on.</p>
+      <div class="hero-cta">
+        <a class="btn btn-secondary lg" href="#install"><svg class="i sm"><use href="assets/icons.svg#download"/></svg>Install PixelSpec</a>
+        <button class="btn btn-primary lg" id="try">Try it on this page <span class="kbd" aria-label="Alt Shift I"><kbd>Alt</kbd><kbd>Shift</kbd><kbd>I</kbd></span></button>
+      </div>
+    </div>
+
+    <div class="wrap wide">
+      <figure class="window">
+        <div class="win-bar"><span></span><span></span><span></span><div class="win-url"><svg class="i sm"><use href="assets/icons.svg#lock"/></svg>localhost:3000/analytics</div><span class="spec-tag" id="mock-size">720 × 400</span></div>
+        <!-- Live mockup: real HTML, driven by assets/mock.js. Not a video. -->
+        <div class="mock" id="mock" role="img" aria-label="PixelSpec on an analytics dashboard: hovering shows an element's name and size, a red line measures the space between two cards, clicking opens a note, and each note is pinned with a numbered marker before all notes are copied for an AI coding agent.">
+          <div class="stage" aria-hidden="true">
+            <div class="m-app">
+              <aside class="m-side"><i class="m-logo"></i><i class="act"></i><i></i><i></i><i></i><i class="m-av"></i></aside>
+              <div class="m-main">
+                <div class="m-head"><b>Analytics</b><span class="sk w60"></span><span class="m-search"></span><span class="m-btn" id="m-btn"></span></div>
+                <div class="m-grid">
+                  <div class="m-chart" id="m-chart">
+                    <div class="m-chart-h"><span class="sk w80"></span><span class="sk big"></span></div>
+                    <div class="m-bars"><i style="--h:38%"></i><i style="--h:52%"></i><i style="--h:44%"></i><i style="--h:63%"></i><i style="--h:57%"></i><i style="--h:71%"></i><i style="--h:49%"></i><i style="--h:66%"></i><i style="--h:80%"></i><i class="hi" style="--h:94%"></i><i style="--h:74%"></i><i style="--h:86%"></i></div>
+                  </div>
+                  <div class="m-stat" id="m-s1"><span class="sk w50"></span><span class="sk big"></span><span class="m-delta"></span></div>
+                  <div class="m-stat" id="m-s2"><span class="sk w60"></span><span class="sk big"></span><span class="m-delta dn"></span></div>
+                </div>
+                <div class="m-list">
+                  <div class="m-li"><i></i><span class="sk w90"></span><span class="sk w40"></span><span class="m-chip"></span></div>
+                  <div class="m-li"><i></i><span class="sk w70"></span><span class="sk w50"></span><span class="m-chip b"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="ov">
+              <div class="o-hov"></div>
+              <div class="o-sel"><i></i><i></i><i></i><i></i></div>
+              <span class="o-tag"></span>
+              <span class="o-size"></span>
+              <div class="o-rl"><span></span></div>
+              <div class="o-marks"></div>
+              <div class="o-note">
+                <div class="n-head"><span class="n-tag"></span><code class="n-sel"></code><span class="n-acts"><svg class="i"><use href="assets/icons.svg#code"/></svg><svg class="i"><use href="assets/icons.svg#arrow-up"/></svg><svg class="i"><use href="assets/icons.svg#arrow-down"/></svg><svg class="i"><use href="assets/icons.svg#close"/></svg></span></div>
+                <div class="n-specs"></div>
+                <div class="n-more"><svg class="i"><use href="assets/icons.svg#chevron-right"/></svg>All properties</div>
+                <div class="n-pn"><div class="n-field"><div class="n-text"><span class="n-typed"></span><span class="n-caret"></span><span class="n-ph">Leave feedback for your agent…</span></div><div class="n-bar"><span class="n-hint"><kbd>Enter</kbd> to add</span><span class="n-send"><svg class="i sm"><use href="assets/icons.svg#arrow-up"/></svg></span></div></div></div>
+              </div>
+              <div class="o-clip"><div class="c-head"><span data-logo="mark" data-decorative></span>Copied for your agent<em>compact</em></div><pre class="c-body"></pre></div>
+              <div class="o-tb">
+                <span class="on"><svg class="i"><use href="assets/icons.svg#spacing"/></svg></span><span><svg class="i"><use href="assets/icons.svg#guides"/></svg></span><span><svg class="i"><use href="assets/icons.svg#pause"/></svg></span><b></b><span><svg class="i"><use href="assets/icons.svg#eye"/></svg></span><span class="o-copy"><svg class="i ic-copy"><use href="assets/icons.svg#copy"/></svg><svg class="i ic-ok"><use href="assets/icons.svg#check"/></svg><em class="o-badge"></em></span><span><svg class="i"><use href="assets/icons.svg#trash"/></svg></span><b></b><span><svg class="i"><use href="assets/icons.svg#settings"/></svg></span><span><svg class="i"><use href="assets/icons.svg#close"/></svg></span>
+              </div>
+              <div class="o-toast"><span data-logo="mark" data-decorative></span><span class="t-msg">Copied 2 feedback (compact). Paste it into your agent.</span></div>
+            </div>
+            <svg class="m-cur" viewBox="0 0 16 22"><path d="M1.5 1.5v16.2l4.1-4 2.6 6 2.9-1.3-2.6-5.9h5.7z" fill="#F7F8F8" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span class="m-click"></span>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats" aria-label="At a glance">
+    <div class="wrap">
+      <div class="stat"><span class="t-pixel num">0</span><p>Runtime dependencies</p></div>
+      <div class="stat"><span class="t-pixel num">1</span><p>Line to install</p></div>
+      <div class="stat"><span class="t-pixel num">28<small>kb</small></span><p>Gzipped, dev builds only</p></div>
+      <div class="stat"><span class="t-pixel num">MIT</span><p>Open source, forever</p></div>
+    </div>
+  </section>
+
+  <!-- STATEMENT + FIGS -->
+  <section class="sec" aria-labelledby="why-title">
+    <div class="wrap">
+      <h2 class="statement" id="why-title">Design QA on the real page. <span>PixelSpec measures what actually shipped, lets you annotate it where it lives, and turns every note into a precise instruction your AI coding agent can act on.</span></h2>
+      <div class="figs">
+        <article class="fig">
+          <div class="fig-viz fv-exact" aria-hidden="true"><div class="fv-row"><span class="fv-el sel">Get started<i></i><i></i><i></i><i></i><span class="fv-size">164 × 40</span></span><span class="fv-rl"><b>16</b></span><span class="fv-el">Docs</span></div></div>
+          <h3 class="h-3">Exact, not approximate</h3>
+          <p>Every number comes from the rendered page. Sizes, spacing, line heights and contrast, measured to the pixel.</p>
+        </article>
+        <article class="fig">
+          <div class="fig-viz fv-agent" aria-hidden="true"><div class="fv-note"><span class="fv-pin">1</span><div><b>Make the CTA the main action</b><code><span class="s">button.cta</span> <span class="k">&lt;PlanCard&gt;</span></code><code><span class="n">164×40</span> <span class="g">p:10 18</span> <span class="d">|</span> Geist 14/20 w600</code></div></div></div>
+          <h3 class="h-3">Made for your agent</h3>
+          <p>Notes carry the selector, the component and the styles that matter. Paste once and your agent knows what to change.</p>
+        </article>
+        <article class="fig">
+          <div class="fig-viz fv-iso" aria-hidden="true"><div class="fv-root"><span class="fv-label">#shadow-root</span><span class="fv-tb"><span data-logo="mark" data-decorative></span><i></i><i></i><i></i></span></div><span class="fv-pill"><svg class="i sm"><use href="assets/icons.svg#lock"/></svg>dev only</span></div>
+          <h3 class="h-3">Invisible to your app</h3>
+          <p>It lives in its own shadow root and only loads in development. Your styles, bundle and users never see it.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="sec" id="features" aria-labelledby="feat-title">
+    <div class="wrap">
+      <div class="intro">
+        <h2 class="h-1" id="feat-title">Measure spacing, type and color on any website</h2>
+        <div>
+          <p class="lede">A CSS inspector built for UI review. Hover for names and sizes, click for the full spec, and hover a second element to measure the distance between them. Every value is one click from your clipboard.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <article class="card feat">
+          <div class="feat-copy"><h3 class="h-3"><svg class="i"><use href="assets/icons.svg#spacing"/></svg>Spacing inspector</h3><p>See padding, margin and the gap between children, drawn right on the element.</p></div>
+          <div class="viz viz-spacing" aria-hidden="true"><div class="m"><div class="p"><div class="c">Get started</div></div></div><span class="spec-tag">p 12 20 · m 16</span></div>
+        </article>
+        <article class="card feat">
+          <div class="feat-copy"><h3 class="h-3"><svg class="i"><use href="assets/icons.svg#redline"/></svg>Distance measurement</h3><p>Measure the space between any two elements in pixels. Hold Alt to measure to the parent.</p></div>
+          <div class="viz viz-redline" aria-hidden="true"><div class="a"></div><div class="b"></div><div class="rl"><span class="tag-red">48</span></div><div class="rv"><span class="tag-red">24</span></div></div>
+        </article>
+        <article class="card feat">
+          <div class="feat-copy"><h3 class="h-3"><svg class="i"><use href="assets/icons.svg#type"/></svg>Typography inspector</h3><p>The font that actually rendered, with font size, weight, line height and letter spacing.</p></div>
+          <div class="viz viz-type" aria-hidden="true"><div class="ag">Ag<span class="cap"></span><span class="base"></span></div><span class="spec-tag">Geist 64/72 · 500 · −0.03em</span></div>
+        </article>
+        <article class="card feat">
+          <div class="feat-copy"><h3 class="h-3"><svg class="i"><use href="assets/icons.svg#contrast"/></svg>Color contrast checker</h3><p>Text and background colors with the WCAG contrast ratio, checked against what's really behind them.</p></div>
+          <div class="viz viz-contrast" aria-hidden="true"><div class="sw"><div class="s1">Aa</div><div class="s2">Aa</div></div><div class="ratio"><span class="pill-tag bad">3.0 fails AA</span><span class="pill-tag ok">14.9 AAA</span></div></div>
+        </article>
+        <article class="card feat">
+          <div class="feat-copy"><h3 class="h-3"><svg class="i"><use href="assets/icons.svg#component"/></svg>Component detection</h3><p>React, Vue and Svelte components named automatically, with source files in dev builds.</p></div>
+          <div class="viz viz-component" aria-hidden="true"><div class="tree"><div>&lt;App&gt;</div><div style="--d:1">&lt;PricingPage&gt;</div><div style="--d:2" class="sel">&lt;<em>PlanCard</em>&gt;<span>src/plans.tsx</span></div><div style="--d:3">&lt;Button&gt;</div></div></div>
+        </article>
+        <article class="card feat">
+          <div class="feat-copy"><h3 class="h-3"><svg class="i"><use href="assets/icons.svg#feedback"/></svg>Pinned visual feedback</h3><p>Click anything and type. A numbered marker keeps the note on its element, even after a reload.</p></div>
+          <div class="viz viz-feedback" aria-hidden="true"><div class="target">Start free trial<span class="pin">1</span></div><div class="note"><span class="pin sm">1</span>Make this button bigger</div></div>
+        </article>
+      </div>
+
+      <ul class="extras" aria-label="Also included">
+        <li><svg class="i sm"><use href="assets/icons.svg#guides"/></svg>Crosshair guides</li>
+        <li><svg class="i sm"><use href="assets/icons.svg#pause"/></svg>Pause animations</li>
+        <li><svg class="i sm"><use href="assets/icons.svg#text-select"/></svg>Quote selected text</li>
+        <li><svg class="i sm"><use href="assets/icons.svg#shield"/></svg>No style leaks</li>
+        <li><svg class="i sm"><use href="assets/icons.svg#clock"/></svg>Undo for deletes</li>
+        <li><svg class="i sm"><use href="assets/icons.svg#keyboard"/></svg>Keyboard first</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- AGENTS -->
+  <section class="sec" id="agents" aria-labelledby="ai-title">
+    <div class="wrap">
+      <div class="intro">
+        <h2 class="h-1" id="ai-title">Visual feedback your<br />AI coding agent can act on</h2>
+        <div>
+          <p class="lede">Every note ships with its CSS selector, component, size and the styles that matter. Your agent knows which element you mean, what it looks like now, and what you want instead. No screenshots, no guessing.</p>
+          <a class="more-link" href="#install">Set it up in a minute <svg class="i"><use href="assets/icons.svg#arrow"/></svg></a>
+        </div>
+      </div>
+
+      <div class="ai">
+        <div class="term card">
+          <div class="term-bar">
+            <span class="term-title"><svg class="i sm"><use href="assets/icons.svg#copy"/></svg>Clipboard</span>
+            <div class="seg" role="group" aria-label="Copy detail">
+              <button type="button" aria-pressed="true" data-detail="compact">Compact</button>
+              <button type="button" aria-pressed="false" data-detail="full">Full</button>
+            </div>
+          </div>
+<pre id="ai-compact"><span class="dim">UI feedback for /pricing (1440×900):</span>
+<span class="n">1. Make this button bigger</span>
+<span class="s">   main>section.hero>button.cta "Start free trial"</span>
+<span class="k">   126×34</span> <span class="g">p:10 18</span> <span class="dim">|</span> Inter 14/14 w600 <span class="dim">|</span> <span class="r">contrast:3.7 fails AA</span>
+<span class="n">2. Cards should line up with the nav</span>
+<span class="s">   section.plans>div.grid &lt;PlanGrid&gt; src/plans.tsx</span>
+<span class="k">   1104×520</span> <span class="g">p:0 24</span> <span class="dim">|</span> grid gap:24 cols:3
+<span class="n">3. Too tight. Use the 8px grid</span>
+<span class="s">   div.card>ul.features "Unlimited projects"</span>
+<span class="k">   320×96</span> <span class="o">m:0 0 12</span> <span class="dim">|</span> col gap:6 <span class="dim">|</span> Inter 15/22 w400</pre>
+<pre id="ai-full" hidden><span class="n"># UI feedback</span>
+
+<span class="dim">Page: https://acme.dev/pricing · Viewport: 1440 × 900</span>
+
+<span class="n">## 1. Make this button bigger</span>
+
+<span class="s">**`main > section.hero > button.cta`**</span>
+- Text: "Start free trial"
+- Size: <span class="k">126 × 34</span> at x 657, y 412
+- Box: <span class="g">padding 10px 18px</span> · <span class="k">radius 999px</span>
+- Typography: Inter 14px / 14px, weight 600
+- Colors: text #FFFFFF, background #3581F6, <span class="r">contrast 3.66:1 (fails AA)</span>
+
+<span class="dim">## 2. Cards should line up with the nav …</span></pre>
+          <div class="term-foot"><span>3 notes · <b id="ai-len">compact</b></span><span id="ai-hint">Press <kbd>C</kbd> to copy · <kbd>Shift</kbd> for full</span></div>
+        </div>
+
+        <ol class="ai-steps">
+          <li><span class="t-pixel">01</span><div><h3 class="h-3">Mark it up</h3><p>Click an element and type what should change. Select text to quote it.</p></div></li>
+          <li><span class="t-pixel">02</span><div><h3 class="h-3">Copy once</h3><p>Press C to copy every note. Compact by default, so it costs few tokens.</p></div></li>
+          <li><span class="t-pixel">03</span><div><h3 class="h-3">Paste into your agent</h3><p>Any coding agent reads it. It gets the element, the numbers and your intent.</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="sec" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="intro">
+        <h2 class="h-1" id="how-title">How it works:<br />five moves, no setup</h2>
+        <div><p class="lede">Open PixelSpec from the button in the corner or with Alt + Shift + I. Then review your UI on the real page with the same five moves every time.</p></div>
+      </div>
+      <ol class="steps">
+        <li><span class="label">01</span><h3 class="h-3">Hover</h3><p>Name and size of anything under the cursor.</p></li>
+        <li><span class="label">02</span><h3 class="h-3">Click</h3><p>The full spec. Click any value to copy it.</p><span class="kbd"><kbd>↑</kbd><kbd>↓</kbd></span></li>
+        <li><span class="label">03</span><h3 class="h-3">Measure</h3><p>Hover a second element for the distance.</p><span class="kbd"><kbd>Alt</kbd></span></li>
+        <li><span class="label">04</span><h3 class="h-3">Comment</h3><p>Type a note, press Enter. A marker pins it.</p><span class="kbd"><kbd>Enter</kbd></span></li>
+        <li><span class="label">05</span><h3 class="h-3">Copy</h3><p>Every note, ready for your agent.</p><span class="kbd"><kbd>C</kbd></span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="sec" id="install" aria-labelledby="install-title">
+    <div class="wrap">
+      <div class="intro">
+        <h2 class="h-1" id="install-title">Install PixelSpec<br />in under a minute</h2>
+        <div><p class="lede">Works with React, Next.js, Vite, Vue, Svelte and plain HTML. PixelSpec loads only in development, has zero dependencies and never touches your styles.</p></div>
+      </div>
+      <div class="install">
+        <div class="tabs card">
+          <div role="tablist" aria-label="Setup">
+            <button role="tab" id="t-react" aria-controls="p-react" aria-selected="true">React<span class="xl"> · Next.js</span></button>
+            <button role="tab" id="t-vite" aria-controls="p-vite" aria-selected="false" tabindex="-1">Vite<span class="xl"> · Vue · Svelte</span></button>
+            <button role="tab" id="t-html" aria-controls="p-html" aria-selected="false" tabindex="-1"><span class="xl">Plain </span>HTML</button>
+          </div>
+          <div role="tabpanel" id="p-react" aria-labelledby="t-react">
+            <div class="code"><div class="cap">Terminal<button class="cp" data-copy="npm install -D pixelspec">Copy</button></div>
+<pre><span class="t">npm</span> install -D pixelspec</pre></div>
+            <div class="code"><div class="cap">App.tsx<button class="cp" data-copy-from="next">Copy</button></div>
+<pre><span class="k">import</span> { PixelSpec } <span class="k">from</span> <span class="s">'pixelspec/react'</span>;
+
+<span class="k">export default function</span> <span class="t">App</span>() {
+  <span class="k">return</span> (
+    &lt;&gt;
+      &lt;<span class="t">YourApp</span> /&gt;
+      {process.env.NODE_ENV === <span class="s">'development'</span> &amp;&amp; &lt;<span class="t">PixelSpec</span> /&gt;}
+    &lt;/&gt;
+  );
+}</pre></div>
+          </div>
+          <div role="tabpanel" id="p-vite" aria-labelledby="t-vite" hidden>
+            <div class="code"><div class="cap">Terminal<button class="cp" data-copy="npm install -D pixelspec">Copy</button></div>
+<pre><span class="t">npm</span> install -D pixelspec</pre></div>
+            <div class="code"><div class="cap">main.ts<button class="cp" data-copy-from="next">Copy</button></div>
+<pre><span class="k">if</span> (<span class="k">import</span>.meta.env.DEV) {
+  <span class="k">import</span>(<span class="s">'pixelspec'</span>).then(({ init }) =&gt; <span class="t">init</span>());
+}</pre></div>
+          </div>
+          <div role="tabpanel" id="p-html" aria-labelledby="t-html" hidden>
+            <div class="code"><div class="cap">index.html, before &lt;/body&gt;<button class="cp" data-copy-from="next">Copy</button></div>
+<pre>&lt;<span class="k">script</span> <span class="a">src</span>=<span class="s">"https://unpkg.com/pixelspec"</span>&gt;&lt;/<span class="k">script</span>&gt;</pre></div>
+            <div class="code"><div class="cap">Optional attributes</div>
+<pre><span class="a">data-active</span>=<span class="s">"true"</span>          <span class="c">start open</span>
+<span class="a">data-hotkey</span>=<span class="s">"alt+shift+i"</span>   <span class="c">toggle key</span>
+<span class="a">data-position</span>=<span class="s">"bottom-left"</span> <span class="c">toolbar corner</span>
+<span class="a">data-ai-detail</span>=<span class="s">"full"</span>      <span class="c">copy format</span></pre></div>
+          </div>
+        </div>
+
+        <div class="keys card">
+          <h3 class="h-3">Keyboard</h3>
+          <ul>
+            <li><svg class="i sm"><use href="assets/icons.svg#focus"/></svg>Toggle PixelSpec<span class="kbd"><kbd>Alt</kbd><kbd>Shift</kbd><kbd>I</kbd></span></li>
+            <li><svg class="i sm"><use href="assets/icons.svg#spacing"/></svg>Spacing overlay<span class="kbd"><kbd>S</kbd></span></li>
+            <li><svg class="i sm"><use href="assets/icons.svg#guides"/></svg>Guides<span class="kbd"><kbd>G</kbd></span></li>
+            <li><svg class="i sm"><use href="assets/icons.svg#pause"/></svg>Pause animations<span class="kbd"><kbd>P</kbd></span></li>
+            <li><svg class="i sm"><use href="assets/icons.svg#eye"/></svg>Hide markers<span class="kbd"><kbd>H</kbd></span></li>
+            <li><svg class="i sm"><use href="assets/icons.svg#copy"/></svg>Copy feedback<span class="kbd"><kbd>C</kbd></span></li>
+            <li><svg class="i sm"><use href="assets/icons.svg#trash"/></svg>Clear all, with undo<span class="kbd"><kbd>X</kbd></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="intro">
+        <h2 class="h-1" id="faq-title">Frequently asked<br />questions</h2>
+        <div><p class="lede">Everything you need to know about inspecting, measuring and annotating your UI with PixelSpec.</p></div>
+      </div>
+      <div class="faq">
+        <details><summary><h3 class="h-3">What is PixelSpec?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>PixelSpec is a free, open-source visual feedback tool and CSS inspector for websites. It runs as an overlay on your live site in development, so you can measure spacing, typography and color, pin notes to elements, and copy precise feedback for your AI coding agent.</p></details>
+        <details><summary><h3 class="h-3">How do I measure spacing and padding on a website?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>Turn on PixelSpec and hover any element. Padding shows in green, margin in orange and the gaps between children in pink, with the value in pixels. Hover a second element to see the exact distance between the two.</p></details>
+        <details><summary><h3 class="h-3">Does it work with my AI coding agent?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>Yes. Press C to copy every note as compact text or full Markdown, then paste it into Claude Code, Cursor, Codex, Copilot or any agent that reads text. Each note includes the selector, component, size and styles, so the agent finds the right element.</p></details>
+        <details><summary><h3 class="h-3">Is PixelSpec for designers or developers?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>Both. Designers use it for design QA on the real build: check spacing, type and color against the design, then leave notes on the exact element instead of sending screenshots. Developers and vibe coders use it to turn “this looks off” into precise instructions their AI coding agent can fix in one pass.</p></details>
+        <details><summary><h3 class="h-3">How does PixelSpec help with vibe coding?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>When you build with an AI agent, describing visual bugs in words is the slow part. With PixelSpec you click the element, type what should change and copy. The agent gets the selector, component name, size, spacing, font and colors with every note, so it edits the right element without guessing.</p></details>
+        <details><summary><h3 class="h-3">Will PixelSpec affect my production site?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>No. You load it only in development, it renders inside its own shadow root so it never changes your styles, and it has zero runtime dependencies.</p></details>
+        <details><summary><h3 class="h-3">Which frameworks does it support?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>Any website. Install it from npm for React, Next.js, Vite, Vue or Svelte, or add one script tag to plain HTML. React, Vue and Svelte component names are detected automatically.</p></details>
+        <details><summary><h3 class="h-3">How does the color contrast check work?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>PixelSpec reads the text color and the real composited background behind it, then shows the WCAG contrast ratio and whether it passes AA or AAA.</p></details>
+        <details><summary><h3 class="h-3">Is PixelSpec free?</h3><svg class="i sm"><use href="assets/icons.svg#plus"/></svg></summary><p>Yes. PixelSpec is open source under the MIT license, free for personal and commercial use.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" aria-labelledby="cta-title">
+    <canvas class="cta-px" data-px-bg="dissolve" data-top="rgba(0,0,0,0)" data-bottom="#0D99FF" data-cell="24" data-seed="8" data-spread="0.62" data-accent="#FFE14D" data-num-top="rgba(161,166,174,.45)" data-num-bottom="rgba(10,10,10,.5)" data-hover="true" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <h2 class="h-display" id="cta-title">Stop <span class="t-pixel accent">eyeballing</span> it.</h2>
+      <p class="lede">Add PixelSpec to your dev build and ship every pixel the way you meant it.</p>
+      <div class="hero-cta">
+        <button class="cmd" data-copy="npm i -D pixelspec" aria-label="Copy install command"><span><span class="prompt">$</span> npm i -D pixelspec</span><span class="copy-ic"><svg class="i sm"><use href="assets/icons.svg#copy"/></svg></span></button>
+        <a class="btn btn-secondary lg" href="https://github.com/yesith0106/pixelspec"><svg class="i sm"><use href="assets/icons.svg#github"/></svg>Star on GitHub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="foot-brand">
+        <span class="foot-logo" data-logo="lockup"></span>
+        <p>Every pixel, on spec. A free, open-source CSS inspector and visual feedback tool for AI coding agents.</p>
+      </div>
+      <nav aria-label="Product"><h4>Product</h4><a href="#features">Features</a><a href="#agents">For agents</a><a href="#how">How it works</a><a href="#install">Install</a><a href="#faq">FAQ</a></nav>
+      <nav aria-label="Resources"><h4>Resources</h4><a href="https://github.com/yesith0106/pixelspec">GitHub</a><a href="https://www.npmjs.com/package/pixelspec">npm</a><a href="https://github.com/yesith0106/pixelspec/releases">Releases</a><a href="https://github.com/yesith0106/pixelspec/blob/main/CONTRIBUTING.md">Contributing</a><a href="https://github.com/yesith0106/pixelspec/blob/main/LICENSE">MIT License</a></nav>
+    </div>
+    <div class="base"><span>© 2026 PixelSpec</span><span>Open source under MIT</span></div>
+  </div>
+</footer>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/brand.js"></script>
+<script src="assets/pixel.js"></script>
+<script src="assets/mock.js"></script>
+<script>
+(() => {
+  const toast = document.querySelector('.toast');
+  let tt;
+  const say = (msg) => { toast.textContent = msg; toast.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove('show'), 1800); };
+
+  // Copy buttons
+  document.addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-copy], [data-copy-from]');
+    if (!b) return;
+    const text = b.dataset.copy ?? b.closest('.code').querySelector('pre').textContent;
+    try { await navigator.clipboard.writeText(text); } catch { return say('Copy failed. Select the text instead.'); }
+    b.setAttribute('data-copied', '');
+    if (b.classList.contains('cp')) b.textContent = 'Copied';
+    setTimeout(() => { b.removeAttribute('data-copied'); if (b.classList.contains('cp')) b.textContent = 'Copy'; }, 1600);
+    say('Copied to clipboard');
+  });
+
+  // Install tabs
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  const select = (t) => tabs.forEach((x) => {
+    const on = x === t;
+    x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1;
+    document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+  });
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; select(n); n.focus(); }
+    });
+  });
+
+  // Compact / full toggle
+  document.querySelectorAll('[data-detail]').forEach((b) => b.addEventListener('click', () => {
+    const full = b.dataset.detail === 'full';
+    document.querySelectorAll('[data-detail]').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    document.getElementById('ai-full').hidden = !full;
+    document.getElementById('ai-compact').hidden = full;
+    document.getElementById('ai-len').textContent = full ? 'full Markdown' : 'compact';
+    document.getElementById('ai-hint').innerHTML = full ? 'Make it the default in Settings' : 'Press <kbd>C</kbd> to copy · <kbd>Shift</kbd> for full';
+  }));
+
+  // Try it on this page: the real overlay is loaded below.
+  document.getElementById('try').addEventListener('click', () => {
+    const inst = window.PixelSpec && window.PixelSpec.getInstance && window.PixelSpec.getInstance();
+    if (inst) { inst.activate(); say('PixelSpec is on. Hover anything.'); }
+    else say('Still loading. Press Alt + Shift + I in a second.');
+  });
+
+  // Headline: show its real rendered width, like the product would.
+  const h1 = document.getElementById('hero-title'), tag = document.getElementById('h1w');
+  const range = document.createRange();
+  const bar = tag.parentElement;
+  const measure = () => { range.selectNodeContents(h1); const w = Math.round(range.getBoundingClientRect().width); tag.textContent = `${w} px`; bar.style.width = `${w}px`; };
+  new ResizeObserver(measure).observe(h1);
+  document.fonts && document.fonts.ready.then(measure);
+})();
+</script>
+<!-- Local build when served from the repo (npm run demo); the published package otherwise. Bump to @0.3.0 once it's on npm. -->
+<script src="/dist/pixelspec.global.js" onerror="var s=document.createElement('script');s.src='https://unpkg.com/pixelspec@0.2.1/dist/pixelspec.global.js';document.body.appendChild(s)"></script>
+</body>
+</html>
