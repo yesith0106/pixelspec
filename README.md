@@ -1,20 +1,29 @@
-# PixelSpec
+# PixelSpec: visual feedback and CSS inspector for AI coding agents
 
-**Design inspector and spacing overlay for any website, with AI-ready feedback.**
+**Pixel-perfect UI feedback for AI agents. Inspect your live site, pin notes to any element, and copy feedback your agent can act on.**
 
 [![CI](https://github.com/yesith0106/pixelspec/actions/workflows/ci.yml/badge.svg)](https://github.com/yesith0106/pixelspec/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/pixelspec.svg)](https://www.npmjs.com/package/pixelspec)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Website and live demo: [pixelspec.dev](https://www.pixelspec.dev)**
+**[pixelspec.dev](https://www.pixelspec.dev)** · [Install](#quick-start) · [How to use it](#how-to-use-it) · [Copy for AI](#copy-for-ai)
 
-PixelSpec lets you measure spacing between elements right in the browser: padding, margin, gaps, distances, letter spacing, line height, colors and contrast, like a design tool's inspect panel on top of the live page. Click any element to leave feedback, then copy it all as a compact prompt for your AI coding agent. It is an open-source [agentation](https://agentation.com) alternative with built-in design inspection.
+PixelSpec is a free, open-source design QA tool that runs as an overlay on your website in development. Measure padding, margin, gaps and the distance between elements, check typography and color contrast, and click any element to leave a note. Then copy every note as a compact prompt with the selector, component, size and styles, and paste it into Claude Code, Cursor, Codex, Copilot or any AI coding agent.
 
 ![PixelSpec demo: hover to inspect, click for specs, measure distances, leave feedback and copy it for your AI agent](docs/demo.gif)
 
-- Works on any site and any framework. React, Vue and Svelte component names are detected automatically.
-- Zero runtime dependencies. The overlay lives in a shadow root, so it never touches your styles.
-- One file for a plain `<script>` tag, or an npm package with a React component.
+## Who it's for
+
+- **Designers** doing design QA on the real build. Check spacing, type and color on the shipped page and leave notes on the exact element instead of sending annotated screenshots.
+- **Vibe coders** building with AI. Stop describing visual bugs in words. Click the element, say what should change, and your agent gets the selector and styles it needs to fix it in one pass.
+- **Frontend developers** who want a fast spacing inspector and pixel-perfect redlines without opening DevTools.
+
+## Why PixelSpec
+
+- **Exact, not approximate.** Real computed values from the browser: padding, margin, gap, redline distances, font, line height, letter spacing, colors and WCAG contrast.
+- **Made for your agent.** Feedback copies as two compact lines per element to save tokens, or as full Markdown.
+- **Invisible to your app.** It lives in its own shadow root, has zero runtime dependencies and is about 28 KB gzipped. Load it in development only.
+- **Works everywhere.** Any site and any framework: React, Next.js, Vite, Vue, Svelte or plain HTML. React, Vue and Svelte component names are detected automatically.
 
 ## Quick start
 
@@ -66,13 +75,13 @@ To work offline, download `pixelspec.global.js` from the [latest release](https:
 
 Optional attributes: `data-active="true"` to start open, `data-hotkey="alt+shift+i"`, `data-position="bottom-left"` and `data-ai-detail="full"`.
 
-**Then open your page.** Click the round button in the bottom-right corner, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>.
+**Then open your page.** Click the PixelSpec button in the bottom-right corner, or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>.
 
 ## How to use it
 
 1. **Hover** anything to see its name and size.
 2. **Click** an element. A popover opens where you clicked, with the key specs: size, padding, margin, gap, layout, font, color, contrast, radius and shadow. Click any value to copy it. The spacing icons use the overlay colors: green is padding, orange is margin, pink is gap.
-3. **Hover another element** to see red redline distances between them. Hold <kbd>Alt</kbd> to measure to the parent.
+3. **Hover another element** to see red redline distances. Hold <kbd>Alt</kbd> to measure to the parent.
 4. **Type feedback** and press <kbd>Enter</kbd>. A numbered marker appears on the element. Hover a marker to read the note, click it to edit or delete.
 5. **Select text** on the page to leave feedback that quotes it.
 6. **Copy** with the toolbar's copy button or <kbd>C</kbd>, and paste it into your agent.
@@ -81,7 +90,7 @@ In the popover header, click the element name to copy its selector, or the code 
 
 ### Toolbar
 
-The toolbar can be dragged anywhere, and it remembers where you put it.
+The toolbar stays pinned to its corner (bottom right by default, or `position: 'bottom-left'`).
 
 | Button | Key | What it does |
 | --- | --- | --- |
@@ -105,9 +114,10 @@ While the toolbar is open, clicks on the page are blocked so links and buttons d
 Copied feedback uses a compact format by default to save tokens. It has two lines per element and only non-default values:
 
 ```
-Make this button bigger
-body>header>button.cta "Start free trial"
-126×34 p:10 18 r:999 | system-ui 14/14 w600 ls:0.01em | c:#FFF bg:#3581F6 contrast:3.7(fails AA)
+UI feedback for /pricing (1440×900):
+1. Make this button bigger
+   body>header>button.cta "Start free trial"
+   126×34 p:10 18 r:999 | system-ui 14/14 w600 ls:0.01em | c:#FFF bg:#3581F6 contrast:3.7(fails AA)
 ```
 
 Key: `p` padding, `m` margin, `b` border, `r` radius, `14/14 w600` size/line-height and weight, `ls` letter spacing, `c` text color, `bg` background. Contrast only appears when it fails AA. Containers skip text and typography.
@@ -137,6 +147,7 @@ The React component takes the same options as props, plus `enabled`. The instanc
 - Rendered font detection is a heuristic based on loaded font faces and canvas measurement.
 - Component source paths need a dev build. React 19 removed `_debugSource`, so React 19 shows names only.
 - Elements inside closed shadow roots and cross-origin iframes can't be inspected.
+- Needs a browser with CSS `color-mix()`: Chrome 111, Safari 16.2, Firefox 113 or newer.
 
 ## Contributing
 
@@ -151,4 +162,4 @@ npm run demo      # http://localhost:5178/demo/
 
 ## License
 
-[MIT](LICENSE). Icons are from the free [Hugeicons](https://hugeicons.com) set, also MIT, and only the icons in use are bundled.
+[MIT](LICENSE). Free for personal and commercial use.

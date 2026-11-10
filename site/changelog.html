@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PixelSpec changelog: release notes and new features</title>
-  <meta name="description" content="Release notes for PixelSpec, the design inspector and visual feedback tool for AI coding agents. New features, changes and fixes in each version." />
+  <meta name="description" content="Release notes for PixelSpec, the CSS inspector and visual feedback tool for AI coding agents. New features, changes and fixes in each version." />
   <link rel="canonical" href="https://www.pixelspec.dev/changelog" />
   <meta property="og:url" content="https://www.pixelspec.dev/changelog" />
   <meta property="og:image" content="https://www.pixelspec.dev/assets/og.png" />
@@ -15,31 +15,41 @@
   <meta name="twitter:image" content="https://www.pixelspec.dev/assets/og.png" />
   <meta property="og:title" content="PixelSpec changelog" />
   <meta property="og:description" content="New features, changes and fixes in each PixelSpec release." />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Pixel:ELSH@0..100&family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/ps.css" />
+  <link rel="stylesheet" href="assets/site.css" />
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
-<body id="top">
-  <a class="brand" href="./">PixelSpec</a>
+<body>
 
-  <nav class="side-nav" aria-label="Sections">
-    <a href="./">Overview</a>
-    <a href="./#why">Why</a>
-    <a href="./#install">Install</a>
-    <span class="gap" aria-hidden="true"></span>
-    <a href="changelog.html" class="active" aria-current="page">Changelog</a>
-    <a class="icon-link" href="https://github.com/yesith0106/pixelspec">GitHub <!-- Hugeicons ArrowUpRight01Icon --><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6.65032C9 6.65032 15.9383 6.10759 16.9154 7.08463C17.8924 8.06167 17.3496 15 17.3496 15M16.5 7.5L6.5 17.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></a>
-  </nav>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="PixelSpec home"><span data-logo="lockup" data-decorative></span></a>
+    <nav class="links" aria-label="Primary">
+      <a href="./#features">Features</a>
+      <a href="./#agents">For agents</a>
+      <a href="./#how">How it works</a>
+      <a href="./#install">Install</a>
+      <a href="./#faq">FAQ</a>
+      <a href="changelog.html" aria-current="page">Changelog</a>
+    </nav>
+    <div class="actions">
+      <a class="btn btn-ghost sm gh" href="https://github.com/yesith0106/pixelspec"><svg class="i sm"><use href="assets/icons.svg#github"/></svg><span>GitHub</span></a>
+      <a class="btn btn-primary sm" href="./#install">Get started</a>
+    </div>
+  </div>
+</header>
 
-  <main>
-    <h1>Changelog</h1>
-    <p class="lead">New features, changes and fixes in each PixelSpec release.</p>
-
-    <div class="releases">
+<main id="top">
+  <section class="cl" aria-labelledby="cl-title">
+    <div class="wrap">
+      <h1 class="h-1" id="cl-title">Changelog</h1>
+      <p class="cl-lead">New features, changes and fixes in each PixelSpec release.</p>
+      <div class="releases">
       <article class="release" id="v0.2.1">
         <div>
           <p class="ver">0.2.1 <span class="latest">Latest</span></p>
@@ -97,17 +107,24 @@
         </div>
       </article>
     </div>
-  </main>
+    </div>
+  </section>
+</main>
 
-  <footer>
-    <p class="status"><a href="changelog.html">v0.2</a>&nbsp;· Free and MIT licensed</p>
-    <nav aria-label="Footer">
-      <a href="changelog.html">Changelog</a>
-      <a href="https://github.com/yesith0106/pixelspec">GitHub</a>
-      <a href="https://www.npmjs.com/package/pixelspec">npm</a>
-    </nav>
-  </footer>
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="foot-brand">
+        <span class="foot-logo" data-logo="lockup"></span>
+        <p>Every pixel, on spec. A free, open-source CSS inspector and visual feedback tool for AI coding agents.</p>
+      </div>
+      <nav aria-label="Product"><h4>Product</h4><a href="./#features">Features</a><a href="./#agents">For agents</a><a href="./#how">How it works</a><a href="./#install">Install</a><a href="./#faq">FAQ</a></nav>
+      <nav aria-label="Resources"><h4>Resources</h4><a href="changelog.html">Changelog</a><a href="https://github.com/yesith0106/pixelspec">GitHub</a><a href="https://www.npmjs.com/package/pixelspec">npm</a><a href="https://github.com/yesith0106/pixelspec/releases">Releases</a><a href="https://github.com/yesith0106/pixelspec/blob/main/CONTRIBUTING.md">Contributing</a><a href="https://github.com/yesith0106/pixelspec/blob/main/LICENSE">MIT License</a></nav>
+    </div>
+    <div class="base"><span>© 2026 PixelSpec</span><span>Open source under MIT</span></div>
+  </div>
+</footer>
 
-  <script src="https://unpkg.com/pixelspec@0.2/dist/pixelspec.global.js"></script>
+<script src="assets/brand.js"></script>
 </body>
 </html>

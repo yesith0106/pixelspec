@@ -1,3 +1,7 @@
 node_modules
 dist
 .vercel
+
+# Brand docs: kept locally, not part of the repo
+site/brand/
+docs/brand-*.md

@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const port = Number(process.env.PORT) || 5178;
-const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.map': 'application/json', '.svg': 'image/svg+xml' };
+const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.map': 'application/json', '.svg': 'image/svg+xml',
+  '.png': 'image/png', '.jpg': 'image/jpeg', '.gif': 'image/gif', '.mp4': 'video/mp4', '.webm': 'video/webm', '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2', '.json': 'application/json', '.webmanifest': 'application/manifest+json' };
 
 createServer(async (req, res) => {
   let path = decodeURIComponent(new URL(req.url, 'http://x').pathname);

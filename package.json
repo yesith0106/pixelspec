@@ -1,7 +1,7 @@
 {
   "name": "pixelspec",
-  "version": "0.2.1",
-  "description": "Design inspector and spacing overlay for any website: measure padding, margin, gaps, distances, typography, colors and contrast, then copy AI-ready feedback.",
+  "version": "0.3.0",
+  "description": "Visual feedback and CSS inspector for AI coding agents. Measure spacing, typography and color contrast on your live site, pin notes to any element, and copy pixel-perfect feedback for Claude Code, Cursor, Codex or Copilot.",
   "license": "MIT",
   "author": "Yesith (https://github.com/yesith0106)",
   "homepage": "https://www.pixelspec.dev",
@@ -40,6 +40,8 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "demo": "node scripts/serve.mjs",
+    "brand": "node scripts/brand-export.mjs",
+    "size": "node scripts/size.mjs",
     "prepare": "npm run build"
   },
   "peerDependencies": {
@@ -59,18 +61,30 @@
   "keywords": [
     "design inspector",
     "css inspector",
-    "spacing",
-    "measure",
-    "redline",
-    "pixel perfect",
+    "spacing inspector",
     "design qa",
+    "visual feedback",
+    "ui feedback",
+    "pixel perfect",
+    "redline",
+    "measure",
+    "padding",
+    "margin",
+    "typography",
+    "color contrast",
+    "wcag",
     "devtools",
     "overlay",
-    "typography",
-    "letter spacing",
-    "contrast",
     "ai agent",
-    "visual feedback",
-    "agentation alternative"
+    "ai coding",
+    "vibe coding",
+    "claude code",
+    "cursor",
+    "copilot",
+    "codex",
+    "design handoff",
+    "react",
+    "nextjs",
+    "vite"
   ]
 }

@@ -2,6 +2,16 @@
 
 All notable changes to PixelSpec are listed here. The site's changelog page (`site/changelog.html`) shows the same entries.
 
+## Unreleased (0.3.0)
+
+New look.
+
+### Changed
+
+- New PixelSpec mark and an original outline icon set, all drawn on the same grid so they line up.
+- Keyboard shortcuts show as keycaps. Glows removed from the toolbar and popover.
+- The toolbar stays pinned to its corner and can no longer be dragged. Positions saved by older versions are ignored.
+
 ## 0.2.1 (2026-10-20)
 
 Bug fixes.
