@@ -272,3 +272,20 @@ html { scroll-padding-top: 88px; }
 .faq details[open] summary .i { transform: rotate(45deg); }
 .faq summary:hover .i { color: var(--snow); }
 .faq p { margin: -6px 0 24px; max-width: 720px; font-size: 16px; color: var(--fog); }
+
+/* ---------- changelog page */
+.nav .links a[aria-current="page"] { color: var(--snow); }
+.cl { padding: clamp(120px, 14vw, 168px) 0 clamp(96px, 12vw, 144px); }
+.cl-lead { margin: 16px 0 56px; font-size: 17px; color: var(--fog); }
+.releases { border-top: 1px solid var(--line); }
+.release { display: grid; grid-template-columns: 200px 1fr; gap: 32px; padding: 40px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
+.release .ver { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font: 500 22px/1.2 var(--f-sans); letter-spacing: -0.02em; color: var(--snow); }
+.release .latest { height: 22px; padding: 0 8px; border-radius: 99px; background: rgb(13 153 255 / .16); color: var(--signal-2); font: 500 12px/22px var(--f-mono); letter-spacing: 0; }
+.release time { font: 400 13px var(--f-mono); color: var(--mute); }
+.release .summary { margin: 0 0 20px; font-size: 17px; color: var(--snow); }
+.release h3 { margin: 24px 0 10px; font: 500 12px var(--f-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+.release ul { margin: 0; padding-left: 18px; color: var(--fog); font-size: 15.5px; line-height: 1.6; }
+.release li + li { margin-top: 6px; }
+.release li::marker { color: var(--line-2); }
+.release code { padding: 1px 5px; border-radius: 5px; background: var(--deep); font: 400 .9em var(--f-mono); color: var(--snow); }
+@media (max-width: 720px) { .release { grid-template-columns: 1fr; gap: 16px; padding: 32px 0; } }

@@ -89,6 +89,8 @@ kbd { display: inline-flex; align-items: center; justify-content: center; min-wi
   box-shadow: 0 0 0 2px #fff, 0 3px 10px rgb(0 0 0 / .25); animation: mk-in .22s var(--ps-ease); transition: transform var(--ps-fast) var(--ps-ease); }
 .mk:hover, .mk.on { transform: scale(1.12); }
 .mk[data-tip]::after { white-space: normal; width: max-content; max-width: 240px; text-align: left; font: 400 12px/1.4 var(--ps-sans); }
+/* The element this note was on has been removed from the page. */
+.mk.gone { background: var(--ps-mute); outline: 1.5px dashed var(--ps-mute); outline-offset: 3px; opacity: .85; }
 @keyframes mk-in { from { transform: scale(.4); opacity: 0; } }
 
 /* ---------- dock & toolbar ---------- */
@@ -182,7 +184,7 @@ kbd { display: inline-flex; align-items: center; justify-content: center; min-wi
 .pa .ib { width: 30px; height: 30px; border-radius: var(--ps-r); }
 .pa .ib svg { width: 16px; height: 16px; }
 
-.pbody { overflow: auto; padding: 12px 14px 0; scrollbar-width: thin; scrollbar-color: var(--ps-line-2) transparent; }
+.pbody { overflow: auto; overscroll-behavior: contain; padding: 12px 14px 0; scrollbar-width: thin; scrollbar-color: var(--ps-line-2) transparent; }
 .quote { margin: 0 0 12px; padding: 8px 12px; border-left: 2px solid var(--ps-signal); border-radius: 0 var(--ps-r) var(--ps-r) 0; background: var(--ps-deep);
   color: var(--ps-snow); font: 400 12.5px/1.5 var(--ps-sans); }
 .specs { display: grid; gap: 2px; margin-bottom: 6px; }
