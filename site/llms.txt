@@ -2,7 +2,7 @@
 
 > PixelSpec is a free, open-source (MIT) design inspector for any live website. It measures padding, margin, gaps, distances between elements, typography, colors and WCAG contrast right in the browser, then lets you click elements to leave feedback and copy it as a compact prompt for AI coding agents such as Claude Code and Cursor. It is an alternative to Agentation with built-in design inspection.
 
-- Current version: 0.2.1. Package name on npm: `pixelspec`.
+- Current version: 0.3.0. Package name on npm: `pixelspec`.
 - Works on any site and framework (React, Next.js, Vite, Vue, Svelte, plain HTML). React, Vue and Svelte component names are detected automatically.
 - Zero runtime dependencies. The overlay lives in a shadow root, so it never changes the page's styles.
 - Meant for development builds only.
